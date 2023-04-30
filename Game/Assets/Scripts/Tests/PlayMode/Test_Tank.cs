@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 using Game.Entity.Tank;
 using Magic.Data;
 
-namespace Tests.Playmode
+namespace Tests.PlayMode
 {
     public class Test_Tank
     {

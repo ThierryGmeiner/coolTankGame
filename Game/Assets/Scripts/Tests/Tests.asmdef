@@ -2,23 +2,17 @@
     "name": "Tests",
     "rootNamespace": "",
     "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "Magic",
-        "Game",
-        "GamePlayer"
+        "GUID:c7d5c41f01000994684e3715c9e28c12",
+        "GUID:2a50582dd30ca6240972d88269b219a4",
+        "GUID:1f0d738c06f8dce4ba438abe70565995"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "nunit.framework.dll"
-    ],
-    "autoReferenced": false,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ],
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }

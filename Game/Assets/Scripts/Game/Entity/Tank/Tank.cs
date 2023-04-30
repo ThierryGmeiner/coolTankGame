@@ -26,9 +26,9 @@ namespace Game.Entity.Tank
         {
             if (data == null) data = ScriptableObject.CreateInstance<TankData>();
             Name = data.Name;
-            Health = new TankHealth(data.Health);
-            Movement = new TankMovement(data.Speed);
-            Armor = new TankArmor(data.ArmorProcent);
+            Health = new TankHealth(this, data.Health);
+            Movement = new TankMovement(this, data.Speed);
+            Armor = new TankArmor(this, data.ArmorProcent);
         }
     }
 }

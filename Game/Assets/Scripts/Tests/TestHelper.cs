@@ -23,7 +23,7 @@ namespace Tests
         {
             gameObject.name = "Destroyed";
             gameObject.tag = "Untagged";
-            gameObject.transform.position = GetEmtySpace(gameObject.transform);
+            gameObject.transform.position = GetEmtySpace(gameObject.transform.localScale);
             GameObject.Destroy(gameObject);
         }
  
@@ -59,14 +59,13 @@ namespace Tests
                 DestroyObjects(gameObject);
         }
 
-        private static Vector3 GetEmtySpace(Transform transform)
+        private static Vector3 GetEmtySpace(Vector3 localScale) 
         {
-            float radius = transform.localScale.x + transform.localScale.y + transform.localScale.z;
             Vector3 spawnPos;
+            float radius = Magic.MathM.Max(localScale.x, localScale.y, localScale.z) * 2;
             do {
                 spawnPos = new Vector3(Random.Range(10000, 1000000), Random.Range(10000, 1000000), Random.Range(10000, 1000000));
             } while (Physics.CheckSphere(spawnPos, radius));
-
             return spawnPos;
         }
     }
