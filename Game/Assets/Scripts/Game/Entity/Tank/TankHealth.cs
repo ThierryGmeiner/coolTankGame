@@ -7,16 +7,14 @@ namespace Game.Entity.Tank
         public int MaxHP { get; private set; }
         public int HP { get; private set; }
 
-        public TankHealth(Tank tank, int maxHealth)
-        {
+        public TankHealth(Tank tank, int maxHealth) {
             this.tank = tank;
             MaxHP = maxHealth;
             HP = maxHealth;
         }
 
-        public void GetDamaged(int damage)
-        {
-            
+        public void GetDamaged(int damage) {
+
 
         }
     }

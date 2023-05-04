@@ -16,6 +16,10 @@ MonoBehaviour:
   templateName: 
   description: 
   preview: {fileID: 0}
-  dependencies: []
+  dependencies:
+  - dependency: {fileID: 2100000, guid: 9bd48ffac9d248443b008aeaf94cbc2f, type: 2}
+    instantiationMode: 0
+  - dependency: {fileID: 2100000, guid: 3228e6e6206934f4ab4eade8b9612ed0, type: 2}
+    instantiationMode: 0
   templatePipeline: {fileID: 0}
   addToDefaults: 0

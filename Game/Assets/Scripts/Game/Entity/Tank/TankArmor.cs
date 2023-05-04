@@ -6,8 +6,7 @@ namespace Game.Entity.Tank
 
         public int ArmorProcent { get; private set; }
 
-        public TankArmor(Tank tank, int armor)
-        {
+        public TankArmor(Tank tank, int armor) {
             this.tank = tank;
             ArmorProcent = armor;
         }

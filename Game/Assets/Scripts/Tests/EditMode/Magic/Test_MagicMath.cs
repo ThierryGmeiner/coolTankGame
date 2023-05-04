@@ -10,14 +10,12 @@ namespace Tests.EditMode
     public class Test_MagicMath
     {
         [Test]
-        public void Test_MagicMathSimplePasses()
-        {
+        public void Test_MagicMathSimplePasses() {
             Assert.IsTrue(true);
         }
 
         [Test]
-        public void Max_GetMaxValueOfTow()
-        {
+        public void Max_GetMaxValueOfTow() {
             int value1 = 2, value2 = 5;
 
             float maxValue = MathM.Max(value1, value2);
@@ -26,8 +24,7 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void Max_GetMaxValueOfThree()
-        {
+        public void Max_GetMaxValueOfThree() {
             int value1 = 2, value2 = 5, value3 = 10;
 
             float maxValue = MathM.Max(value1, value2, value3);
@@ -36,8 +33,7 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void Max_GetMaxValueOfFour()
-        {
+        public void Max_GetMaxValueOfFour() {
             int value1 = 2, value2 = 5, value3 = 10, value4 = 20;
 
             float maxValue = MathM.Max(value1, value2, value3, value4);
@@ -45,4 +41,4 @@ namespace Tests.EditMode
             Assert.AreEqual(value4, maxValue);
         }
     }
-}
+} 
