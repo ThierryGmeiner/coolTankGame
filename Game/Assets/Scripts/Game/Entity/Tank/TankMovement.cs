@@ -1,4 +1,3 @@
-using UnityEngine.InputSystem;
 using UnityEngine;
 
 namespace Game.Entity.Tank
@@ -12,24 +11,30 @@ namespace Game.Entity.Tank
 
         private float defaultSpeed;
         private float speed;
+        private float jumpForce;
 
         public float Speed { get => speed; }
 
-        public TankMovement(Tank tank, float speed, Transform groundCheck) {
+        public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;
             this.groundCheck = groundCheck;
-            this.defaultSpeed = speed;
-            this.speed = speed;
+            this.defaultSpeed = tank.Data.Speed;
+            this.speed = tank.Data.Speed;
+            this.jumpForce = tank.Data.JumpForce;
             groundLayer = LayerMask.GetMask("Ground");
         }
 
         public void Move(Vector2 direction) => Move(new Vector3(direction.x, 0, direction.y));
 
         public void Move(Vector3 direction) {
-            direction *= speed;
-            if (!tank.IsGrounded) direction *= AIR_MULTIPLIER;
-
+            direction = tank.IsGrounded ? direction * speed : direction * speed * AIR_MULTIPLIER; 
             tank.RigidBody.AddForce(direction, ForceMode.Force);
+        }
+
+        public void Jump() {
+            if (tank.IsGrounded) {
+                tank.RigidBody.AddForce(new Vector3(tank.RigidBody.velocity.x, jumpForce, tank.RigidBody.velocity.z), ForceMode.Impulse);
+            }
         }
 
         public void EnableTurbo() {

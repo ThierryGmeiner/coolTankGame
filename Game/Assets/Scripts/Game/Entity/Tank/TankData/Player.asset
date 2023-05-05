@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: PlayerTank
   Speed: 10
+  JumpForce: 3.5
   Health: 100
   ArmorProcent: 5

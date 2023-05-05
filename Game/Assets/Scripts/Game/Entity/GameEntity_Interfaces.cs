@@ -4,4 +4,9 @@ namespace Game.Entity
     {
         public void GetDamaged(int damage);
     }
+
+    public interface IRepairable
+    {
+        public void GetRepaired(int healing);
+    }
 }

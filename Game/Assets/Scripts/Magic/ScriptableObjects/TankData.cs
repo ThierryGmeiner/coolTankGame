@@ -11,6 +11,7 @@ namespace Magic.Data
         [Space]
         [Header("Movement")]
         public float Speed = 10;
+        public float JumpForce = 10;
 
         [Space]
         [Header("Health")]

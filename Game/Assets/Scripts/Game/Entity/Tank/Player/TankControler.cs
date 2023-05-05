@@ -7,22 +7,23 @@ namespace Game.Input
     [RequireComponent(typeof(Tank))]
     public class TankControler : MonoBehaviour
     {
-        private PlayerControler inputAction;
+        private PlayerControler controler;
         private Tank tank;
 
         private void Awake() {
-            inputAction = new PlayerControler();
-            inputAction.TankDrive.Enable();
+            controler = new PlayerControler();
+            controler.TankDrive.Enable();
         }
 
         private void Start() {
             tank = GetComponent<Tank>();
-            inputAction.TankDrive.Turbo.started += (InputAction.CallbackContext context) => tank.Movement.EnableTurbo();
-            inputAction.TankDrive.Turbo.canceled += (InputAction.CallbackContext context) => tank.Movement.DisableTurbo();
+            controler.TankDrive.Turbo.started += (InputAction.CallbackContext context) => tank.Movement.EnableTurbo();
+            controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext context) => tank.Movement.DisableTurbo();
+            controler.TankDrive.Jump.started += (InputAction.CallbackContext context) => tank.Movement.Jump();
         }
 
         private void FixedUpdate() {
-            tank.Movement.Move(inputAction.TankDrive.Move.ReadValue<Vector2>());
+            tank.Movement.Move(controler.TankDrive.Move.ReadValue<Vector2>());
         }
     }
 }

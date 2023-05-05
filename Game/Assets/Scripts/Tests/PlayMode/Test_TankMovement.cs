@@ -73,5 +73,79 @@ namespace Tests.PlayMode
 
             TestHelper.DestroyObjects(tank.gameObject, ground.gameObject);
         }
+
+        [UnityTest]
+        public IEnumerator Jump_IsGrounded_IncreasHeight() {
+            Tank tank = TestHelper.CreateTank<Tank>();
+            Transform ground = TestHelper.CreateGround<Transform>();
+            tank.transform.position = new Vector3(ground.position.x, ground.position.y + (tank.transform.localScale.y / 2), ground.position.z);
+            while (tank.IsGrounded == false) yield return null;
+
+            yield return null;
+            float oldHeight = tank.transform.position.y;
+            tank.Movement.Jump();
+            for (int i = 0; i < 20; i++) yield return null;
+
+            Assert.Greater(tank.transform.position.y, oldHeight);
+
+            TestHelper.DestroyObjects(tank.gameObject, ground.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator Jump_IsNotGrounded_StaySameHeight() {
+            Tank tank = TestHelper.CreateTank<Tank>();
+            tank.RigidBody.useGravity = false;
+
+            yield return null;
+            float oldHeight = tank.transform.position.y;
+            tank.Movement.Jump();
+            for (int i = 0; i < 20; i++) yield return null;
+
+            Assert.AreEqual(oldHeight, tank.transform.position.y);
+
+            TestHelper.DestroyObjects(tank.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator EnableTurbo_TankWithTurboIsFaster() {
+            Tank tankOne = TestHelper.CreateTank<Tank>();
+            Tank tankTwo = TestHelper.CreateTank<Tank>();
+            GameObject.Destroy(tankOne.Collider);
+            GameObject.Destroy(tankTwo.Collider);
+            tankOne.Movement.EnableTurbo();
+            yield return null;
+
+            for (int i = 0; i < 10; i++) {
+                tankOne.Movement.Move(Vector2.up);
+                tankTwo.Movement.Move(Vector2.up);
+                yield return null;
+            }
+            Debug.Log($"tankOne: {tankOne.transform.position.z} / tankTwo: {tankTwo.transform.position.z}");
+            Assert.Greater(tankOne.transform.position.z, tankTwo.transform.position.z);
+
+            TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator DisableTurbo_BothTanksAreEqualFast() {
+            Tank tankOne = TestHelper.CreateTank<Tank>();
+            Tank tankTwo = TestHelper.CreateTank<Tank>();
+            GameObject.Destroy(tankOne.Collider);
+            GameObject.Destroy(tankTwo.Collider); 
+            tankOne.Movement.EnableTurbo();
+            tankOne.Movement.DisableTurbo();
+            yield return null;
+
+            for (int i = 0; i < 10; i++) {
+                tankOne.Movement.Move(Vector2.up);
+                tankTwo.Movement.Move(Vector2.up);
+                yield return null;
+            }
+
+            Debug.Log($"tankOne: {tankOne.transform.position.z} / tankTwo: {tankTwo.transform.position.z}");
+            Assert.AreEqual(tankOne.transform.position.z, tankTwo.transform.position.z);
+
+            TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);
+        }
     }
 }

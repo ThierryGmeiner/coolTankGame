@@ -46,6 +46,15 @@ namespace Game.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""255988a9-42fc-48f3-a93c-c05b36ae5cc0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -114,6 +123,17 @@ namespace Game.Input
                     ""action"": ""Turbo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0779389c-5221-4a0c-87a6-9d922cdd2b56"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -124,6 +144,7 @@ namespace Game.Input
             m_TankDrive = asset.FindActionMap("TankDrive", throwIfNotFound: true);
             m_TankDrive_Move = m_TankDrive.FindAction("Move", throwIfNotFound: true);
             m_TankDrive_Turbo = m_TankDrive.FindAction("Turbo", throwIfNotFound: true);
+            m_TankDrive_Jump = m_TankDrive.FindAction("Jump", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -185,12 +206,14 @@ namespace Game.Input
         private ITankDriveActions m_TankDriveActionsCallbackInterface;
         private readonly InputAction m_TankDrive_Move;
         private readonly InputAction m_TankDrive_Turbo;
+        private readonly InputAction m_TankDrive_Jump;
         public struct TankDriveActions
         {
             private @PlayerControler m_Wrapper;
             public TankDriveActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_TankDrive_Move;
             public InputAction @Turbo => m_Wrapper.m_TankDrive_Turbo;
+            public InputAction @Jump => m_Wrapper.m_TankDrive_Jump;
             public InputActionMap Get() { return m_Wrapper.m_TankDrive; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -206,6 +229,9 @@ namespace Game.Input
                     @Turbo.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
                     @Turbo.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
                     @Turbo.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
+                    @Jump.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
+                    @Jump.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
+                    @Jump.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
                 }
                 m_Wrapper.m_TankDriveActionsCallbackInterface = instance;
                 if (instance != null)
@@ -216,6 +242,9 @@ namespace Game.Input
                     @Turbo.started += instance.OnTurbo;
                     @Turbo.performed += instance.OnTurbo;
                     @Turbo.canceled += instance.OnTurbo;
+                    @Jump.started += instance.OnJump;
+                    @Jump.performed += instance.OnJump;
+                    @Jump.canceled += instance.OnJump;
                 }
             }
         }
@@ -224,6 +253,7 @@ namespace Game.Input
         {
             void OnMove(InputAction.CallbackContext context);
             void OnTurbo(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
         }
     }
 }

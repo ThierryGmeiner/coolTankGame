@@ -32,7 +32,7 @@ namespace Game.Entity.Tank
             if (data == null) data = ScriptableObject.CreateInstance<TankData>();
             Name = data.Name;
             Health = new TankHealth(this, data.Health);
-            Movement = new TankMovement(this, data.Speed, groundCheck);
+            Movement = new TankMovement(this, groundCheck);
             Armor = new TankArmor(this, data.ArmorProcent);
         }
 

@@ -5,7 +5,9 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Magic",
-        "Tests"
+        "Tests",
+        "Game",
+        "GamePlayer"
     ],
     "includePlatforms": [
         "Editor"
