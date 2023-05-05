@@ -60,7 +60,7 @@ namespace Tests.PlayMode
             TestHelper.DestroyObjects(tank.gameObject);
         }
 
-        [UnityTest] 
+        [UnityTest]
         public IEnumerator GroundCheck_IsGrounded_True() {
             Tank tank = TestHelper.CreateTank<Tank>();
             Transform ground = TestHelper.CreateGround<Transform>();

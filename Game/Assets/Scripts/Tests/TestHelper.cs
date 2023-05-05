@@ -10,6 +10,7 @@ namespace Tests
             GameObject tank = new GameObject();
             tank.name = "TestTank";
             tank.tag = "Tank";
+            tank.layer = 6;
             tank.AddComponent<Rigidbody>();
             tank.AddComponent<BoxCollider>();
             tank.AddComponent<Tank>().Data = ScriptableObject.CreateInstance<TankData>();
@@ -33,6 +34,7 @@ namespace Tests
         public static void DestroyObjects(GameObject gameObject) {
             gameObject.name = "Destroyed";
             gameObject.tag = "Untagged";
+            gameObject.layer = 0;
             gameObject.transform.position = GetEmtySpace(gameObject.transform.localScale);
             GameObject.Destroy(gameObject);
         }
