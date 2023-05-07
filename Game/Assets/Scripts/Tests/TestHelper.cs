@@ -1,5 +1,6 @@
 using Game.Entity.Tank;
 using Magic.Data;
+using Game.AI;
 using UnityEngine;
 
 namespace Tests
@@ -20,16 +21,35 @@ namespace Tests
         public static T CreateTank<T>() => CreateTank().GetComponent<T>();
 
         public static GameObject CreateGround() {
-            GameObject tank = new GameObject();
-            tank.transform.localScale = new Vector3(20, 0.1f, 20);
-            tank.name = "TestGround";
-            tank.tag = "Enviorment";
-            tank.layer = 3;
-            tank.AddComponent<BoxCollider>();
-            return tank;
+            GameObject ground = new GameObject();
+            ground.transform.localScale = new Vector3(20, 0.1f, 20);
+            ground.name = "TestGround";
+            ground.tag = "Enviorment";
+            ground.layer = 3;
+            ground.AddComponent<BoxCollider>();
+            return ground;
         }
 
         public static T CreateGround<T>() => CreateGround().GetComponent<T>();
+
+        public static GameObject CreateObstacle(Vector3 size) {
+            GameObject obstacle = new GameObject(); Debug.Log("create");
+
+            obstacle.transform.localScale = size;
+            obstacle.name = "Obstacle";
+            obstacle.tag = "Enviorment";
+            obstacle.layer = 7;
+            obstacle.AddComponent<BoxCollider>();
+            return obstacle;
+        }
+
+        public static AStarGrid CreateASTarGrid() {
+            GameObject grid = new GameObject();
+            grid.name = "A*Grid";
+            grid.tag = "Untagged";
+            grid.layer = 0;
+            return grid.AddComponent<AStarGrid>();
+        }
 
         public static void DestroyObjects(GameObject gameObject) {
             gameObject.name = "Destroyed";
