@@ -63,5 +63,18 @@ namespace Tests.PlayMode
 
         //    TestHelper.DestroyObjects(Astar.gameObject, obstacle);
         //}
+
+        [UnityTest]
+        public IEnumerator GetNodeFromPosition_GetRightNode() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            Vector3 bottomLeft = new Vector3(5.5f, 0, 5.5f); // 0.5 = radius of node
+            yield return null;
+
+            AStarNode node = grid.GetNodeFromPosition(bottomLeft);
+
+            Assert.AreEqual(bottomLeft, node.Position);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
     }
 }

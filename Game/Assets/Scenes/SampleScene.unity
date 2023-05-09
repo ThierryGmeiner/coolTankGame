@@ -269,6 +269,7 @@ MonoBehaviour:
     m_Bits: 128
   gridWorldSize: {x: 20, y: 20}
   nodeRadius: 0.5
+  player: {fileID: 984900973}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,6 +448,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 30, y: -45, z: 0}
+--- !u!4 &984900973 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6703403965578517543, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}
+  m_PrefabInstance: {fileID: 1196263473}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1196263473
 PrefabInstance:
   m_ObjectHideFlags: 0
