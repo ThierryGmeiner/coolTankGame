@@ -17,7 +17,7 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CreateGrid_GetRightAmountOfNodes() {
-            AStarGrid Astar = TestHelper.CreateASTarGrid();
+            AStarGrid Astar = TestHelper.CreateASTarGrid(3, 3);
             int expectedLength = 20; // is hardcoden in class as default
 
             yield return null;
@@ -29,7 +29,7 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CreateGrid_HasNoObstacle_AllNotesAreWalkable() {
-            AStarGrid Astar = TestHelper.CreateASTarGrid();
+            AStarGrid Astar = TestHelper.CreateASTarGrid(3, 3);
             bool allNodesAreWalkable = true;
             yield return null;
 
@@ -66,13 +66,55 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator GetNodeFromPosition_GetRightNode() {
-            AStarGrid grid = TestHelper.CreateASTarGrid();
-            Vector3 bottomLeft = new Vector3(5.5f, 0, 5.5f); // 0.5 = radius of node
+            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            Vector2 bottomLeft = new Vector3(5.5f, 5.5f); // 0.5 = radius of node
             yield return null;
 
             AStarNode node = grid.GetNodeFromPosition(bottomLeft);
 
             Assert.AreEqual(bottomLeft, node.Position);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GetIndexFromNode_DontExist_NegativeOne() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode node = new AStarNode(true, new Vector2(10, 10));
+            node.hCost = 10;
+
+            yield return null;
+            Vector2Int searchedPos = grid.GetIndexFromNode(node);
+
+            Assert.AreEqual(new Vector2Int(-1, -1), searchedPos);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GetIndexFromNode_Exist_Test1() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            Vector2Int pos = new Vector2Int(5, 5);
+            grid.Grid[pos.x, pos.y].hCost = 10;
+
+            yield return null;
+            Vector2Int searchedPos = grid.GetIndexFromNode(grid.Grid[pos.x, pos.y]);
+
+            Assert.AreEqual(pos, searchedPos);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GetIndexFromNode_Exist_Test2() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            Vector2Int pos = new Vector2Int(7, 4);
+            grid.Grid[pos.x, pos.y].hCost = 10;
+
+            yield return null;
+            Vector2Int searchedPos = grid.GetIndexFromNode(grid.Grid[pos.x, pos.y]);
+
+            Assert.AreEqual(pos, searchedPos);
 
             TestHelper.DestroyObjects(grid.gameObject);
         }

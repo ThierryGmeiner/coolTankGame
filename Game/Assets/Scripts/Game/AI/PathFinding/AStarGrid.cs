@@ -13,7 +13,7 @@ namespace Game.AI
         private float nodeDiameter;
         private int gridSizeX, gridSizeY;
 
-        public AStarNode[,] Grid { get; private set; }
+        public AStarNode[,] Grid { get; set; }
 
         private void OnDrawGizmos() {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
@@ -21,7 +21,7 @@ namespace Game.AI
             if (Grid != null) {
                 foreach (AStarNode node in Grid) {
                     Gizmos.color = node.IsWalkable ? Color.white : Color.red;
-                    Gizmos.DrawCube(node.Position, Vector3.one * (nodeDiameter - 0.3f));
+                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.y), Vector3.one * (nodeDiameter - 0.3f));
                 }
             }
         }
@@ -33,15 +33,26 @@ namespace Game.AI
             CreateGrid();
         }
 
-        public AStarNode GetNodeFromPosition(Vector3 position) {
+        public AStarNode GetNodeFromPosition(Vector2 position) {
             float precentX = (position.x + gridWorldSize.x / 2) / gridWorldSize.x;
-            float precentY = (position.z + gridWorldSize.y / 2) / gridWorldSize.y;
+            float precentY = (position.y + gridWorldSize.y / 2) / gridWorldSize.y;
             precentX = Mathf.Clamp01(precentX);
             precentY = Mathf.Clamp01(precentY);
 
             int x = Mathf.RoundToInt((gridSizeX - 1) * precentX);
             int y = Mathf.RoundToInt((gridSizeY - 1) * precentY);
             return Grid[x, y];
+        }
+
+        public Vector2Int GetIndexFromNode(AStarNode node) {
+            for (int x = 0; x < Grid.GetLength(0); x++) {
+                for (int y = 0; y < Grid.GetLength(1); y++) {
+                    if (node.Equals(Grid[x, y])) {
+                        return new Vector2Int(x, y);
+                    }
+                }
+            }
+            return new Vector2Int(-1, -1);
         }
 
         public void Clear() {
@@ -52,15 +63,15 @@ namespace Game.AI
 
         private void CreateGrid() {
             Grid = new AStarNode[gridSizeX, gridSizeY];
-            Vector3 worldBottomLeft 
-                = new Vector3(transform.position.x - gridWorldSize.x / 2, transform.position.y, transform.position.z - gridWorldSize.y / 2);
+            Vector2 worldBottomLeft 
+                = new Vector2(transform.position.x - gridWorldSize.x / 2, transform.position.z - gridWorldSize.y / 2);
 
             for (int x = 0; x < gridSizeX; x++) {
                 for (int y = 0; y < gridSizeX; y++) {
-                    Vector3 worldPoint
-                        = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-                    bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
-                    Grid[x, y] = new AStarNode(walkable, worldPoint);
+                    Vector2 worldPoint
+                        = worldBottomLeft + Vector2.right * (x * nodeDiameter + nodeRadius) + Vector2.up * (y * nodeDiameter + nodeRadius);
+                    bool walkable = !(Physics.CheckSphere(new Vector3(worldPoint.x, 0, worldPoint.y), nodeRadius, unwalkableMask));
+                    Grid[x, y] = new AStarNode(walkable, worldPoint, new Vector2Int(x, y));
                 }
             }
         }

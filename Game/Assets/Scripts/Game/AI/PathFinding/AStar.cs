@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Game.AI
@@ -5,8 +6,9 @@ namespace Game.AI
     public class AStar
     {
         private readonly AStarGrid grid;
-        private AStarNode startNode;
-        private AStarNode tartgetNode;
+
+        public AStarNode startNode { get; private set; }
+        public AStarNode targetNode { get; private set; }
 
         public AStar(AStarGrid grid) {
             this.grid = grid;
@@ -15,7 +17,7 @@ namespace Game.AI
         public AStarNode[] GetPath(Vector3 startPos, Vector3 targetPos) {
             AStarNode[] path;
             startNode = grid.GetNodeFromPosition(startPos);
-            tartgetNode = grid.GetNodeFromPosition(targetPos);
+            targetNode = grid.GetNodeFromPosition(targetPos);
 
             // get simple path
             // simplify the way (via rays)
@@ -27,49 +29,44 @@ namespace Game.AI
 
         private AStarNode[] GetAStarPath() {
             AStarNode currentNode = startNode;
-            
-            while (currentNode != tartgetNode) {
+
+            while (currentNode != targetNode) {
                 UpdateNeighbors(currentNode);
             }
 
             // get the path
             //    => let all nodes point back to the previous node
+
+            return new AStarNode[0];
         }
 
         private void UpdateNeighbors(AStarNode currentNode) {
-            UpdateNode(grid.Grid[(int)currentNode.Position.x - 1, (int)currentNode.Position.y], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x + 1, (int)currentNode.Position.y], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x, (int)currentNode.Position.y - 1], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x, (int)currentNode.Position.y + 1], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x - 1, (int)currentNode.Position.y - 1], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x + 1, (int)currentNode.Position.y - 1], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x - 1, (int)currentNode.Position.y + 1], currentNode);
-            UpdateNode(grid.Grid[(int)currentNode.Position.x + 1, (int)currentNode.Position.y + 1], currentNode);
+            Vector2Int[] newPositions = SuroundingNodes(currentNode.ArrayIndex);
+
+            foreach(Vector2Int pos in newPositions) {
+                if (AStarHelper.NodeIsOutsideOfGrid(pos, grid)) continue;
+                else UpdateNode(grid.Grid[pos.x, pos.y], currentNode);
+            }
         }
 
-        private void UpdateNode(AStarNode node, AStarNode updatingNeighbor) {
-            if (NodeIsInsideOfGrid(node))
-                node.UpdateCost(GCost(node, updatingNeighbor), HCost(node));
+        public void UpdateNode(AStarNode node, AStarNode updatingNeighbor) {
+            node.hCost = AStarHelper.CalculateHCost(node, targetNode);
+
+            int gCost = AStarHelper.CalculateGCost(node, updatingNeighbor);
+            if (NewCostIsLower(gCost, node.gCost) || OldCostIsUndefined(node.gCost)) {
+                node.LastNodeInPath = updatingNeighbor;
+                node.gCost = gCost;
+            }
         }
 
-        public int GCost(AStarNode node, AStarNode updatingNeighbor) {
-            // if updating neighbor is diagonal the cost has to increas by 14 else by 10
-
-            // if new c cost is lower 
-            //    update the LastNodeInPath to the updating neighbor
-            //    return new c cost
-            // else
-            //    return old value
+        private static bool NewCostIsLower(int newCost, int oldCost) => newCost < oldCost;
+        private static bool OldCostIsUndefined(int oldCost) => oldCost == 0;
+        private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
+            Vector2Int[] array = { new Vector2Int(olsPos.x - 1, olsPos.y), new Vector2Int(olsPos.x + 1, olsPos.y),
+                                        new Vector2Int(olsPos.x, olsPos.y - 1), new Vector2Int(olsPos.x, olsPos.y + 1),
+                                        new Vector2Int(olsPos.x - 1, olsPos.y - 1), new Vector2Int(olsPos.x + 1, olsPos.y - 1),
+                                        new Vector2Int(olsPos.x - 1, olsPos.y + 1), new Vector2Int(olsPos.x + 1, olsPos.y + 1), };
+            return array;
         }
-
-        public int HCost(AStarNode node) {
-
-        }
-
-        private bool NodeIsInsideOfGrid(AStarNode node)
-            => node.Position.x >= 0
-            && node.Position.y >= 0
-            && node.Position.x < grid.Grid.Length
-            && node.Position.y < grid.Grid.Length;
     }
 }

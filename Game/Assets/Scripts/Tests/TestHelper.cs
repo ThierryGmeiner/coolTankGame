@@ -43,12 +43,24 @@ namespace Tests
             return obstacle;
         }
 
-        public static AStarGrid CreateASTarGrid() {
-            GameObject grid = new GameObject();
-            grid.name = "A*Grid";
-            grid.tag = "Untagged";
-            grid.layer = 0;
-            return grid.AddComponent<AStarGrid>();
+        public static AStarGrid CreateASTarGrid(int x, int y) {
+            GameObject obj = new GameObject();
+            obj.name = "A*Grid";
+            obj.tag = "Untagged";
+            obj.layer = 0;
+            AStarGrid grid = obj.AddComponent<AStarGrid>();
+            grid.Grid = CreateAStarNodeArray(x, y);
+            return grid;
+        }
+        
+        public static AStarNode[,] CreateAStarNodeArray(int x, int y) {
+            AStarNode[,] grid = new AStarNode[x, y];
+            for (int i = 0; i < grid.GetLength(0); i++) {
+                for (int j = 0; j < grid.GetLength(1); j++) {
+                    grid[i, j] = new AStarNode(true, new Vector2(i, j), new Vector2Int(i, j));
+                }
+            }
+            return grid;
         }
 
         public static void DestroyObjects(GameObject gameObject) {
