@@ -120,7 +120,7 @@ namespace Tests.PlayMode
                 tankTwo.Movement.Move(Vector2.up);
                 yield return null;
             }
-            Debug.Log($"tankOne: {tankOne.transform.position.z} / tankTwo: {tankTwo.transform.position.z}");
+
             Assert.Greater(tankOne.transform.position.z, tankTwo.transform.position.z);
 
             TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);
@@ -142,7 +142,6 @@ namespace Tests.PlayMode
                 yield return null;
             }
 
-            Debug.Log($"tankOne: {tankOne.transform.position.z} / tankTwo: {tankTwo.transform.position.z}");
             Assert.AreEqual(tankOne.transform.position.z, tankTwo.transform.position.z);
 
             TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);

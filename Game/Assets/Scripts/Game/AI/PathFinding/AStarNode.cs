@@ -10,10 +10,11 @@ namespace Game.AI
         public int hCost { get; set; } = 0; // estimatet cost to the targetnode
         public int fCost { get => gCost + hCost; }
 
-        public readonly Vector2Int ArrayIndex;
+        public Vector2Int ArrayIndex { get; private set; }
         public Vector2 Position { get; private set; }
-        public bool IsWalkable { get; private set; }
         public AStarNode LastNodeInPath { get; set; } = null;
+        public bool IsWalkable { get; private set; }
+        public bool AllNeighborsAreDiscovered { get; set; } = false;
 
         public AStarNode(bool isWalkable, Vector2 position) : this(isWalkable, position, new Vector2Int(-1, -1)) { }
         public AStarNode(bool isWalkable, Vector2 position, Vector2Int arrayIndex) {
@@ -24,6 +25,7 @@ namespace Game.AI
 
         public void Clear() {
             LastNodeInPath = null;
+            AllNeighborsAreDiscovered = false;
             gCost = 0;
             hCost = 0;
         }

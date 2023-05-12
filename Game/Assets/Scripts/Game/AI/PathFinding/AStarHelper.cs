@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.AI
@@ -20,12 +21,21 @@ namespace Game.AI
         public static int CalculateHCost(AStarNode node, AStarNode targetNode) {
             if (node.hCost > 0) return node.hCost;
 
-            int distanceX = Math.Abs(Mathf.RoundToInt(targetNode.Position.x - node.Position.x)) - 1;
-            int distanceY = Math.Abs(Mathf.RoundToInt(targetNode.Position.y - node.Position.y)) - 1;
+            int distanceX = Math.Abs(Mathf.RoundToInt(targetNode.Position.x - node.Position.x));
+            int distanceY = Math.Abs(Mathf.RoundToInt(targetNode.Position.y - node.Position.y));
             int diagonalSteps = Math.Min(distanceX, distanceY);
             int straightSteps = Math.Max(distanceX, distanceY) - diagonalSteps;
             int hCost = straightSteps * STRAIGHT_MOVE_COST + diagonalSteps * DIAGOANAL_MOVE_COST;
             return hCost;
+        }
+
+        public AStarNode[] BackTrackPath(AStarGrid grid, AStarNode startNode, AStarNode targetNode) {
+            List<AStarNode> path = new List<AStarNode>();
+
+            // recursion ?????!!!!!
+            for ()
+
+            return path.ToArray();
         }
 
         public static bool NodeIsOutsideOfGrid(AStarNode node, AStarGrid grid) => NodeIsOutsideOfGrid(node.ArrayIndex, grid);

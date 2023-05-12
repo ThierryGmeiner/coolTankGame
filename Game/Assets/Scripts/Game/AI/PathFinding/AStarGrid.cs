@@ -55,10 +55,35 @@ namespace Game.AI
             return new Vector2Int(-1, -1);
         }
 
-        public void Clear() {
+        public AStarNode GetCheapestNode() {
+            List<AStarNode> listOfCheapestNodes = new List<AStarNode>();
+            AStarNode startNode = new AStarNode(true, Vector2.zero);
+            startNode.hCost = int.MaxValue;
+            listOfCheapestNodes.Add(startNode);
+
             foreach (AStarNode node in Grid) {
-                node.Clear();
+                if (node.AllNeighborsAreDiscovered || node.fCost == 0) continue;
+                if (node.fCost < listOfCheapestNodes[0].fCost) { listOfCheapestNodes.Clear(); listOfCheapestNodes.Add(node); }
+                else if (node.fCost == listOfCheapestNodes[0].fCost) listOfCheapestNodes.Add(node);
             }
+            return GetCheapestNode(listOfCheapestNodes);
+        }
+
+        private AStarNode GetCheapestNode(List<AStarNode> nodeList) {
+            if (nodeList.Count == 1) return nodeList[0];
+            
+            // if there are more then one node, tanke the one with the lowest hCost
+            AStarNode cheapestNode = nodeList[0];
+            for (int i = 1; i < nodeList.Count; i++) {
+                if (nodeList[i].hCost < cheapestNode.hCost) {
+                    cheapestNode = nodeList[i];
+                }
+            }
+            return cheapestNode;
+        }
+
+        public void Clear() {
+            foreach (AStarNode node in Grid) node.Clear();
         }
 
         private void CreateGrid() {

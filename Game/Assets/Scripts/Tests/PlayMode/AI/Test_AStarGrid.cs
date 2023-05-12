@@ -118,5 +118,39 @@ namespace Tests.PlayMode
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
+
+        [UnityTest]
+        public IEnumerator GetNodeWithLowestFCost_OneLowest_GetLowest() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(2, 2);
+            grid.Grid[0, 0].hCost = 100;
+            grid.Grid[0, 1].hCost = 10;
+            grid.Grid[1, 0].hCost = 101;
+            grid.Grid[1, 1].hCost = 0;
+
+            AStarNode cheapestNode = grid.GetCheapestNode();
+
+            Assert.AreEqual(grid.Grid[0, 1], cheapestNode);
+            yield return null;
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GetNodeWithLowestFCost_TowLowest_GetLowestHCost() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(2, 2);
+            grid.Grid[0, 0].hCost = 20;
+            grid.Grid[0, 1].hCost = 10;
+            grid.Grid[0, 0].gCost = 10;
+            grid.Grid[0, 1].gCost = 20;
+            grid.Grid[1, 0].hCost = 100;
+            grid.Grid[1, 1].hCost = 0;
+
+            AStarNode cheapestNode = grid.GetCheapestNode();
+
+            Assert.AreEqual(grid.Grid[0, 1], cheapestNode);
+            yield return null;
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
     }
 }

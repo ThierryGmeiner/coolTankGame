@@ -215,7 +215,7 @@ namespace Tests.PlayMode
             node.hCost = oldHCost;
 
             yield return null;
-            int newHCost = AStarHelper.CalculateHCost(node, aStar.targetNode);
+            int newHCost = AStarHelper.CalculateHCost(node, aStar.TargetNode);
 
             Assert.AreEqual(oldHCost, newHCost);
 
@@ -223,17 +223,106 @@ namespace Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator CalculateHCost_xxx_xxx() {
+        public IEnumerator CalculateHCost_StraightMoves() {
             AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
-            AStar aStar = new AStar(grid);
-            AStarNode node = grid.Grid[0, 0];
-            int oldHCost = 20;
-            node.hCost = oldHCost;
+            AStarNode startNode = grid.Grid[9, 0];
+            AStarNode targetNode = grid.Grid[0, 0];
 
             yield return null;
-            int newHCost = AStarHelper.CalculateHCost(node, aStar.targetNode);
-            
-            Assert.AreEqual(oldHCost, newHCost);
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.STRAIGHT_MOVE_COST * 9; // 9 are the required amount of steps
+            Assert.AreEqual(requiredHCost, hCost);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator CalculateHCost_DiagonaleMoves() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode startNode = grid.Grid[0, 0];
+            AStarNode targetNode = grid.Grid[9, 9];
+
+            yield return null;
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 9; // 9 are the required amount of steps
+            Assert.AreEqual(requiredHCost, hCost);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator CalculateHCost_DiagonalAndStraight_Test1() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode startNode = grid.Grid[0, 0];
+            AStarNode targetNode = grid.Grid[2, 1];
+
+            yield return null;
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 1 + AStarHelper.STRAIGHT_MOVE_COST * 1;
+            Assert.AreEqual(requiredHCost, hCost);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator CalculateHCost_DiagonalAndStraight_Test2() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode startNode = grid.Grid[0, 0];
+            AStarNode targetNode = grid.Grid[2, 5];
+
+            yield return null;
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 2 + AStarHelper.STRAIGHT_MOVE_COST * 3;
+            Assert.AreEqual(requiredHCost, hCost);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator CalculateHCost_DiagonalAndStraight_Test3() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode startNode = grid.Grid[6, 7];
+            AStarNode targetNode = grid.Grid[1, 4];
+
+            yield return null;
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 3 + AStarHelper.STRAIGHT_MOVE_COST * 2;
+            Assert.AreEqual(requiredHCost, hCost);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator CalculateHCost_DiagonalAndStraight_Test4() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode startNode = grid.Grid[6, 4];
+            AStarNode targetNode = grid.Grid[1, 4];
+
+            yield return null;
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 0 + AStarHelper.STRAIGHT_MOVE_COST * 5;
+            Assert.AreEqual(requiredHCost, hCost);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator CalculateHCost_DiagonalAndStraight_Test5() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarNode startNode = grid.Grid[6, 0];
+            AStarNode targetNode = grid.Grid[1, 7];
+
+            yield return null;
+            int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
+
+            int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 5 + AStarHelper.STRAIGHT_MOVE_COST * 2;
+            Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
         }

@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.AI
@@ -7,50 +7,55 @@ namespace Game.AI
     {
         private readonly AStarGrid grid;
 
-        public AStarNode startNode { get; private set; }
-        public AStarNode targetNode { get; private set; }
+        public AStarNode StartNode { get; set; }
+        public AStarNode TargetNode { get; set; }
 
         public AStar(AStarGrid grid) {
             this.grid = grid;
         }
 
         public AStarNode[] GetPath(Vector3 startPos, Vector3 targetPos) {
-            AStarNode[] path;
-            startNode = grid.GetNodeFromPosition(startPos);
-            targetNode = grid.GetNodeFromPosition(targetPos);
+            StartNode = grid.GetNodeFromPosition(startPos);
+            TargetNode = grid.GetNodeFromPosition(targetPos);
 
             // get simple path
             // simplify the way (via rays)
             // convert the simplified way to an array
 
+            AStarNode[] path = GetAStarPath();
+
+
             grid.Clear();
             return new AStarNode[0];
         }
 
-        private AStarNode[] GetAStarPath() {
-            AStarNode currentNode = startNode;
+        public AStarNode[] GetAStarPath() {
+            List<AStarNode> path = new List<AStarNode>();
+            AStarNode currentNode = StartNode;
 
-            while (currentNode != targetNode) {
+            while (currentNode != TargetNode) {
                 UpdateNeighbors(currentNode);
+                currentNode = grid.GetCheapestNode();
             }
 
-            // get the path
-            //    => let all nodes point back to the previous node
 
-            return new AStarNode[0];
+
+            return path.ToArray();
         }
 
         private void UpdateNeighbors(AStarNode currentNode) {
-            Vector2Int[] newPositions = SuroundingNodes(currentNode.ArrayIndex);
+            Vector2Int[] neighborPositions = SuroundingNodes(currentNode.ArrayIndex);
 
-            foreach(Vector2Int pos in newPositions) {
-                if (AStarHelper.NodeIsOutsideOfGrid(pos, grid)) continue;
-                else UpdateNode(grid.Grid[pos.x, pos.y], currentNode);
+            foreach(Vector2Int position in neighborPositions) {
+                if (AStarHelper.NodeIsOutsideOfGrid(position, grid)) continue;
+                
+                UpdateNode(grid.Grid[position.x, position.y], currentNode);
+                grid.Grid[position.x, position.y].AllNeighborsAreDiscovered = true;
             }
         }
 
         public void UpdateNode(AStarNode node, AStarNode updatingNeighbor) {
-            node.hCost = AStarHelper.CalculateHCost(node, targetNode);
+            node.hCost = AStarHelper.CalculateHCost(node, TargetNode);
 
             int gCost = AStarHelper.CalculateGCost(node, updatingNeighbor);
             if (NewCostIsLower(gCost, node.gCost) || OldCostIsUndefined(node.gCost)) {
