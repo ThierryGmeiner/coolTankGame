@@ -368,5 +368,87 @@ namespace Tests.PlayMode
             expectedPath.Add(node5);
             Assert.AreEqual(expectedPath, path);
         }
+
+        [UnityTest]
+        public IEnumerator UpdateNode_UpdateLastNodeInPath() {
+            AStarNode node = new AStarNode(true, Vector2.zero, Vector2Int.zero);
+            AStarNode updatingNode = new AStarNode(true, Vector2.zero, Vector2Int.up);
+            AStarNode targetNode = new AStarNode(true, Vector2.zero, Vector2Int.down);
+            updatingNode.gCost = 10;
+            yield return null;
+
+            AStarHelper.UpdateNode(node, updatingNode, targetNode);
+
+            Assert.AreEqual(updatingNode, node.LastNodeInPath);
+        }
+
+        [UnityTest]
+        public IEnumerator UpdateNode_UpdateGCost() {
+            AStarNode node = new AStarNode(true, Vector2.zero, Vector2Int.zero);
+            AStarNode updatingNode = new AStarNode(true, Vector2.zero, Vector2Int.up);
+            AStarNode targetNode = new AStarNode(true, Vector2.zero, Vector2Int.down);
+            int oldGCost = node.gCost;
+            updatingNode.gCost = 10;
+            yield return null;
+
+            AStarHelper.UpdateNode(node, updatingNode, targetNode);
+
+            Assert.AreNotEqual(oldGCost, node.gCost);
+        }
+        
+        [UnityTest]
+        public IEnumerator UpdateNode_UpdateHCost() {
+            AStarNode node = new AStarNode(true, Vector2.zero, Vector2Int.zero);
+            AStarNode updatingNode = new AStarNode(true, Vector2.down, Vector2Int.down);
+            AStarNode targetNode = new AStarNode(true, Vector2.up, Vector2Int.up);
+            int oldHCost = node.hCost;
+            updatingNode.gCost = 10;
+
+            AStarHelper.UpdateNode(node, updatingNode, targetNode);
+            yield return null;
+
+            Assert.AreNotEqual(oldHCost, node.hCost);
+        }
+
+        [UnityTest]
+        public IEnumerator UpdateNode_GCostIsUndefinde_Update() {
+            AStarNode node = new AStarNode(true, Vector2.zero, Vector2Int.zero);
+            AStarNode updatingNode = new AStarNode(true, Vector2.zero, Vector2Int.up);
+            AStarNode targetNode = new AStarNode(true, Vector2.zero, Vector2Int.down);
+            updatingNode.gCost = 10;
+            yield return null;
+
+            AStarHelper.UpdateNode(node, updatingNode, targetNode);
+
+            Assert.AreEqual(updatingNode, node.LastNodeInPath);
+        }
+
+        [UnityTest]
+        public IEnumerator UpdateNode_GCostIsLower_Update() {
+            AStarNode node = new AStarNode(true, Vector2.zero, Vector2Int.zero);
+            AStarNode updatingNode = new AStarNode(true, Vector2.zero, Vector2Int.up);
+            AStarNode targetNode = new AStarNode(true, Vector2.zero, Vector2Int.down);
+            updatingNode.gCost = 10;
+            node.gCost = 100;
+            yield return null;
+
+            AStarHelper.UpdateNode(node, updatingNode, targetNode);
+
+            Assert.AreEqual(updatingNode, node.LastNodeInPath);
+        }
+
+        [UnityTest]
+        public IEnumerator UpdateNode_GCostIsHigher_DontUpdate() {
+            AStarNode node = new AStarNode(true, Vector2.zero, Vector2Int.zero);
+            AStarNode updatingNode = new AStarNode(true, Vector2.zero, Vector2Int.up);
+            AStarNode targetNode = new AStarNode(true, Vector2.zero, Vector2Int.down);
+            updatingNode.gCost = 10;
+            node.gCost = 8;
+            yield return null;
+
+            AStarHelper.UpdateNode(node, updatingNode, targetNode);
+
+            Assert.AreEqual(null, node.LastNodeInPath);
+        }
     }
 }
