@@ -37,10 +37,7 @@ namespace Game.AI
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
             }
-
-
-
-            return path.ToArray();
+            return AStarHelper.GetPathViaBacktracking(StartNode, TargetNode).ToArray();
         }
 
         private void UpdateNeighbors(AStarNode currentNode) {
@@ -49,23 +46,11 @@ namespace Game.AI
             foreach(Vector2Int position in neighborPositions) {
                 if (AStarHelper.NodeIsOutsideOfGrid(position, grid)) continue;
                 
-                UpdateNode(grid.Grid[position.x, position.y], currentNode);
+                AStarHelper.UpdateNode(grid.Grid[position.x, position.y], currentNode, TargetNode);
                 grid.Grid[position.x, position.y].AllNeighborsAreDiscovered = true;
             }
         }
 
-        public void UpdateNode(AStarNode node, AStarNode updatingNeighbor) {
-            node.hCost = AStarHelper.CalculateHCost(node, TargetNode);
-
-            int gCost = AStarHelper.CalculateGCost(node, updatingNeighbor);
-            if (NewCostIsLower(gCost, node.gCost) || OldCostIsUndefined(node.gCost)) {
-                node.LastNodeInPath = updatingNeighbor;
-                node.gCost = gCost;
-            }
-        }
-
-        private static bool NewCostIsLower(int newCost, int oldCost) => newCost < oldCost;
-        private static bool OldCostIsUndefined(int oldCost) => oldCost == 0;
         private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
             Vector2Int[] array = { new Vector2Int(olsPos.x - 1, olsPos.y), new Vector2Int(olsPos.x + 1, olsPos.y),
                                         new Vector2Int(olsPos.x, olsPos.y - 1), new Vector2Int(olsPos.x, olsPos.y + 1),

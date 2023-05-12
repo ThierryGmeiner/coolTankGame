@@ -326,5 +326,47 @@ namespace Tests.PlayMode
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
+
+        [UnityTest]
+        public IEnumerator GetPathViaBacktracking_Test1() {
+            AStarNode node1 = new AStarNode(true, Vector2.zero);
+            AStarNode node2 = new AStarNode(true, Vector2.one);
+            AStarNode node3 = new AStarNode(true, Vector2.left);
+            node3.LastNodeInPath = node2;
+            node2.LastNodeInPath = node1;
+            yield return null;
+
+            List<AStarNode> path = AStarHelper.GetPathViaBacktracking(node1, node3);
+
+            List<AStarNode> expectedPath = new List<AStarNode>();
+            expectedPath.Add(node1);
+            expectedPath.Add(node2);
+            expectedPath.Add(node3);
+            Assert.AreEqual(expectedPath, path);
+        }
+
+        [UnityTest]
+        public IEnumerator GetPathViaBacktracking_Test2() {
+            AStarNode node1 = new AStarNode(true, Vector2.zero);
+            AStarNode node2 = new AStarNode(true, Vector2.one);
+            AStarNode node3 = new AStarNode(true, Vector2.left);
+            AStarNode node4 = new AStarNode(true, Vector2.right);
+            AStarNode node5 = new AStarNode(true, Vector2.up);
+            node5.LastNodeInPath = node4;
+            node4.LastNodeInPath = node3;
+            node3.LastNodeInPath = node2;
+            node2.LastNodeInPath = node1;
+            yield return null;
+
+            List<AStarNode> path = AStarHelper.GetPathViaBacktracking(node1, node5);
+
+            List<AStarNode> expectedPath = new List<AStarNode>();
+            expectedPath.Add(node1);
+            expectedPath.Add(node2);
+            expectedPath.Add(node3);
+            expectedPath.Add(node4);
+            expectedPath.Add(node5);
+            Assert.AreEqual(expectedPath, path);
+        }
     }
 }
