@@ -43,14 +43,12 @@ namespace Tests
             return obstacle;
         }
 
-        public static AStarGrid CreateASTarGrid(int x, int y) {
+        public static AStarGrid CreateASTarGrid() {
             GameObject obj = new GameObject();
             obj.name = "A*Grid";
             obj.tag = "Untagged";
             obj.layer = 0;
-            AStarGrid grid = obj.AddComponent<AStarGrid>();
-            grid.Grid = CreateAStarNodeArray(x, y);
-            return grid;
+            return obj.AddComponent<AStarGrid>();
         }
         
         public static AStarNode[,] CreateAStarNodeArray(int x, int y) {

@@ -17,11 +17,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator GetAStarPath_Test1() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(5, 5);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
             AStar aStar = new AStar(grid);
+            yield return null;
 
             AStarNode[] path = aStar.GetAStarPath(grid.Grid[0, 0].Position, grid.Grid[4, 4].Position);
-            yield return null;
 
             AStarNode[] expectedPath = { grid.Grid[0, 0], grid.Grid[1, 1], grid.Grid[2, 2], grid.Grid[3, 3], grid.Grid[4, 4] };
             Assert.AreEqual(expectedPath, path);

@@ -96,11 +96,11 @@ namespace Tests.PlayMode
         }
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_DontExistInGrid_True() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode node = new AStarNode(true, new Vector2(10, 10));
 
             bool isOutside = AStarHelper.NodeIsOutsideOfGrid(node, grid);
-            yield return null;
 
             Assert.IsTrue(isOutside);
 
@@ -109,11 +109,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_XtoLow_True() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(-5, 1));
 
             bool isOutside = AStarHelper.NodeIsOutsideOfGrid(node, grid);
-            yield return null;
 
             Assert.IsTrue(isOutside);
 
@@ -122,11 +122,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_YtoLow_True() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, -5));
 
             bool isOutside = AStarHelper.NodeIsOutsideOfGrid(node, grid);
-            yield return null;
 
             Assert.IsTrue(isOutside);
 
@@ -135,11 +135,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_XToHigh_True() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
-            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(+5, 1));
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(+50, 1));
 
             bool isOutside = AStarHelper.NodeIsOutsideOfGrid(node, grid);
-            yield return null;
 
             Assert.IsTrue(isOutside);
 
@@ -148,11 +148,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_YToHigh_True() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
-            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, +5));
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, +50));
 
             bool isOutside = AStarHelper.NodeIsOutsideOfGrid(node, grid);
-            yield return null;
 
             Assert.IsTrue(isOutside);
 
@@ -161,11 +161,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_IsInside_False() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, 1));
 
             bool isOutside = AStarHelper.NodeIsOutsideOfGrid(node, grid);
-            yield return null;
 
             Assert.IsFalse(isOutside);
 
@@ -208,13 +208,13 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_CostAlreadySet_ReturnOldCost() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStar aStar = new AStar(grid);
             AStarNode node = grid.Grid[0, 0];
             int oldHCost = 20;
             node.hCost = oldHCost;
 
-            yield return null;
             int newHCost = AStarHelper.CalculateHCost(node, aStar.TargetNode);
 
             Assert.AreEqual(oldHCost, newHCost);
@@ -224,11 +224,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_StraightMoves() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[9, 0];
             AStarNode targetNode = grid.Grid[0, 0];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.STRAIGHT_MOVE_COST * 9; // 9 are the required amount of steps
@@ -239,11 +239,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonaleMoves() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[9, 9];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 9; // 9 are the required amount of steps
@@ -254,11 +254,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test1() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[2, 1];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 1 + AStarHelper.STRAIGHT_MOVE_COST * 1;
@@ -269,11 +269,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test2() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[2, 5];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 2 + AStarHelper.STRAIGHT_MOVE_COST * 3;
@@ -284,11 +284,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test3() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[6, 7];
             AStarNode targetNode = grid.Grid[1, 4];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 3 + AStarHelper.STRAIGHT_MOVE_COST * 2;
@@ -299,11 +299,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test4() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[6, 4];
             AStarNode targetNode = grid.Grid[1, 4];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 0 + AStarHelper.STRAIGHT_MOVE_COST * 5;
@@ -314,11 +314,11 @@ namespace Tests.PlayMode
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test5() {
-            AStarGrid grid = TestHelper.CreateASTarGrid(10, 10);
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
             AStarNode startNode = grid.Grid[6, 0];
             AStarNode targetNode = grid.Grid[1, 7];
 
-            yield return null;
             int hCost = AStarHelper.CalculateHCost(startNode, targetNode);
 
             int requiredHCost = AStarHelper.DIAGOANAL_MOVE_COST * 5 + AStarHelper.STRAIGHT_MOVE_COST * 2;

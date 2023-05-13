@@ -37,7 +37,6 @@ namespace Game.AI
         }
 
         private AStarNode[] GetAStarPath() {
-            List<AStarNode> path = new List<AStarNode>();
             AStarNode currentNode = StartNode;
 
             int iteration = 0;

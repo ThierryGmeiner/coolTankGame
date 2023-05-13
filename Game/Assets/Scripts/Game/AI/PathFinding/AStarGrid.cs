@@ -7,7 +7,7 @@ namespace Game.AI
     public class AStarGrid : MonoBehaviour
     {
         [SerializeField] public LayerMask unwalkableMask = 7;
-        [SerializeField] private Vector2 gridWorldSize = new Vector2(20, 20);
+        [SerializeField] private Vector2 gridWorldSize = new Vector2(10, 10);
         [SerializeField] private float nodeRadius = 0.5f;
         [SerializeField] private Transform player;
         private float nodeDiameter;
@@ -38,8 +38,8 @@ namespace Game.AI
             float precentY = (position.y + gridWorldSize.y / 2) / gridWorldSize.y;
             precentX = Mathf.Clamp01(precentX);
             precentY = Mathf.Clamp01(precentY);
-            int x = Mathf.RoundToInt((gridSizeX - 1) * precentX);
-            int y = Mathf.RoundToInt((gridSizeY - 1) * precentY);
+            int x = Mathf.RoundToInt(Mathf.Clamp((gridSizeX - 1) * precentX, 0, Grid.GetLength(0)));
+            int y = Mathf.RoundToInt(Mathf.Clamp((gridSizeY - 1) * precentY, 0, Grid.GetLength(1)));
             return Grid[x, y];
         }
 
