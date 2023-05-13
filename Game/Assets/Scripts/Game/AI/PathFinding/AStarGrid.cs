@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,13 +34,29 @@ namespace Game.AI
         }
 
         public AStarNode GetNodeFromPosition(Vector2 position) {
+            Vector2 bottomLeftOfGrid = new Vector2(transform.position.x - gridSizeX / 2, transform.position.y - gridSizeY / 2);
+
+            //float precentX = (Math.Abs(bottomLeftOfGrid.x - position.x) * 100) / gridSizeX;
+            //float precentY = (Math.Abs(bottomLeftOfGrid.y - position.y) * 100) / gridSizeY;
+
+            //Debug.Log(Math.Abs(bottomLeftOfGrid.x - position.x));
+            //Debug.Log((Math.Abs(bottomLeftOfGrid.x - position.x) * 100));
+            //Debug.Log((Math.Abs(bottomLeftOfGrid.x - position.x) * 100) / gridSizeX);
+            //Debug.Log($"precentX: {precentX}, precentY: {precentY}");
             float precentX = (position.x + gridWorldSize.x / 2) / gridWorldSize.x;
             float precentY = (position.y + gridWorldSize.y / 2) / gridWorldSize.y;
+            Debug.Log($"precentX: {precentX}, precentY: {precentY}");
+
             precentX = Mathf.Clamp01(precentX);
             precentY = Mathf.Clamp01(precentY);
 
-            int x = Mathf.RoundToInt((gridSizeX - 1) * precentX);
-            int y = Mathf.RoundToInt((gridSizeY - 1) * precentY);
+            int x = Mathf.RoundToInt(gridSizeX * (precentX / 100));
+            int y = Mathf.RoundToInt(gridSizeY * (precentY / 100));
+
+            //int x = Mathf.RoundToInt((gridSizeX - 1) * precentX);
+            //int y = Mathf.RoundToInt((gridSizeY - 1) * precentY);
+
+            Debug.Log("position: " + position + " / " + x + ", " + y);
             return Grid[x, y];
         }
 
@@ -66,6 +82,7 @@ namespace Game.AI
                 if (node.fCost < listOfCheapestNodes[0].fCost) { listOfCheapestNodes.Clear(); listOfCheapestNodes.Add(node); }
                 else if (node.fCost == listOfCheapestNodes[0].fCost) listOfCheapestNodes.Add(node);
             }
+            Debug.Log("getCheapestNode is finished");
             return GetCheapestNode(listOfCheapestNodes);
         }
 

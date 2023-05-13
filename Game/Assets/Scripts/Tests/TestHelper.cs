@@ -57,7 +57,8 @@ namespace Tests
             AStarNode[,] grid = new AStarNode[x, y];
             for (int i = 0; i < grid.GetLength(0); i++) {
                 for (int j = 0; j < grid.GetLength(1); j++) {
-                    grid[i, j] = new AStarNode(true, new Vector2(i, j), new Vector2Int(i, j));
+                    // pos + 0.5 because that's the default radius of the nodes
+                    grid[i, j] = new AStarNode(true, new Vector2(i + 0.5f, j + 0.5f), new Vector2Int(i, j));
                 }
             }
             return grid;

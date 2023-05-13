@@ -14,7 +14,7 @@ namespace Game.AI
             this.grid = grid;
         }
 
-        public AStarNode[] GetPath(Vector3 startPos, Vector3 targetPos) {
+        public AStarNode[] GetOptimizedPath(Vector2 startPos, Vector2 targetPos) {
             StartNode = grid.GetNodeFromPosition(startPos);
             TargetNode = grid.GetNodeFromPosition(targetPos);
 
@@ -29,13 +29,24 @@ namespace Game.AI
             return new AStarNode[0];
         }
 
-        public AStarNode[] GetAStarPath() {
+        public AStarNode[] GetAStarPath(Vector2 startPos, Vector2 targetPos) {
+            StartNode = grid.GetNodeFromPosition(startPos);
+            Debug.Log("targetPos: " + targetPos);
+            TargetNode = grid.GetNodeFromPosition(targetPos);
+            return GetAStarPath();
+        }
+
+        private AStarNode[] GetAStarPath() {
             List<AStarNode> path = new List<AStarNode>();
             AStarNode currentNode = StartNode;
 
-            while (currentNode != TargetNode) {
+            int iteration = 0;
+
+            while (currentNode != TargetNode && iteration < 100) {
+                Debug.Log(currentNode.ArrayIndex);
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
+                iteration++;
             }
             return AStarHelper.GetPathViaBacktracking(StartNode, TargetNode).ToArray();
         }
@@ -49,6 +60,7 @@ namespace Game.AI
                 AStarHelper.UpdateNode(grid.Grid[position.x, position.y], currentNode, TargetNode);
                 grid.Grid[position.x, position.y].AllNeighborsAreDiscovered = true;
             }
+            Debug.Log("updateNeighbors is finished");
         }
 
         private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {

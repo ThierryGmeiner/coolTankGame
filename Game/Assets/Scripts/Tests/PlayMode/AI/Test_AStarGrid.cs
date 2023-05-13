@@ -65,14 +65,53 @@ namespace Tests.PlayMode
         //}
 
         [UnityTest]
-        public IEnumerator GetNodeFromPosition_GetRightNode() {
+        public IEnumerator GetNodeFromPosition_BottomLeft() {
             AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
-            Vector2 bottomLeft = new Vector3(5.5f, 5.5f); // 0.5 = radius of node
+            Vector2 searchPos = grid.Grid[0, 0].Position;
+
+            AStarNode node = grid.GetNodeFromPosition(searchPos);
+
+            Assert.AreEqual(searchPos, node.Position);
             yield return null;
 
-            AStarNode node = grid.GetNodeFromPosition(bottomLeft);
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
 
-            Assert.AreEqual(bottomLeft, node.Position);
+        [UnityTest]
+        public IEnumerator GetNodeFromPosition_BottomRight() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            Vector2 searchPos = grid.Grid[2, 0].Position;
+
+            AStarNode node = grid.GetNodeFromPosition(searchPos);
+
+            Assert.AreEqual(searchPos, node.Position);
+            yield return null;
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GetNodeFromPosition_TopLeft() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            Vector2 searchPos = grid.Grid[0, 2].Position;
+
+            AStarNode node = grid.GetNodeFromPosition(searchPos);
+
+            Assert.AreEqual(searchPos, node.Position);
+            yield return null;
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator GetNodeFromPosition_TopRight() {
+            AStarGrid grid = TestHelper.CreateASTarGrid(3, 3);
+            Vector2 searchPos = grid.Grid[2, 2].Position;
+
+            AStarNode node = grid.GetNodeFromPosition(searchPos);
+
+            Assert.AreEqual(searchPos, node.Position);
+            yield return null;
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
