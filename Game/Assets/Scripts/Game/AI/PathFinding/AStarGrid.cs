@@ -9,18 +9,23 @@ namespace Game.AI
         [SerializeField] public LayerMask unwalkableMask = 7;
         [SerializeField] private Vector2 gridWorldSize = new Vector2(10, 10);
         [SerializeField] private float nodeRadius = 0.5f;
-        [SerializeField] private Transform player;
         private float nodeDiameter;
         private int gridSizeX, gridSizeY;
+
+        [SerializeField] private Transform player;
+        [SerializeField] private Transform target;
 
         public AStarNode[,] Grid { get; set; }
 
         private void OnDrawGizmos() {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+            AStar aStar = new AStar(this);
+            AStarNode[] path = aStar.GetAStarPath(player.position, target.position);
 
             if (Grid != null) {
                 foreach (AStarNode node in Grid) {
                     Gizmos.color = node.IsWalkable ? Color.white : Color.red;
+                    if (Magic.Array.Contains<AStarNode>(path, node)) Gizmos.color = Color.cyan;
                     Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.y), Vector3.one * (nodeDiameter - 0.3f));
                 }
             }

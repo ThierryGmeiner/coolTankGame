@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Magic;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.Magic
 {
     public class Test_MagicMath
     {

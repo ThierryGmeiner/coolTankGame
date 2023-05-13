@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Game.Entity.Tank;
 
-namespace Tests.PlayMode
+namespace Tests.PlayMode.Entity
 {
     public class Test_TankMovement
     {

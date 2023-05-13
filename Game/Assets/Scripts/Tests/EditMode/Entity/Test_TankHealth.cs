@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Game.Entity.Tank;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.Entity
 {
     public class Test_TankHealth
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Game.AI;
 
-namespace Tests.PlayMode
+namespace Tests.PlayMode.AI
 {
     public class Test_AStar
     {

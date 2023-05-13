@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Game.AI;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.AI
 {
     public class Test_AStarNode
     {
