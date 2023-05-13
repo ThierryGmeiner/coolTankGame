@@ -13,7 +13,7 @@ namespace Game.AI
         public Vector2Int ArrayIndex { get; private set; }
         public Vector2 Position { get; private set; }
         public AStarNode LastNodeInPath { get; set; } = null;
-        public bool IsWalkable { get; private set; }
+        public bool IsWalkable { get; set; }
         public bool AllNeighborsAreDiscovered { get; set; } = false;
 
         public AStarNode(bool isWalkable, Vector2 position) : this(isWalkable, position, new Vector2Int(-1, -1)) { }

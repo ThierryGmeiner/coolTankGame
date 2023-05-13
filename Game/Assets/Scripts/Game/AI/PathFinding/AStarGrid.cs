@@ -61,11 +61,10 @@ namespace Game.AI
             listOfCheapestNodes.Add(startNode);
 
             foreach (AStarNode node in Grid) {
-                if (node.AllNeighborsAreDiscovered || node.fCost == 0) continue;
+                if (node.AllNeighborsAreDiscovered || node.fCost == 0 || !node.IsWalkable) continue;
                 if (node.fCost < listOfCheapestNodes[0].fCost) { listOfCheapestNodes.Clear(); listOfCheapestNodes.Add(node); }
                 else if (node.fCost == listOfCheapestNodes[0].fCost) listOfCheapestNodes.Add(node);
             }
-            Debug.Log("getCheapestNode is finished");
             return GetCheapestNode(listOfCheapestNodes);
         }
 

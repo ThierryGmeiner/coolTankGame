@@ -31,18 +31,16 @@ namespace Game.AI
 
         public AStarNode[] GetAStarPath(Vector2 startPos, Vector2 targetPos) {
             StartNode = grid.GetNodeFromPosition(startPos);
-            Debug.Log("targetPos: " + targetPos);
             TargetNode = grid.GetNodeFromPosition(targetPos);
             return GetAStarPath();
         }
 
-        private AStarNode[] GetAStarPath() {
+        public AStarNode[] GetAStarPath() {
             AStarNode currentNode = StartNode;
 
             int iteration = 0;
 
-            while (currentNode != TargetNode && iteration < 100) {
-                Debug.Log(currentNode.ArrayIndex);
+            while (currentNode != TargetNode && iteration < 10000000) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
                 iteration++;
@@ -50,16 +48,14 @@ namespace Game.AI
             return AStarHelper.GetPathViaBacktracking(StartNode, TargetNode).ToArray();
         }
 
-        private void UpdateNeighbors(AStarNode currentNode) {
+        public void UpdateNeighbors(AStarNode currentNode) {
             Vector2Int[] neighborPositions = SuroundingNodes(currentNode.ArrayIndex);
+            currentNode.AllNeighborsAreDiscovered = true;
 
-            foreach(Vector2Int position in neighborPositions) {
-                if (AStarHelper.NodeIsOutsideOfGrid(position, grid)) continue;
-                
+            foreach (Vector2Int position in neighborPositions) {
+                if (!currentNode.IsWalkable || AStarHelper.NodeIsOutsideOfGrid(position, grid)) continue;
                 AStarHelper.UpdateNode(grid.Grid[position.x, position.y], currentNode, TargetNode);
-                grid.Grid[position.x, position.y].AllNeighborsAreDiscovered = true;
             }
-            Debug.Log("updateNeighbors is finished");
         }
 
         private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
