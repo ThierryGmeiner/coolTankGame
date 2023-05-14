@@ -25,14 +25,14 @@ namespace Game.AI
 
             AStarNode[] path = new AStarNode[0];
             if (activateVisualPathfinding) {
-                path = aStar.GetAStarPath(player.position, target.position);
+                path = aStar.FindPath(player.position, target.position);
             }
 
             if (Grid != null) {
                 foreach (AStarNode node in Grid) {
                     Gizmos.color = node.IsWalkable ? Color.white : Color.red;
                     if (activateVisualPathfinding && Magic.Array.Contains(path, node)) Gizmos.color = Color.cyan;
-                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.y), Vector3.one * (nodeDiameter - 0.15f));
+                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
                 }
             }
         }
@@ -45,7 +45,6 @@ namespace Game.AI
             aStar = new AStar(this);
         }
 
-        public AStarNode GetNodeFromPosition(Vector2 position) => GetNodeFromPosition(new Vector3(position.x, 0, position.y));
         public AStarNode GetNodeFromPosition(Vector3 position) {
             float precentX = (position.x + gridWorldSize.x / 2) / gridWorldSize.x;
             float precentY = (position.z + gridWorldSize.y / 2) / gridWorldSize.y;
@@ -100,14 +99,14 @@ namespace Game.AI
 
         private void CreateGrid() {
             Grid = new AStarNode[gridSizeX, gridSizeY];
-            Vector2 worldBottomLeft 
-                = new Vector2(transform.position.x - gridWorldSize.x / 2, transform.position.z - gridWorldSize.y / 2);
+            Vector3 worldBottomLeft 
+                = new Vector3(transform.position.x - gridWorldSize.x / 2, 0, transform.position.z - gridWorldSize.y / 2);
 
             for (int x = 0; x < gridSizeX; x++) {
                 for (int y = 0; y < gridSizeX; y++) {
-                    Vector2 worldPoint
-                        = worldBottomLeft + Vector2.right * (x * nodeDiameter + nodeRadius) + Vector2.up * (y * nodeDiameter + nodeRadius);
-                    bool walkable = !(Physics.CheckSphere(new Vector3(worldPoint.x, 0, worldPoint.y), nodeRadius, unwalkableMask));
+                    Vector3 worldPoint
+                        = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
+                    bool walkable = !(Physics.CheckSphere(new Vector3(worldPoint.x, 0, worldPoint.z), nodeRadius, unwalkableMask));
                     Grid[x, y] = new AStarNode(walkable, worldPoint, new Vector2Int(x, y));
                 }
             }

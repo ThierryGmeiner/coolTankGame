@@ -69,7 +69,7 @@ namespace Tests.PlayMode.AI
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
 
-            Vector2 searchPos = grid.Grid[0, 0].Position;
+            Vector3 searchPos = grid.Grid[0, 0].Position;
             AStarNode node = grid.GetNodeFromPosition(searchPos);
 
             Assert.AreEqual(searchPos, node.Position);
@@ -82,7 +82,7 @@ namespace Tests.PlayMode.AI
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
 
-            Vector2 searchPos = grid.Grid[2, 0].Position;
+            Vector3 searchPos = grid.Grid[2, 0].Position;
             AStarNode node = grid.GetNodeFromPosition(searchPos);
 
             Assert.AreEqual(searchPos, node.Position);
@@ -95,7 +95,7 @@ namespace Tests.PlayMode.AI
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
 
-            Vector2 searchPos = grid.Grid[0, 2].Position;
+            Vector3 searchPos = grid.Grid[0, 2].Position;
             AStarNode node = grid.GetNodeFromPosition(searchPos);
 
             Assert.AreEqual(searchPos, node.Position);
@@ -108,7 +108,7 @@ namespace Tests.PlayMode.AI
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
 
-            Vector2 searchPos = grid.Grid[2, 2].Position;
+            Vector3 searchPos = grid.Grid[2, 2].Position;
             AStarNode node = grid.GetNodeFromPosition(searchPos);
 
             Assert.AreEqual(searchPos, node.Position);
