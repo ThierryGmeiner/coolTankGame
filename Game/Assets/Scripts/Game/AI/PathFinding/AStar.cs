@@ -9,26 +9,78 @@ namespace Game.AI
         private readonly AStarGrid grid;
         private AStarNode startNode;
         private AStarNode targetNode;
-
-        public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
-        public AStarNode TargetNode { get => targetNode; set { if (value.IsWalkable) targetNode = value; } }
-
+        public const int STRAIGHT_MOVE_COST = 10;
+        public const int DIAGOANAL_MOVE_COST = 14;
+     
         public AStar(AStarGrid grid) {
             this.grid = grid;
         }
 
-        public AStarNode[] FindPath(Vector3 startPos, Vector3 targetPos) {
-            startNode = grid.GetNodeFromPosition(startPos);
-            targetNode = grid.GetNodeFromPosition(targetPos);
+        public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
+        public AStarNode TargetNode { get => targetNode; set { if (value.IsWalkable) targetNode = value; } }
+
+        public AStarNode[] FindPath(Vector3 startPos, Vector3 targetPos)
+            => FindPath(grid.GetNodeFromPosition(startPos), grid.GetNodeFromPosition(targetPos));
+
+        public AStarNode[] FindPath(AStarNode start, AStarNode target) {
+            startNode = start;
+            targetNode = target;
+
+            if (!targetNode.IsWalkable || !startNode.IsWalkable) return new AStarNode[0];
 
             AStarNode currentNode = startNode;
-            int count = 0;
-            while (currentNode != targetNode && count < 1000) {
+            for (int i = 0; currentNode != targetNode && i < 3000; i++) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
-                count++;
             }
-            return GetPathViaBacktracking(startNode, targetNode).ToArray();
+            AStarNode[] path = GetPathViaBacktracking(startNode, targetNode).ToArray();
+            grid.Clear();
+            return path;
+        }
+
+        public AStarNode[] FindOptimizedPath(AStarNode start, AStarNode target) {
+            AStarNode[] path = FindPath(start, target);
+            List<AStarNode> optimizedPath = new List<AStarNode>();
+            optimizedPath.Add(startNode);
+
+            if (path.Length == 0) return path;
+
+            AStarNode nextSection = startNode;
+
+            while (nextSection != targetNode) {
+                nextSection = FindSectionInPath(path, nextSection, Array.IndexOf(path, nextSection));
+                optimizedPath.Add(nextSection);
+            }
+            return optimizedPath.ToArray();
+
+            //if (path.Length <= 0) return optimizedPath.ToArray();
+            //AStarNode currentNode = path[0];
+            //AStarNode targetNode = path[path.Length - 1];
+            //optimizedPath.Add(currentNode);
+
+            //// search entire path
+            //while (true) {
+            //    int index = Array.IndexOf(path, currentNode);
+            //    // search one section of path
+            //    AStarNode nextNode = currentNode;
+            //    while (!Physics.Linecast(currentNode.Position, nextNode.Position, grid.unwalkableMask) && index < 500) {
+            //        if (nextNode == targetNode) {
+            //            optimizedPath.Add(nextNode);
+            //            return optimizedPath.ToArray();
+            //        }
+            //        nextNode = path[++index];
+            //    }
+            //    currentNode = path[index - 1];
+            //    optimizedPath.Add(currentNode);
+            //    if (index > 500) return path;
+            //}
+        }
+
+        private AStarNode FindSectionInPath(AStarNode[] path, AStarNode searchNode, int lastIndex) {
+            if (!Physics.Linecast(searchNode.Position, path[lastIndex + 1].Position, grid.unwalkableMask) || path[lastIndex + 1] == targetNode) {
+                return path[lastIndex];
+            }
+            return FindSectionInPath(path, searchNode, lastIndex + 1); 
         }
 
         public void UpdateNeighbors(AStarNode currentNode) {
@@ -48,10 +100,6 @@ namespace Game.AI
                                         new Vector2Int(olsPos.x - 1, olsPos.y + 1), new Vector2Int(olsPos.x + 1, olsPos.y + 1), };
             return array;
         }
-
-
-        public const int STRAIGHT_MOVE_COST = 10;
-        public const int DIAGOANAL_MOVE_COST = 14;
 
         public static void UpdateNode(AStarNode node, AStarNode updatingNeighbor, AStarNode target) {
             node.hCost = CalculateHCost(node, target);

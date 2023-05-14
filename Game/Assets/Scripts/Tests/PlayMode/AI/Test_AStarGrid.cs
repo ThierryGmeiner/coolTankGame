@@ -117,48 +117,6 @@ namespace Tests.PlayMode.AI
         }
 
         [UnityTest]
-        public IEnumerator GetIndexFromNode_DontExist_NegativeOne() {
-            AStarGrid grid = TestHelper.CreateASTarGrid();
-            AStarNode node = new AStarNode(true, new Vector2(10, 10));
-            node.hCost = 10;
-
-            yield return null;
-            Vector2Int searchedPos = grid.GetIndexFromNode(node);
-
-            Assert.AreEqual(new Vector2Int(-1, -1), searchedPos);
-
-            TestHelper.DestroyObjects(grid.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator GetIndexFromNode_Exist_Test1() {
-            AStarGrid grid = TestHelper.CreateASTarGrid();
-            Vector2Int pos = new Vector2Int(5, 5);
-            yield return null;
-            grid.Grid[pos.x, pos.y].hCost = 10;
-
-            Vector2Int searchedPos = grid.GetIndexFromNode(grid.Grid[pos.x, pos.y]);
-
-            Assert.AreEqual(pos, searchedPos);
-
-            TestHelper.DestroyObjects(grid.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator GetIndexFromNode_Exist_Test2() {
-            AStarGrid grid = TestHelper.CreateASTarGrid();
-            Vector2Int pos = new Vector2Int(7, 4);
-            yield return null;
-            grid.Grid[pos.x, pos.y].hCost = 10;
-
-            Vector2Int searchedPos = grid.GetIndexFromNode(grid.Grid[pos.x, pos.y]);
-
-            Assert.AreEqual(pos, searchedPos);
-
-            TestHelper.DestroyObjects(grid.gameObject);
-        }
-
-        [UnityTest]
         public IEnumerator GetNodeWithLowestFCost_OneLowest_GetLowest() {
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;

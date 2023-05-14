@@ -13,7 +13,8 @@ namespace Game.AI
         private int gridSizeX, gridSizeY;
 
         [Header("PathFinding")]
-        [SerializeField] private bool activateVisualPathfinding = false;
+        [SerializeField] private bool drawPath = false;
+        [SerializeField] private bool drawBoard = false;
         [SerializeField] private Transform player;
         [SerializeField] private Transform target;
         private AStar aStar;
@@ -24,15 +25,29 @@ namespace Game.AI
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
             AStarNode[] path = new AStarNode[0];
-            if (activateVisualPathfinding) {
+            AStarNode[] optimizedPath = new AStarNode[0];
+            if (drawPath) {
                 path = aStar.FindPath(player.position, target.position);
+                optimizedPath = aStar.FindOptimizedPath(aStar.StartNode, aStar.TargetNode);
             }
 
             if (Grid != null) {
                 foreach (AStarNode node in Grid) {
-                    Gizmos.color = node.IsWalkable ? Color.white : Color.red;
-                    if (activateVisualPathfinding && Magic.Array.Contains(path, node)) Gizmos.color = Color.cyan;
-                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
+                    if (drawBoard && drawPath) {
+                        Gizmos.color = node.IsWalkable ? Color.white : Color.red;
+                        if (Magic.Array.Contains(path, node)) Gizmos.color = Color.cyan;
+                        Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
+                    }
+                    else if (drawPath) {
+                        if (Magic.Array.Contains(path, node)) {
+                            Gizmos.color = Magic.Array.Contains(optimizedPath, node) ? Color.yellow : Color.cyan;
+                            Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
+                        }
+                    }
+                    else if (drawBoard) {
+                        Gizmos.color = node.IsWalkable ? Color.white : Color.red;
+                        Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
+                    }
                 }
             }
         }
@@ -53,17 +68,6 @@ namespace Game.AI
             int x = Mathf.RoundToInt((gridSizeX - 1) * precentX);
             int y = Mathf.RoundToInt((gridSizeY - 1) * precentY);
             return Grid[x, y];
-        }
-
-        public Vector2Int GetIndexFromNode(AStarNode node) {
-            for (int x = 0; x < Grid.GetLength(0); x++) {
-                for (int y = 0; y < Grid.GetLength(1); y++) {
-                    if (node.Equals(Grid[x, y])) {
-                        return new Vector2Int(x, y);
-                    }
-                }
-            }
-            return new Vector2Int(-1, -1);
         }
 
         public AStarNode GetCheapestNode() {
@@ -107,7 +111,7 @@ namespace Game.AI
                     Vector3 worldPoint
                         = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                     bool walkable = !(Physics.CheckSphere(new Vector3(worldPoint.x, 0, worldPoint.z), nodeRadius, unwalkableMask));
-                    Grid[x, y] = new AStarNode(walkable, worldPoint, new Vector2Int(x, y));
+                    Grid[x, y] = new AStarNode(walkable, new Vector3(worldPoint.x, worldPoint.y + 0.5f, worldPoint.z), new Vector2Int(x, y));
                 }
             }
         }
