@@ -12,21 +12,27 @@ namespace Game.AI
         private float nodeDiameter;
         private int gridSizeX, gridSizeY;
 
+        [Header("PathFinding")]
+        [SerializeField] private bool activateVisualPathfinding = false;
         [SerializeField] private Transform player;
         [SerializeField] private Transform target;
-
+        private AStar aStar;
+        
         public AStarNode[,] Grid { get; set; }
 
         private void OnDrawGizmos() {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
-            AStar aStar = new AStar(this);
-            AStarNode[] path = aStar.GetAStarPath(player.position, target.position);
+
+            AStarNode[] path = new AStarNode[0];
+            if (activateVisualPathfinding) {
+                path = aStar.GetAStarPath(player.position, target.position);
+            }
 
             if (Grid != null) {
                 foreach (AStarNode node in Grid) {
                     Gizmos.color = node.IsWalkable ? Color.white : Color.red;
-                    if (Magic.Array.Contains<AStarNode>(path, node)) Gizmos.color = Color.cyan;
-                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.y), Vector3.one * (nodeDiameter - 0.3f));
+                    if (activateVisualPathfinding && Magic.Array.Contains(path, node)) Gizmos.color = Color.cyan;
+                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.y), Vector3.one * (nodeDiameter - 0.15f));
                 }
             }
         }
@@ -36,15 +42,17 @@ namespace Game.AI
             gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
             gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
             CreateGrid();
+            aStar = new AStar(this);
         }
 
-        public AStarNode GetNodeFromPosition(Vector2 position) {
+        public AStarNode GetNodeFromPosition(Vector2 position) => GetNodeFromPosition(new Vector3(position.x, 0, position.y));
+        public AStarNode GetNodeFromPosition(Vector3 position) {
             float precentX = (position.x + gridWorldSize.x / 2) / gridWorldSize.x;
-            float precentY = (position.y + gridWorldSize.y / 2) / gridWorldSize.y;
+            float precentY = (position.z + gridWorldSize.y / 2) / gridWorldSize.y;
             precentX = Mathf.Clamp01(precentX);
             precentY = Mathf.Clamp01(precentY);
-            int x = Mathf.RoundToInt(Mathf.Clamp((gridSizeX - 1) * precentX, 0, Grid.GetLength(0)));
-            int y = Mathf.RoundToInt(Mathf.Clamp((gridSizeY - 1) * precentY, 0, Grid.GetLength(1)));
+            int x = Mathf.RoundToInt((gridSizeX - 1) * precentX);
+            int y = Mathf.RoundToInt((gridSizeY - 1) * precentY);
             return Grid[x, y];
         }
 

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.AI
@@ -6,17 +5,19 @@ namespace Game.AI
     public class AStar
     {
         private readonly AStarGrid grid;
+        private AStarNode startNode;
+        private AStarNode targetNode;
 
-        public AStarNode StartNode { get; set; }
-        public AStarNode TargetNode { get; set; }
+        public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
+        public AStarNode TargetNode { get => targetNode; set { if (value.IsWalkable) targetNode = value; } }
 
         public AStar(AStarGrid grid) {
             this.grid = grid;
         }
 
         public AStarNode[] GetOptimizedPath(Vector2 startPos, Vector2 targetPos) {
-            StartNode = grid.GetNodeFromPosition(startPos);
-            TargetNode = grid.GetNodeFromPosition(targetPos);
+            startNode = grid.GetNodeFromPosition(startPos);
+            targetNode = grid.GetNodeFromPosition(targetPos);
 
             // get simple path
             // simplify the way (via rays)
@@ -29,23 +30,23 @@ namespace Game.AI
             return new AStarNode[0];
         }
 
-        public AStarNode[] GetAStarPath(Vector2 startPos, Vector2 targetPos) {
-            StartNode = grid.GetNodeFromPosition(startPos);
-            TargetNode = grid.GetNodeFromPosition(targetPos);
+        public AStarNode[] GetAStarPath(Vector3 startPos, Vector3 targetPos) {
+            startNode = grid.GetNodeFromPosition(startPos);
+            targetNode = grid.GetNodeFromPosition(targetPos);
             return GetAStarPath();
         }
 
         public AStarNode[] GetAStarPath() {
-            AStarNode currentNode = StartNode;
+            AStarNode currentNode = startNode;
 
             int iteration = 0;
 
-            while (currentNode != TargetNode && iteration < 10000000) {
+            while (currentNode != targetNode && iteration < 10000) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
                 iteration++;
             }
-            return AStarHelper.GetPathViaBacktracking(StartNode, TargetNode).ToArray();
+            return AStarHelper.GetPathViaBacktracking(startNode, targetNode).ToArray();
         }
 
         public void UpdateNeighbors(AStarNode currentNode) {
@@ -54,7 +55,7 @@ namespace Game.AI
 
             foreach (Vector2Int position in neighborPositions) {
                 if (!currentNode.IsWalkable || AStarHelper.NodeIsOutsideOfGrid(position, grid)) continue;
-                AStarHelper.UpdateNode(grid.Grid[position.x, position.y], currentNode, TargetNode);
+                AStarHelper.UpdateNode(grid.Grid[position.x, position.y], currentNode, targetNode);
             }
         }
 
