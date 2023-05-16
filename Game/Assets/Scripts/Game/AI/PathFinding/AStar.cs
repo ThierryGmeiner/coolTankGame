@@ -37,50 +37,55 @@ namespace Game.AI
             grid.Clear();
             return path;
         }
+        //if (path.Length <= 0) return optimizedPath.ToArray();
+        //AStarNode currentNode = path[0];
+        //AStarNode targetNode = path[path.Length - 1];
+        //optimizedPath.Add(currentNode);
+
+        //// search entire path
+        //while (true) {
+        //    int index = Array.IndexOf(path, currentNode);
+        //    // search one section of path
+        //    AStarNode nextNode = currentNode;
+        //    while (!Physics.Linecast(currentNode.Position, nextNode.Position, grid.unwalkableMask) && index < 500) {
+        //        if (nextNode == targetNode) {
+        //            optimizedPath.Add(nextNode);
+        //            return optimizedPath.ToArray();
+        //        }
+        //        nextNode = path[++index];
+        //    }
+        //    currentNode = path[index - 1];
+        //    optimizedPath.Add(currentNode);
+        //    if (index > 500) return path;
+        //}
 
         public AStarNode[] FindOptimizedPath(AStarNode start, AStarNode target) {
             AStarNode[] path = FindPath(start, target);
             List<AStarNode> optimizedPath = new List<AStarNode>();
-            optimizedPath.Add(startNode);
 
             if (path.Length == 0) return path;
 
-            AStarNode nextSection = startNode;
+            optimizedPath.Add(startNode);
+            AStarNode newSectionStart = startNode;
 
-            while (nextSection != targetNode) {
-                nextSection = FindSectionInPath(path, nextSection, Array.IndexOf(path, nextSection));
-                optimizedPath.Add(nextSection);
+            while (newSectionStart != targetNode) {
+                AStarNode oldSectionStart = newSectionStart;
+                newSectionStart = FindSectionInPath(path, newSectionStart, Array.IndexOf(path, newSectionStart));
+                if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
+                optimizedPath.Add(newSectionStart);
             }
             return optimizedPath.ToArray();
-
-            //if (path.Length <= 0) return optimizedPath.ToArray();
-            //AStarNode currentNode = path[0];
-            //AStarNode targetNode = path[path.Length - 1];
-            //optimizedPath.Add(currentNode);
-
-            //// search entire path
-            //while (true) {
-            //    int index = Array.IndexOf(path, currentNode);
-            //    // search one section of path
-            //    AStarNode nextNode = currentNode;
-            //    while (!Physics.Linecast(currentNode.Position, nextNode.Position, grid.unwalkableMask) && index < 500) {
-            //        if (nextNode == targetNode) {
-            //            optimizedPath.Add(nextNode);
-            //            return optimizedPath.ToArray();
-            //        }
-            //        nextNode = path[++index];
-            //    }
-            //    currentNode = path[index - 1];
-            //    optimizedPath.Add(currentNode);
-            //    if (index > 500) return path;
-            //}
         }
 
         private AStarNode FindSectionInPath(AStarNode[] path, AStarNode searchNode, int lastIndex) {
-            if (!Physics.Linecast(searchNode.Position, path[lastIndex + 1].Position, grid.unwalkableMask) || path[lastIndex + 1] == targetNode) {
+            AStarNode currentNode = path[lastIndex + 1];
+            if (currentNode == targetNode) {
+                return currentNode;
+            }
+            if (Physics.Linecast(searchNode.Position, currentNode.Position, grid.unwalkableMask)) {
                 return path[lastIndex];
             }
-            return FindSectionInPath(path, searchNode, lastIndex + 1); 
+            return FindSectionInPath(path, searchNode, lastIndex + 1);
         }
 
         public void UpdateNeighbors(AStarNode currentNode) {
