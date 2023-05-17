@@ -22,70 +22,50 @@ namespace Game.AI
         public AStarNode[] FindPath(Vector3 startPos, Vector3 targetPos)
             => FindPath(grid.GetNodeFromPosition(startPos), grid.GetNodeFromPosition(targetPos));
 
+        // finds a path with the aStar algorithm
         public AStarNode[] FindPath(AStarNode start, AStarNode target) {
             startNode = start;
             targetNode = target;
+            AStarNode currentNode = startNode;
 
             if (!targetNode.IsWalkable || !startNode.IsWalkable) return new AStarNode[0];
-
-            AStarNode currentNode = startNode;
+            // search every loop the cheapest node and update them
             for (int i = 0; currentNode != targetNode && i < 3000; i++) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
             }
+
             AStarNode[] path = GetPathViaBacktracking(startNode, targetNode).ToArray();
             grid.Clear();
             return path;
         }
-        //if (path.Length <= 0) return optimizedPath.ToArray();
-        //AStarNode currentNode = path[0];
-        //AStarNode targetNode = path[path.Length - 1];
-        //optimizedPath.Add(currentNode);
-
-        //// search entire path
-        //while (true) {
-        //    int index = Array.IndexOf(path, currentNode);
-        //    // search one section of path
-        //    AStarNode nextNode = currentNode;
-        //    while (!Physics.Linecast(currentNode.Position, nextNode.Position, grid.unwalkableMask) && index < 500) {
-        //        if (nextNode == targetNode) {
-        //            optimizedPath.Add(nextNode);
-        //            return optimizedPath.ToArray();
-        //        }
-        //        nextNode = path[++index];
-        //    }
-        //    currentNode = path[index - 1];
-        //    optimizedPath.Add(currentNode);
-        //    if (index > 500) return path;
-        //}
-
+        
+        // filters out the important nodes of the aStar path
         public AStarNode[] FindOptimizedPath(AStarNode start, AStarNode target) {
             AStarNode[] path = FindPath(start, target);
             List<AStarNode> optimizedPath = new List<AStarNode>();
+            AStarNode currentSectionStart = startNode;
 
             if (path.Length == 0) return path;
-
-            optimizedPath.Add(startNode);
-            AStarNode newSectionStart = startNode;
-
-            while (newSectionStart != targetNode) {
-                AStarNode oldSectionStart = newSectionStart;
-                newSectionStart = FindSectionInPath(path, newSectionStart, Array.IndexOf(path, newSectionStart));
-                if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
-                optimizedPath.Add(newSectionStart);
+            // search in every loop one section
+            while (currentSectionStart != targetNode) {
+                currentSectionStart = FindNewSection(path, currentSectionStart);
+                optimizedPath.Add(currentSectionStart);
             }
             return optimizedPath.ToArray();
         }
 
-        private AStarNode FindSectionInPath(AStarNode[] path, AStarNode searchNode, int lastIndex) {
-            AStarNode currentNode = path[lastIndex + 1];
-            if (currentNode == targetNode) {
-                return currentNode;
-            }
-            if (Physics.Linecast(searchNode.Position, currentNode.Position, grid.unwalkableMask)) {
-                return path[lastIndex];
-            }
-            return FindSectionInPath(path, searchNode, lastIndex + 1);
+        private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {
+            AStarNode newSectionStart = FidnSectionViaBacktracking(path, oldSectionStart, Array.IndexOf(path, oldSectionStart) + 1);
+            // fixes the problem that the search sometimes gets stuck on a node
+            if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
+            return newSectionStart;
+        }
+
+        private AStarNode FidnSectionViaBacktracking(AStarNode[] path, AStarNode searchNode, int index) {
+            if (path[index] == targetNode) return path[index];
+            if (Physics.Linecast(searchNode.Position, path[index].Position, grid.unwalkableMask)) return path[index - 1];
+            return FidnSectionViaBacktracking(path, searchNode, index + 1);
         }
 
         public void UpdateNeighbors(AStarNode currentNode) {
@@ -96,14 +76,6 @@ namespace Game.AI
                 if (!currentNode.IsWalkable || NodeIsOutsideOfGrid(position, grid)) continue;
                 UpdateNode(grid.Grid[position.x, position.y], currentNode, targetNode);
             }
-        }
-
-        private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
-            Vector2Int[] array = { new Vector2Int(olsPos.x - 1, olsPos.y), new Vector2Int(olsPos.x + 1, olsPos.y),
-                                        new Vector2Int(olsPos.x, olsPos.y - 1), new Vector2Int(olsPos.x, olsPos.y + 1),
-                                        new Vector2Int(olsPos.x - 1, olsPos.y - 1), new Vector2Int(olsPos.x + 1, olsPos.y - 1),
-                                        new Vector2Int(olsPos.x - 1, olsPos.y + 1), new Vector2Int(olsPos.x + 1, olsPos.y + 1), };
-            return array;
         }
 
         public static void UpdateNode(AStarNode node, AStarNode updatingNeighbor, AStarNode target) {
@@ -144,6 +116,14 @@ namespace Game.AI
             path = GetPathViaBacktracking(startNode, lastNode.LastNodeInPath);
             path.Add(lastNode);
             return path;
+        }
+
+        private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
+            Vector2Int[] array = { new Vector2Int(olsPos.x - 1, olsPos.y), new Vector2Int(olsPos.x + 1, olsPos.y),
+                                        new Vector2Int(olsPos.x, olsPos.y - 1), new Vector2Int(olsPos.x, olsPos.y + 1),
+                                        new Vector2Int(olsPos.x - 1, olsPos.y - 1), new Vector2Int(olsPos.x + 1, olsPos.y - 1),
+                                        new Vector2Int(olsPos.x - 1, olsPos.y + 1), new Vector2Int(olsPos.x + 1, olsPos.y + 1), };
+            return array;
         }
 
         private static bool NewCostIsLower(int newCost, int oldCost) => newCost < oldCost;
