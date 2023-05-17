@@ -1,4 +1,5 @@
 using UnityEngine;
+using Game.AI;
 
 namespace Game.Entity.Tank
 {
@@ -13,6 +14,7 @@ namespace Game.Entity.Tank
         private float speed;
         private float jumpForce;
 
+        public AStarNode[] Path { private get; set; } 
         public float Speed { get => speed; }
 
         public TankMovement(Tank tank, Transform groundCheck) {
@@ -29,6 +31,14 @@ namespace Game.Entity.Tank
         public void Move(Vector3 direction) {
             direction = tank.IsGrounded ? direction * speed : direction * speed * AIR_MULTIPLIER; 
             tank.RigidBody.AddForce(direction, ForceMode.Force);
+        }
+
+        public void Move() {
+            if (Path == null) return;
+            // iterate over the path and break up when target arived via loop
+
+            Vector3.MoveTowards(tank.transform.position, Path[0].Position, speed * Time.deltaTime);
+            Path = null;
         }
 
         public void Jump() {

@@ -111,7 +111,7 @@ namespace Game.AI
                     Vector3 worldPoint
                         = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                     bool walkable = !(Physics.CheckSphere(new Vector3(worldPoint.x, 0, worldPoint.z), nodeRadius, unwalkableMask));
-                    Grid[x, y] = new AStarNode(walkable, new Vector3(worldPoint.x, worldPoint.y + 0.5f, worldPoint.z), new Vector2Int(x, y));
+                    Grid[x, y] = new AStarNode(walkable, new Vector3(worldPoint.x, 0, worldPoint.z), new Vector2Int(x, y));
                 }
             }
         }
