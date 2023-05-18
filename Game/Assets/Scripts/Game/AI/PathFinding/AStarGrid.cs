@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,34 +17,18 @@ namespace Game.AI
         [SerializeField] private Transform player;
         [SerializeField] private Transform target;
         private AStar aStar;
-        
-        public AStarNode[,] Grid { get; set; }
+
+        public AStarNode[,] Grid { get; set; } = new AStarNode[0, 0];
 
         private void OnDrawGizmos() {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
-
-            AStarNode[] path = new AStarNode[0];
-            AStarNode[] optimizedPath = new AStarNode[0];
             if (drawPath) {
-                path = aStar.FindPath(player.position, target.position);
-                optimizedPath = aStar.FindOptimizedPath(aStar.StartNode, aStar.TargetNode);
-            }
+                AStarNode[] path = aStar.FindPath(player.position, target.position);
+                AStarNode[] optimizedPath = aStar.FindOptimizedPath(aStar.StartNode, aStar.TargetNode);
 
-            if (Grid != null) {
                 foreach (AStarNode node in Grid) {
-                    if (drawBoard && drawPath) {
-                        Gizmos.color = node.IsWalkable ? Color.white : Color.red;
-                        if (Magic.Array.Contains(path, node)) Gizmos.color = Color.cyan;
-                        Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
-                    }
-                    else if (drawPath) {
-                        if (Magic.Array.Contains(path, node)) {
-                            Gizmos.color = Magic.Array.Contains(optimizedPath, node) ? Color.yellow : Color.cyan;
-                            Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
-                        }
-                    }
-                    else if (drawBoard) {
-                        Gizmos.color = node.IsWalkable ? Color.white : Color.red;
+                    if (Magic.Array.Contains(path, node)) {
+                        Gizmos.color = Magic.Array.Contains(optimizedPath, node) ? Color.yellow : Color.cyan;
                         Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
                     }
                 }

@@ -39,17 +39,17 @@ namespace Game.AI
             grid.Clear();
             return path;
         }
-        
+
         // filters out the important nodes of the aStar path
-        public AStarNode[] FindOptimizedPath(AStarNode start, AStarNode target) {
-            AStarNode[] path = FindPath(start, target);
+        public AStarNode[] FindOptimizedPath(AStarNode start, AStarNode target) => FindOptimizedPath(FindPath(start, target));
+        public AStarNode[] FindOptimizedPath(AStarNode[] unoptimizedPath) {
             List<AStarNode> optimizedPath = new List<AStarNode>();
             AStarNode currentSectionStart = startNode;
 
-            if (path.Length == 0) return path;
+            if (unoptimizedPath.Length == 0) return unoptimizedPath;
             // search in every loop one section
             while (currentSectionStart != targetNode) {
-                currentSectionStart = FindNewSection(path, currentSectionStart);
+                currentSectionStart = FindNewSection(unoptimizedPath, currentSectionStart);
                 optimizedPath.Add(currentSectionStart);
             }
             return optimizedPath.ToArray();

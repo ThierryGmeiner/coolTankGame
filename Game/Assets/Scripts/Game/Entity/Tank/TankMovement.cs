@@ -13,8 +13,9 @@ namespace Game.Entity.Tank
         private float defaultSpeed;
         private float speed;
         private float jumpForce;
+        private int pathIndex = 0;
 
-        public AStarNode[] Path { private get; set; } 
+        public AStarNode[] Path { get; set; } 
         public float Speed { get => speed; }
 
         public TankMovement(Tank tank, Transform groundCheck) {
@@ -35,9 +36,13 @@ namespace Game.Entity.Tank
 
         public void Move() {
             if (Path == null) return;
-            // iterate over the path and break up when target arived via loop
+            tank.transform.position = Vector3.MoveTowards(tank.transform.position, Path[pathIndex].Position, speed * Time.deltaTime);
+            if (Vector3.Distance(tank.transform.position, Path[Path.Length - 1].Position) < 0.1) ClearPath();
+            else if (Vector3.Distance(tank.transform.position, Path[pathIndex].Position) < 0.1) pathIndex++;
+        }
 
-            Vector3.MoveTowards(tank.transform.position, Path[0].Position, speed * Time.deltaTime);
+        public void ClearPath() {
+            pathIndex = 0;
             Path = null;
         }
 
