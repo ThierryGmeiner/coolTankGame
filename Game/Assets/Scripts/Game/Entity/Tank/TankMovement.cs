@@ -37,6 +37,7 @@ namespace Game.Entity.Tank
         public void Move() {
             if (Path == null) return;
             tank.transform.position = Vector3.MoveTowards(tank.transform.position, Path[pathIndex].Position, speed * Time.deltaTime);
+ 
             if (Vector3.Distance(tank.transform.position, Path[Path.Length - 1].Position) < 0.1) ClearPath();
             else if (Vector3.Distance(tank.transform.position, Path[pathIndex].Position) < 0.1) pathIndex++;
         }

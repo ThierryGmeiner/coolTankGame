@@ -269,7 +269,7 @@ namespace Tests.PlayMode.AI
             grid[1, 1].gCost = 10;
             yield return null;
 
-            int cost = AStar.CalculateGCost(grid[0, 1], grid[1, 1]);
+            float cost = AStar.CalculateGCost(grid[0, 1], grid[1, 1]);
 
             Assert.AreEqual(grid[1, 1].gCost + 10, cost);
         }
@@ -280,9 +280,9 @@ namespace Tests.PlayMode.AI
             grid[1, 1].gCost = 10;
             yield return null;
 
-            int cost = AStar.CalculateGCost(grid[1, 0], grid[1, 1]);
+            float cost = AStar.CalculateGCost(grid[1, 0], grid[1, 1]);
 
-            Assert.AreEqual(grid[1, 1].gCost + 10, cost);
+            Assert.AreEqual(grid[1, 1].gCost + AStar.STRAIGHT_MOVE_COST, cost);
         }
 
         [UnityTest]
@@ -291,9 +291,9 @@ namespace Tests.PlayMode.AI
             grid[1, 1].gCost = 10;
             yield return null;
 
-            int cost = AStar.CalculateGCost(grid[0, 0], grid[1, 1]);
+            float cost = AStar.CalculateGCost(grid[0, 0], grid[1, 1]);
 
-            Assert.AreEqual(grid[1, 1].gCost + 14, cost);
+            Assert.AreEqual(grid[1, 1].gCost + AStar.DIAGOANAL_MOVE_COST, cost);
         }
 
         [UnityTest]
@@ -305,7 +305,7 @@ namespace Tests.PlayMode.AI
             int oldHCost = 20;
             node.hCost = oldHCost;
 
-            int newHCost = AStar.CalculateHCost(node, aStar.TargetNode);
+            float newHCost = AStar.CalculateHCost(node, aStar.TargetNode);
 
             Assert.AreEqual(oldHCost, newHCost);
 
@@ -319,9 +319,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[9, 0];
             AStarNode targetNode = grid.Grid[0, 0];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.STRAIGHT_MOVE_COST * 9; // 9 are the required amount of steps
+            float requiredHCost = AStar.STRAIGHT_MOVE_COST * 9; // 9 are the required amount of steps
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -334,9 +334,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[9, 9];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.DIAGOANAL_MOVE_COST * 9; // 9 are the required amount of steps
+            float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 9; // 9 are the required amount of steps
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -349,9 +349,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[2, 1];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.DIAGOANAL_MOVE_COST * 1 + AStar.STRAIGHT_MOVE_COST * 1;
+            float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 1 + AStar.STRAIGHT_MOVE_COST * 1;
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -364,9 +364,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[2, 5];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.DIAGOANAL_MOVE_COST * 2 + AStar.STRAIGHT_MOVE_COST * 3;
+            float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 2 + AStar.STRAIGHT_MOVE_COST * 3;
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -379,9 +379,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[6, 7];
             AStarNode targetNode = grid.Grid[1, 4];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.DIAGOANAL_MOVE_COST * 3 + AStar.STRAIGHT_MOVE_COST * 2;
+            float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 3 + AStar.STRAIGHT_MOVE_COST * 2;
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -394,9 +394,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[6, 4];
             AStarNode targetNode = grid.Grid[1, 4];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.DIAGOANAL_MOVE_COST * 0 + AStar.STRAIGHT_MOVE_COST * 5;
+            float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 0 + AStar.STRAIGHT_MOVE_COST * 5;
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -409,9 +409,9 @@ namespace Tests.PlayMode.AI
             AStarNode startNode = grid.Grid[6, 0];
             AStarNode targetNode = grid.Grid[1, 7];
 
-            int hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = AStar.CalculateHCost(startNode, targetNode);
 
-            int requiredHCost = AStar.DIAGOANAL_MOVE_COST * 5 + AStar.STRAIGHT_MOVE_COST * 2;
+            float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 5 + AStar.STRAIGHT_MOVE_COST * 2;
             Assert.AreEqual(requiredHCost, hCost);
 
             TestHelper.DestroyObjects(grid.gameObject);
@@ -477,7 +477,7 @@ namespace Tests.PlayMode.AI
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.zero, Vector2Int.up);
             AStarNode targetNode = new AStarNode(true, Vector3.zero, Vector2Int.down);
-            int oldGCost = node.gCost;
+            float oldGCost = node.gCost;
             updatingNode.gCost = 10;
             yield return null;
 
@@ -491,7 +491,7 @@ namespace Tests.PlayMode.AI
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.back, Vector2Int.down);
             AStarNode targetNode = new AStarNode(true, Vector3.forward, Vector2Int.up);
-            int oldHCost = node.hCost;
+            float oldHCost = node.hCost;
             updatingNode.gCost = 10;
 
             AStar.UpdateNode(node, updatingNode, targetNode);

@@ -12,25 +12,16 @@ namespace Game.AI
         private int gridSizeX, gridSizeY;
 
         [Header("PathFinding")]
-        [SerializeField] private bool drawPath = false;
         [SerializeField] private bool drawBoard = false;
-        [SerializeField] private Transform player;
-        [SerializeField] private Transform target;
-        private AStar aStar;
 
         public AStarNode[,] Grid { get; set; } = new AStarNode[0, 0];
 
         private void OnDrawGizmos() {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
-            if (drawPath) {
-                AStarNode[] path = aStar.FindPath(player.position, target.position);
-                AStarNode[] optimizedPath = aStar.FindOptimizedPath(aStar.StartNode, aStar.TargetNode);
-
+            if (drawBoard) {
                 foreach (AStarNode node in Grid) {
-                    if (Magic.Array.Contains(path, node)) {
-                        Gizmos.color = Magic.Array.Contains(optimizedPath, node) ? Color.yellow : Color.cyan;
-                        Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
-                    }
+                    Gizmos.color = node.IsWalkable ? Color.white : Color.red;
+                    Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (nodeDiameter - 0.15f));
                 }
             }
         }
@@ -40,7 +31,6 @@ namespace Game.AI
             gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
             gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
             CreateGrid();
-            aStar = new AStar(this);
         }
 
         public AStarNode GetNodeFromPosition(Vector3 position) {

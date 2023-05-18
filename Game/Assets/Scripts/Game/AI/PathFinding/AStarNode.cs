@@ -6,9 +6,9 @@ namespace Game.AI
 {
     public class AStarNode
     {
-        public int gCost { get; set; } = 0; // cost of the path from the startnode
-        public int hCost { get; set; } = 0; // estimatet cost to the targetnode
-        public int fCost { get => gCost + hCost; }
+        public float gCost { get; set; } = 0; // cost of the path from the startnode
+        public float hCost { get; set; } = 0; // estimatet cost to the targetnode
+        public float fCost { get => gCost + hCost; }
 
         public Vector2Int ArrayIndex { get; private set; }
         public Vector3 Position { get; private set; }

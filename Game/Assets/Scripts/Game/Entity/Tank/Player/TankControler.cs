@@ -30,11 +30,14 @@ namespace Game.InputSystem
 
         private void Update() {
             if (Input.GetMouseButtonDown(1)) {
-                tank.Movement.ClearPath();
                 AStarNode startPos = grid.GetNodeFromPosition(transform.position);
                 AStarNode TargetPos = grid.GetNodeFromPosition(GetClickPosition());
                 AStarNode[] newPath = aStar.FindOptimizedPath(startPos, TargetPos);
-                tank.Movement.Path = newPath.Length <= 0 ? null : newPath;
+
+                if (newPath.Length > 0) {
+                    tank.Movement.ClearPath();
+                    tank.Movement.Path = newPath.Length <= 0 ? null : newPath;
+                }
             }
         }
 
@@ -51,7 +54,7 @@ namespace Game.InputSystem
             foreach (AStarNode node in oldPath) {
                 Gizmos.color = Color.cyan;
                 if (Magic.Array.Contains(tank.Movement.Path, node)) Gizmos.color = Color.yellow;
-                Gizmos.DrawCube(new Vector3(node.Position.x, 0, node.Position.z), Vector3.one * (0.5f));
+                Gizmos.DrawCube(new Vector3(node.Position.x, 0.25f, node.Position.z), Vector3.one * (0.5f));
             }
         }
     }

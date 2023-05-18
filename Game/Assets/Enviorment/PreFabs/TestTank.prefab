@@ -348,7 +348,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.95, z: 1}
+  m_Size: {x: 0.8, y: 0.95, z: 0.8}
   m_Center: {x: 0, y: 0.475, z: 0}
 --- !u!114 &6525638083318524053
 MonoBehaviour:
@@ -376,7 +376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36d593f0db9c2d47a7259e741de6e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6789102678565313149
 GameObject:
   m_ObjectHideFlags: 0

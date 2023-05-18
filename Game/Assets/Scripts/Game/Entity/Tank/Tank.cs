@@ -24,7 +24,7 @@ namespace Game.Entity.Tank
             InstantiateData();
         }
 
-        private void Update() {
+        private void Update() { 
             IsGrounded = Movement.GroundCheck();
             Movement.Move();
         }
