@@ -29,19 +29,31 @@ namespace Game.InputSystem
         }
 
         private void Update() {
+            SetLookDirection(tank.TankHead.transform);
             if (Input.GetMouseButtonDown(1)) {
-                AStarNode startPos = grid.GetNodeFromPosition(transform.position);
-                AStarNode TargetPos = grid.GetNodeFromPosition(GetClickPosition());
-                AStarNode[] newPath = aStar.FindOptimizedPath(startPos, TargetPos);
-
-                if (newPath.Length > 0) {
-                    tank.Movement.ClearPath();
-                    tank.Movement.Path = newPath.Length <= 0 ? null : newPath;
-                }
+                SetPath(GetMousePosition());
             }
         }
 
-        private Vector3 GetClickPosition() {
+        public void SetLookDirection(Transform transform) {
+            Vector3 mousePos = GetMousePosition();
+            transform.LookAt(new Vector3(mousePos.x, transform.position.y, mousePos.z));
+        }
+
+        public void SetPath(Vector3 targetPos) {
+            AStarNode[] newPath = GetPath(targetPos);
+            if (newPath.Length > 0) {
+                tank.Movement.Path = newPath;
+            }
+        }
+
+        private AStarNode[] GetPath(Vector3 targetPos) {
+            AStarNode startPos = grid.GetNodeFromPosition(transform.position);
+            AStarNode TargetPos = grid.GetNodeFromPosition(targetPos);
+            return aStar.FindOptimizedPath(startPos, TargetPos);
+        }
+
+        private Vector3 GetMousePosition() {
             float distance;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             plane.Raycast(ray, out distance);

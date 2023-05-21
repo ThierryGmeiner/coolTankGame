@@ -6,9 +6,11 @@ namespace Game.Entity.Tank
     public class Tank : MonoBehaviour
     {
         [SerializeField] private TankData data;
+        [SerializeField] private GameObject tankHead;
         [SerializeField] private Transform groundCheck;
 
         public string Name { get; private set; }
+        public GameObject TankHead { get => tankHead; }
         public TankHealth Health { get; private set; }
         public TankMovement Movement { get; private set; }
         public TankArmor Armor { get; private set; }
@@ -21,6 +23,7 @@ namespace Game.Entity.Tank
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             if (groundCheck == null) groundCheck = CreateGroundCheck();
+            if (tankHead == null) new GameObject();
             InstantiateData();
         }
 
