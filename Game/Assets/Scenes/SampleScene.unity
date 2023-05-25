@@ -1529,11 +1529,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   gridWorldSize: {x: 40, y: 40}
-  nodeRadius: 0.35
-  drawPath: 0
+  nodeRadius: 0.45
   drawBoard: 0
-  player: {fileID: 984900973}
-  target: {fileID: 1993379178}
 --- !u!1 &697262229
 GameObject:
   m_ObjectHideFlags: 0
@@ -2391,11 +2388,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972335542}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &984900973 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6703403965578517543, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}
-  m_PrefabInstance: {fileID: 1196263473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1080810568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2741,6 +2733,18 @@ PrefabInstance:
     - target: {fileID: 6703403965578517546, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}
       propertyPath: m_Name
       value: TestTank
+      objectReference: {fileID: 0}
+    - target: {fileID: 7212869684855242049, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7212869684855242049, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7212869684855242049, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}
+      propertyPath: m_Size.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9baa3b05876b205448f3d5a5857266ec, type: 3}

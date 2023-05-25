@@ -33,6 +33,9 @@ namespace Game.InputSystem
             if (Input.GetMouseButtonDown(1)) {
                 SetPath(GetMousePosition());
             }
+            if (Input.GetMouseButtonDown(0)) {
+                Debug.Log("shot");
+            }
         }
 
         public void SetLookDirection(Transform transform) {
