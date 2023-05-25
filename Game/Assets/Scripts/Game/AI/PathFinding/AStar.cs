@@ -9,12 +9,14 @@ namespace Game.AI
         private readonly AStarGrid grid;
         private AStarNode startNode;
         private AStarNode targetNode;
-        private const float COLLISION_RADIUS = 0.5f;
+        private readonly float colliderRadius = 0.5f;
         public const float STRAIGHT_MOVE_COST = 10;
         public const float DIAGOANAL_MOVE_COST = 14;
      
-        public AStar(AStarGrid grid) {
+        public AStar(AStarGrid grid) : this(grid, 0.5f) { }
+        public AStar(AStarGrid grid, float colliderRadius) {
             this.grid = grid;
+            this.colliderRadius = colliderRadius;
         }
 
         public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
@@ -70,7 +72,7 @@ namespace Game.AI
             Ray ray = new Ray(searchNode.Position, direction);
             float rayLength = Vector3.Distance(searchNode.Position, path[index].Position);
 
-            if (Physics.SphereCast(ray, COLLISION_RADIUS, rayLength, grid.unwalkableMask)) return path[index - 1];
+            if (Physics.SphereCast(ray, colliderRadius, rayLength, grid.unwalkableMask)) return path[index - 1];
             return FidnSectionViaBacktracking(path, searchNode, index + 1);
         }
 

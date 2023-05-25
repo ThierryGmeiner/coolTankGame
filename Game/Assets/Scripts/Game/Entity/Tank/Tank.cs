@@ -1,8 +1,8 @@
-using Magic.Data;
 using UnityEngine;
 
 namespace Game.Entity.Tank
 {
+    [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
     public class Tank : MonoBehaviour
     {
         [SerializeField] private TankData data;
@@ -14,6 +14,7 @@ namespace Game.Entity.Tank
         public TankHealth Health { get; private set; }
         public TankMovement Movement { get; private set; }
         public TankArmor Armor { get; private set; }
+        public TankAttack Attack { get; private set; }
         public Rigidbody RigidBody { get; private set; }
         public BoxCollider Collider { get; private set; }
         public TankData Data { get => data; set { data = value; InstantiateData(); } }
@@ -38,6 +39,7 @@ namespace Game.Entity.Tank
             Health = new TankHealth(this, data.Health);
             Movement = new TankMovement(this, groundCheck);
             Armor = new TankArmor(this, data.ArmorProcent);
+            Attack = new TankAttack(this, data.BulletStorage);
         }
 
         private Transform CreateGroundCheck() {

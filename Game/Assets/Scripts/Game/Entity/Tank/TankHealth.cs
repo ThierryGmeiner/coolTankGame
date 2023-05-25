@@ -4,7 +4,7 @@ namespace Game.Entity.Tank
 {
     public class TankHealth : IDamagable, IRepairable
     {
-        private Tank tank;
+        private readonly Tank tank;
         public event Action<int> OnDamaged;
         public event Action<int> OnRepaired;
         public event Action OnDestruction;

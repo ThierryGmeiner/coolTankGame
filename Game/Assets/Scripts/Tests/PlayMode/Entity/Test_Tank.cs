@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Game.Entity;
 using Game.Entity.Tank;
-using Magic.Data;
 
 namespace Tests.PlayMode.Entity
 {

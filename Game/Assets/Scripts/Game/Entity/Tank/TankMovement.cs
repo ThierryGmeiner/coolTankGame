@@ -5,17 +5,18 @@ namespace Game.Entity.Tank
 {
     public class TankMovement
     {
-        private Tank tank;
-        private Transform groundCheck;
-        private LayerMask groundLayer;
-        private const float AIR_MULTIPLIER = 0.65f;
-        private const float ROTATION_SPEED = 6;
+        private readonly Tank tank;
+        private readonly Transform groundCheck;
+        private readonly LayerMask groundLayer;
+        private readonly float defaultSpeed;
+        private readonly float jumpForce;
 
-        private float defaultSpeed;
         private float speed;
-        private float jumpForce;
         private AStarNode[] path = null;
         private int pathIndex = 0;
+
+        private const float AIR_MULTIPLIER = 0.65f;
+        private const float ROTATION_SPEED = 6;
 
         public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;

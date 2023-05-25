@@ -18,7 +18,7 @@ namespace Game.InputSystem
             controler = new PlayerControler();
             controler.TankDrive.Enable();
             grid = GameObject.Find("A*").GetComponent<AStarGrid>();
-            aStar = new AStar(grid);
+            aStar = new AStar(grid, System.Math.Max(transform.localScale.x, transform.localScale.z) / 2);
         }
 
         private void Start() {

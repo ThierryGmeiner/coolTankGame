@@ -2,7 +2,7 @@ namespace Game.Entity.Tank
 {
     public class TankArmor
     {
-        private Tank tank;
+        private readonly Tank tank;
 
         public int ArmorProcent { get; private set; }
 

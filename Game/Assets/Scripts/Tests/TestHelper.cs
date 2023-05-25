@@ -1,5 +1,5 @@
+using Game.Entity;
 using Game.Entity.Tank;
-using Magic.Data;
 using Game.AI;
 using UnityEngine;
 
@@ -10,10 +10,9 @@ namespace Tests
         public static GameObject CreateTank() {
             GameObject tank = new GameObject();
             tank.name = "TestTank";
-            tank.tag = "Tank";
+            tank.tag = "Entity";
             tank.layer = 6;
-            tank.AddComponent<Rigidbody>();
-            tank.AddComponent<BoxCollider>();
+            // collider and rigidbody are requiredComponents
             tank.AddComponent<Tank>().Data = ScriptableObject.CreateInstance<TankData>();
             return tank;
         }

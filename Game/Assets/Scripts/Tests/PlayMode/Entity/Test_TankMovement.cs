@@ -110,8 +110,8 @@ namespace Tests.PlayMode.Entity
         public IEnumerator EnableTurbo_TankWithTurboIsFaster() {
             Tank tankOne = TestHelper.CreateTank<Tank>();
             Tank tankTwo = TestHelper.CreateTank<Tank>();
-            GameObject.Destroy(tankOne.Collider);
-            GameObject.Destroy(tankTwo.Collider);
+            tankOne.Collider.enabled = false;
+            tankTwo.Collider.enabled = false;
             tankOne.Movement.EnableTurbo();
             yield return null;
 
@@ -130,8 +130,8 @@ namespace Tests.PlayMode.Entity
         public IEnumerator DisableTurbo_BothTanksAreEqualFast() {
             Tank tankOne = TestHelper.CreateTank<Tank>();
             Tank tankTwo = TestHelper.CreateTank<Tank>();
-            GameObject.Destroy(tankOne.Collider);
-            GameObject.Destroy(tankTwo.Collider); 
+            tankOne.Collider.enabled = false;
+            tankTwo.Collider.enabled = false;
             tankOne.Movement.EnableTurbo();
             tankOne.Movement.DisableTurbo();
             yield return null;

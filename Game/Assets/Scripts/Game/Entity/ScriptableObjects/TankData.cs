@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Magic.Data
+namespace Game.Entity
 {
     [CreateAssetMenu(fileName = "ScriptableObject Tank", menuName = "ScriptableObject Tank")]
     public class TankData : ScriptableObject
@@ -20,5 +20,9 @@ namespace Magic.Data
         [Space]
         [Header("Armor")]
         public int ArmorProcent = 5;
+
+        [Space]
+        [Header("Attack")]
+        public BulletStorage BulletStorage;
     }
 }
