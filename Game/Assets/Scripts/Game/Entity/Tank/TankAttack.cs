@@ -12,12 +12,13 @@ namespace Game.Entity.Tank
             this.bullets = bullets;
         }
 
-        public void ChangeAttack(int index) {
-            bullets.SetCurrentBullet(index);
+        public void ChangeBullet(GameObject bullet) {
+            bullets.Current = bullet;
         }
 
-        public void Attack(Vector2 direction) {
-
+        public void Shoot(Vector3 direction) {
+            GameObject.Instantiate(bullets.Current, tank.ShootingSpot.position, tank.ShootingSpot.rotation)
+                .GetComponent<Bullet>()?.Shoot(direction);
         }
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5739335046450715872}
   m_Layer: 6
   m_Name: TankBody
-  m_TagString: Tank
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 1097850056876019525}
   m_Layer: 6
   m_Name: TankHead
-  m_TagString: Tank
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,6 +116,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6497093116247710965}
+  - {fileID: 2354776596614923810}
   m_Father: {fileID: 6703403965578517543}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -169,6 +170,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4129742129462639255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2354776596614923810}
+  m_Layer: 0
+  m_Name: ShootingPoint
+  m_TagString: Entity
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2354776596614923810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4129742129462639255}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.269}
+  m_LocalScale: {x: 1.25, y: 4, z: 1.25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5916644146678057348}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4881159858881287024
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +214,7 @@ GameObject:
   - component: {fileID: 599168954103727018}
   m_Layer: 0
   m_Name: WheelLeft
-  m_TagString: Untagged
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -263,7 +295,7 @@ GameObject:
   - component: {fileID: 6703403963855507950}
   m_Layer: 6
   m_Name: GroundCheck
-  m_TagString: Untagged
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -365,6 +397,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2d70530ab62e5d4469a94891a9fe9837, type: 2}
   tankHead: {fileID: 2088877454940453857}
   groundCheck: {fileID: 6703403963855507950}
+  shootingSpot: {fileID: 2354776596614923810}
 --- !u!114 &5232540850519706294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,7 +423,7 @@ GameObject:
   - component: {fileID: 6795105037016151773}
   m_Layer: 0
   m_Name: WheelRight
-  m_TagString: Untagged
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -473,7 +506,7 @@ GameObject:
   - component: {fileID: 4319776370302889223}
   m_Layer: 6
   m_Name: TankCannon
-  m_TagString: Tank
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -486,7 +519,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8850970406259874536}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.7699999}
+  m_LocalPosition: {x: 0, y: 0, z: 0.77}
   m_LocalScale: {x: 0.125, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

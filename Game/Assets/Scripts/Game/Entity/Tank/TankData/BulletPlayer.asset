@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b92f3f34a25f5e49964fb55f73d5200, type: 3}
   m_Name: BulletPlayer
   m_EditorClassIdentifier: 
-  bulletObjects:
+  bullets:
   - {fileID: 7136877454970224427, guid: e917bc672817cb74ab8959cc45ad1b75, type: 3}

@@ -17,3 +17,4 @@ MonoBehaviour:
   JumpForce: 3.5
   Health: 100
   ArmorProcent: 5
+  BulletStorage: {fileID: 11400000, guid: eda5a25186583524bb3749377ebcb83b, type: 2}

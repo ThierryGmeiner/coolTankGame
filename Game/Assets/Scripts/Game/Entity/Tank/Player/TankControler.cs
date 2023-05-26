@@ -34,7 +34,8 @@ namespace Game.InputSystem
                 SetPath(GetMousePosition());
             }
             if (Input.GetMouseButtonDown(0)) {
-                Debug.Log("shot");
+                Vector3 attackDirection = -(tank.ShootingSpot.position - GetMousePosition());
+                tank.Attack.Shoot(new Vector3(attackDirection.x, tank.ShootingSpot.position.y, attackDirection.z));
             }
         }
 

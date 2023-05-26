@@ -8,6 +8,7 @@ namespace Game.Entity.Tank
         [SerializeField] private TankData data;
         [SerializeField] private GameObject tankHead;
         [SerializeField] private Transform groundCheck;
+        [SerializeField] private Transform shootingSpot;
 
         public string Name { get; private set; }
         public GameObject TankHead { get => tankHead; }
@@ -18,9 +19,11 @@ namespace Game.Entity.Tank
         public Rigidbody RigidBody { get; private set; }
         public BoxCollider Collider { get; private set; }
         public TankData Data { get => data; set { data = value; InstantiateData(); } }
+        public Transform ShootingSpot { get => shootingSpot; }
         public bool IsGrounded { get; private set; }
 
         private void Awake() {
+            data.BulletStorage?.ManualAwake();
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             if (groundCheck == null) groundCheck = CreateGroundCheck();

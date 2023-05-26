@@ -6,19 +6,15 @@ namespace Game.Entity
     [CreateAssetMenu(fileName = "BulletStorage", menuName = "BulletStorage")]
     public class BulletStorage : ScriptableObject
     {
-        [SerializeField] private GameObject[] bulletObjects;
-        private List<Bullet> bulletSorts;
-        private Bullet currentBullet;
+        [SerializeField] 
+        private GameObject[] bullets;
+        private GameObject current;
 
-        private void Awake() {
-            foreach (GameObject bullet in bulletObjects) {
-                bulletSorts.Add(bullet.GetComponent<Bullet>());
-            }
-            currentBullet = bulletSorts[0];
+        public void ManualAwake() {
+            current = bullets[0];
         }
-
-        public Bullet CurrentBullet { get => currentBullet; }
-
-        public void SetCurrentBullet(int index) => currentBullet = bulletSorts[index];
+        
+        public GameObject Current { get => current; set => current = value; }
+        public GameObject[] Bullets { get => bullets; }
     }
 }

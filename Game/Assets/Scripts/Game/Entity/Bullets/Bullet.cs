@@ -1,11 +1,16 @@
 using UnityEngine;
+using Magic;
 
 namespace Game.Entity
 {
     [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
     public abstract class Bullet : MonoBehaviour
     {
-        [SerializeField] private int damage;
+        [SerializeField] protected new string name;
+        [SerializeField] protected int damage;
+        [SerializeField] private float shootingSpeed;
+        
+        public string Name { get => name; }
         public int Damage { get => damage; }
         public Rigidbody RigidBody { get; private set; }
         public BoxCollider Collider { get; private set; }
@@ -16,13 +21,16 @@ namespace Game.Entity
         }
 
         protected virtual void OnCollisionEnter(Collision collision) {
-            string tag = collision.gameObject.tag;
-            if (tag == "Entity" || tag == "Player") {
-                collision.gameObject.GetComponent<IDamagable>().GetDamaged(damage);
+            if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
+                collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage);
+                return;
             }
-            else {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
+        }
+
+        public virtual void Shoot(Vector3 direction) {
+            Debug.Log("shoot bullet");
+            RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
         private void OnDestroy() {

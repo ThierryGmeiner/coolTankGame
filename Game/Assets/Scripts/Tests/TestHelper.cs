@@ -1,6 +1,7 @@
 using Game.Entity;
 using Game.Entity.Tank;
 using Game.AI;
+using Magic;
 using UnityEngine;
 
 namespace Tests
@@ -10,7 +11,7 @@ namespace Tests
         public static GameObject CreateTank() {
             GameObject tank = new GameObject();
             tank.name = "TestTank";
-            tank.tag = "Entity";
+            tank.tag = Tags.Entity;
             tank.layer = 6;
             // collider and rigidbody are requiredComponents
             tank.AddComponent<Tank>().Data = ScriptableObject.CreateInstance<TankData>();
@@ -23,7 +24,7 @@ namespace Tests
             GameObject ground = new GameObject();
             ground.transform.localScale = new Vector3(20, 0.1f, 20);
             ground.name = "TestGround";
-            ground.tag = "Enviorment";
+            ground.tag = Tags.Enviorment;
             ground.layer = 3;
             ground.AddComponent<BoxCollider>();
             return ground;
@@ -36,7 +37,7 @@ namespace Tests
 
             obstacle.transform.localScale = size;
             obstacle.name = "Obstacle";
-            obstacle.tag = "Enviorment";
+            obstacle.tag = Tags.Enviorment;
             obstacle.layer = 7;
             obstacle.AddComponent<BoxCollider>();
             return obstacle;
@@ -45,7 +46,7 @@ namespace Tests
         public static AStarGrid CreateASTarGrid() {
             GameObject obj = new GameObject();
             obj.name = "A*Grid";
-            obj.tag = "Untagged";
+            obj.tag = Tags.Untagged;
             obj.layer = 0;
             return obj.AddComponent<AStarGrid>();
         }
@@ -63,7 +64,7 @@ namespace Tests
 
         public static void DestroyObjects(GameObject gameObject) {
             gameObject.name = "Destroyed";
-            gameObject.tag = "Untagged";
+            gameObject.tag = Tags.Untagged;
             gameObject.layer = 0;
             gameObject.transform.position = GetEmtySpace(gameObject.transform.localScale);
             GameObject.Destroy(gameObject);
