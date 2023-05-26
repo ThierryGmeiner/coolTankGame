@@ -23,7 +23,7 @@ namespace Game.Entity.Tank
         public bool IsGrounded { get; private set; }
 
         private void Awake() {
-            data.BulletStorage?.ManualAwake();
+            data?.BulletStorage.ManualAwake();
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             if (groundCheck == null) groundCheck = CreateGroundCheck();
@@ -38,7 +38,7 @@ namespace Game.Entity.Tank
 
         private void InstantiateData() {
             if (data == null) data = ScriptableObject.CreateInstance<TankData>();
-            Name = data.Name;
+            Name = data.Name; 
             Health = new TankHealth(this, data.Health);
             Movement = new TankMovement(this, groundCheck);
             Armor = new TankArmor(this, data.ArmorProcent);
