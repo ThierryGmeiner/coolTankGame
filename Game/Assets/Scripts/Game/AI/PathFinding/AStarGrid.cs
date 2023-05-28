@@ -78,9 +78,8 @@ namespace Game.AI
             Grid = new AStarNode[gridSizeX, gridSizeY];
             Vector3 worldBottomLeft 
                 = new Vector3(transform.position.x - gridWorldSize.x / 2, 0, transform.position.z - gridWorldSize.y / 2);
-
             for (int x = 0; x < gridSizeX; x++) {
-                for (int y = 0; y < gridSizeX; y++) {
+                for (int y = 0; y < gridSizeY; y++) {
                     Vector3 worldPoint
                         = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                     bool walkable = !(Physics.CheckSphere(new Vector3(worldPoint.x, 0, worldPoint.z), nodeRadius, unwalkableMask));

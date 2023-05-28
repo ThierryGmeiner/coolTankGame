@@ -38,10 +38,10 @@ namespace Tests.PlayMode.AI
             yield return null;
             AStar aStar = new AStar(grid);
 
-            AStarNode[] path = aStar.FindPath(grid.Grid[0, 0].Position, grid.Grid[4, 4].Position);
+            Path path = aStar.FindPath(grid.Grid[0, 0].Position, grid.Grid[4, 4].Position);
 
             AStarNode[] expectedPath = { grid.Grid[0, 0], grid.Grid[1, 1], grid.Grid[2, 2], grid.Grid[3, 3], grid.Grid[4, 4] };
-            Assert.AreEqual(expectedPath, path);
+            Assert.AreEqual(expectedPath, path.Nodes);
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
@@ -52,10 +52,10 @@ namespace Tests.PlayMode.AI
             yield return null;
             AStar aStar = new AStar(grid);
 
-            AStarNode[] path = aStar.FindPath(grid.Grid[4, 2].Position, grid.Grid[0, 0].Position);
+            Path path = aStar.FindPath(grid.Grid[4, 2].Position, grid.Grid[0, 0].Position);
 
             AStarNode[] expectedPath = { grid.Grid[4, 2], grid.Grid[3, 1], grid.Grid[2, 0], grid.Grid[1, 0], grid.Grid[0, 0] };
-            Assert.AreEqual(expectedPath, path);
+            Assert.AreEqual(expectedPath, path.Nodes);
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
@@ -69,11 +69,11 @@ namespace Tests.PlayMode.AI
             grid.Grid[2, 1].IsWalkable = false;
             grid.Grid[2, 2].IsWalkable = false;
 
-            AStarNode[] path = aStar.FindPath(grid.Grid[0, 0].Position, grid.Grid[3, 0].Position);
+            Path path = aStar.FindPath(grid.Grid[0, 0].Position, grid.Grid[3, 0].Position);
 
             AStarNode[] expectedPath = { grid.Grid[0, 0], grid.Grid[1, 1], grid.Grid[1, 2], grid.Grid[2, 3], grid.Grid[3, 2],
                                         grid.Grid[3, 1], grid.Grid[3, 0] };
-            Assert.AreEqual(expectedPath, path);
+            Assert.AreEqual(expectedPath, path.Nodes);
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
@@ -90,11 +90,11 @@ namespace Tests.PlayMode.AI
             grid.Grid[4, 2].IsWalkable = false;
             grid.Grid[5, 2].IsWalkable = false;
 
-            AStarNode[] path = aStar.FindPath(grid.Grid[0, 0].Position, grid.Grid[3, 0].Position);
+            Path path = aStar.FindPath(grid.Grid[0, 0].Position, grid.Grid[3, 0].Position);
 
             AStarNode[] expectedPath = { grid.Grid[0, 0], grid.Grid[1, 1], grid.Grid[1, 2], grid.Grid[2, 3], grid.Grid[3, 3],
                                         grid.Grid[4, 3], grid.Grid[5, 3], grid.Grid[6, 2], grid.Grid[5, 1], grid.Grid[4, 0], grid.Grid[3, 0] };
-            Assert.AreEqual(expectedPath, path);
+            Assert.AreEqual(expectedPath, path.Nodes);
 
             TestHelper.DestroyObjects(grid.gameObject);
         }

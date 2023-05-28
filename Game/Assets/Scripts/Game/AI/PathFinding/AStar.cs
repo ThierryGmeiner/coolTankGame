@@ -22,40 +22,45 @@ namespace Game.AI
         public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
         public AStarNode TargetNode { get => targetNode; set { if (value.IsWalkable) targetNode = value; } }
 
-        public AStarNode[] FindPath(Vector3 startPos, Vector3 targetPos)
+        public Path FindPath(Vector3 startPos, Vector3 targetPos)
             => FindPath(grid.GetNodeFromPosition(startPos), grid.GetNodeFromPosition(targetPos));
 
         // finds a path with the aStar algorithm
-        public AStarNode[] FindPath(AStarNode start, AStarNode target) {
+        public Path FindPath(AStarNode start, AStarNode target) {
             startNode = start;
             targetNode = target;
             AStarNode currentNode = startNode;
 
-            if (!targetNode.IsWalkable || !startNode.IsWalkable) return new AStarNode[0];
+            if (!targetNode.IsWalkable || !startNode.IsWalkable) return new Path(new AStarNode[0], Path.Optimized.False);
             // search every loop the cheapest node and update them
-            for (int i = 0; currentNode != targetNode && i < 3000; i++) {
+            for (int i = 0; currentNode != targetNode && i < 10000; i++) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
             }
 
-            AStarNode[] path = GetPathViaBacktracking(startNode, targetNode).ToArray();
+            Path path = new Path(GetPathViaBacktracking(startNode, targetNode).ToArray(), Path.Optimized.False);
             grid.Clear();
             return path;
         }
 
         // filters out the important nodes of the aStar path
-        public AStarNode[] FindOptimizedPath(AStarNode start, AStarNode target) => FindOptimizedPath(FindPath(start, target));
-        public AStarNode[] FindOptimizedPath(AStarNode[] unoptimizedPath) {
+        public Path FindOptimizedPath(Vector3 start, Vector3 target)
+            => FindOptimizedPath(grid.GetNodeFromPosition(start), grid.GetNodeFromPosition(target));
+
+        public Path FindOptimizedPath(AStarNode start, AStarNode target) 
+            => FindOptimizedPath(FindPath(start, target));
+
+        public Path FindOptimizedPath(Path unoptimizedPath) {
             List<AStarNode> optimizedPath = new List<AStarNode>();
             AStarNode currentSectionStart = startNode;
 
-            if (unoptimizedPath.Length == 0) return unoptimizedPath;
+            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, Path.Optimized.True);
             // search in every loop one section
             while (currentSectionStart != targetNode) {
-                currentSectionStart = FindNewSection(unoptimizedPath, currentSectionStart);
+                currentSectionStart = FindNewSection(unoptimizedPath.Nodes, currentSectionStart);
                 optimizedPath.Add(currentSectionStart);
             }
-            return optimizedPath.ToArray();
+            return new Path(optimizedPath.ToArray(), Path.Optimized.True);
         }
 
         private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {

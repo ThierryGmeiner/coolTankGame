@@ -12,12 +12,12 @@ namespace Game.Entity.Tank
 
         public string Name { get; private set; }
         public GameObject TankHead { get => tankHead; }
-        public TankHealth Health { get; private set; }
-        public TankMovement Movement { get; private set; }
-        public TankArmor Armor { get; private set; }
-        public TankAttack Attack { get; private set; }
-        public Rigidbody RigidBody { get; private set; }
-        public BoxCollider Collider { get; private set; }
+        public TankHealth Health { get; private set; } = null;
+        public TankMovement Movement { get; private set; } = null;
+        public TankArmor Armor { get; private set; } = null;
+        public TankAttack Attack { get; private set; } = null;
+        public Rigidbody RigidBody { get; private set; } = null;
+        public BoxCollider Collider { get; private set; } = null;
         public TankData Data { get => data; set { data = value; InstantiateData(); } }
         public Transform ShootingSpot { get => shootingSpot; }
         public bool IsGrounded { get; private set; }

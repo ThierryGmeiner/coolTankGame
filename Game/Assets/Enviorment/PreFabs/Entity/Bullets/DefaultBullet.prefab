@@ -131,7 +131,7 @@ MonoBehaviour:
   name: DefaultBullet
   damage: 10
   shootingSpeed: 20
-  lifeTime: 8
+  lifeTime: 6
   timerMode: 0
 --- !u!114 &4603368707967738351
 MonoBehaviour:
