@@ -17,11 +17,12 @@ namespace Game.Entity.Tank
         public readonly AStarGrid grid;
 
         // movement
+        private float speed;
         private readonly float defaultSpeed;
         private readonly float jumpForce;
-        private float speed;
         private const float AIR_MULTIPLIER = 0.65f;
-        private const float ROTATION_SPEED = 6;
+        private const float BODY_ROTATION_SPEED = 6;
+        private const float HEAD_ROTATION_SPEED = 5;
 
         public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;
@@ -41,8 +42,6 @@ namespace Game.Entity.Tank
             set { pathIndex = 0; path = value; }
         }
 
-        public void Move(Vector2 direction) => Move(new Vector3(direction.x, 0, direction.y));
-
         public void Move(Vector3 target) {
             float movementSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
             tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, movementSpeed);
@@ -55,7 +54,7 @@ namespace Game.Entity.Tank
             // the findPath methode gets caled via second thread (for performance)
             if (!path.IsOptimized) path = aStar.FindOptimizedPath(Path);
 
-            Rotate(path.Nodes[pathIndex].Position);
+            RotateBody(path.Nodes[pathIndex].Position);
             Move(path.Nodes[pathIndex].Position);
 
             if (ReachTarget()) Path = null;
@@ -68,10 +67,17 @@ namespace Game.Entity.Tank
             }
         }
 
-        public void Rotate(Vector3 target) {
+        public void RotateHead(Vector3 target) {
             Vector3 direction = (target - tank.transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            tank.transform.rotation = Quaternion.Slerp(tank.transform.rotation, lookRotation, Time.deltaTime * ROTATION_SPEED);
+            tank.TankHead.transform.rotation 
+                = Quaternion.Slerp(tank.TankHead.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
+        }
+
+        public void RotateBody(Vector3 target) {
+            Vector3 direction = (target - tank.transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            tank.transform.rotation = Quaternion.Slerp(tank.transform.rotation, lookRotation, Time.deltaTime * BODY_ROTATION_SPEED);
         }
 
         public void SetPath(Vector3 startPos, Vector3 targetPos) {

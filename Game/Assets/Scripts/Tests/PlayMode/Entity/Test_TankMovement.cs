@@ -116,8 +116,8 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             for (int i = 0; i < 10; i++) {
-                tankOne.Movement.Move(Vector2.up);
-                tankTwo.Movement.Move(Vector2.up);
+                tankOne.Movement.Move(Vector3.forward);
+                tankTwo.Movement.Move(Vector3.forward);
                 yield return null;
             }
 
@@ -137,8 +137,8 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             for (int i = 0; i < 10; i++) {
-                tankOne.Movement.Move(Vector2.up);
-                tankTwo.Movement.Move(Vector2.up);
+                tankOne.Movement.Move(Vector3.forward);
+                tankTwo.Movement.Move(Vector3.forward);
                 yield return null;
             }
 

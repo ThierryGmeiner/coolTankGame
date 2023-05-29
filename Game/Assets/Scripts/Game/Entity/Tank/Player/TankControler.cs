@@ -26,7 +26,7 @@ namespace Game.InputSystem
         }
 
         private void Update() {
-            SetLookDirection(tank.TankHead.transform);
+            tank.Movement.RotateHead(GetMousePosition());
             if (Input.GetMouseButtonDown(1)) SetNewPath();
             if (Input.GetMouseButtonDown(0)) Shoot();
         }
@@ -35,17 +35,11 @@ namespace Game.InputSystem
             Vector3 startPos = transform.position, targetPos = GetMousePosition();
             Thread pathFindingThread = new Thread(() => tank.Movement.SetPath(startPos, targetPos));
             pathFindingThread.Start();
-            //tank.Movement.SetPath(startPos, targetPos);
         }
 
         private void Shoot() {
             Vector3 attackDirection = -(tank.ShootingSpot.position - GetMousePosition());
             tank.Attack.Shoot(new Vector3(attackDirection.x, 0, attackDirection.z));
-        }
-
-        public void SetLookDirection(Transform transform) {
-            Vector3 mousePos = GetMousePosition();
-            transform.LookAt(new Vector3(mousePos.x, transform.position.y, mousePos.z));
         }
 
         private Vector3 GetMousePosition() {

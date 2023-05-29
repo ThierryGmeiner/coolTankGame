@@ -35,7 +35,9 @@ namespace Game.Entity
         }
 
         protected virtual void OnCollisionEnter(Collision collision) {
+            Debug.Log("hit");
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
+                Destroy(gameObject);
                 collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage);
                 return;
             }
@@ -43,7 +45,6 @@ namespace Game.Entity
         }
 
         public virtual void Shoot(Vector3 direction) {
-            Debug.Log("shoot bullet");
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
