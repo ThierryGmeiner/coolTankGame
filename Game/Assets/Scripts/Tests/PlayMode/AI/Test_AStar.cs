@@ -426,7 +426,7 @@ namespace Tests.PlayMode.AI
             node2.LastNodeInPath = node1;
             yield return null;
 
-            List<AStarNode> path = AStar.GetPathViaBacktracking(node1, node3);
+            List<AStarNode> path = AStar.GetPath(node1, node3);
 
             List<AStarNode> expectedPath = new List<AStarNode>();
             expectedPath.Add(node1);
@@ -448,7 +448,7 @@ namespace Tests.PlayMode.AI
             node2.LastNodeInPath = node1;
             yield return null;
 
-            List<AStarNode> path = AStar.GetPathViaBacktracking(node1, node5);
+            List<AStarNode> path = AStar.GetPath(node1, node5);
 
             List<AStarNode> expectedPath = new List<AStarNode>();
             expectedPath.Add(node1);

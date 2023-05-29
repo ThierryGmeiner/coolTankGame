@@ -9,6 +9,7 @@ namespace Tests
     public static class TestHelper
     {
         public static GameObject CreateTank() {
+            if (GameObject.Find("A*") == null) CreateASTarGrid();
             GameObject tank = new GameObject();
             tank.name = "TestTank";
             tank.tag = Tags.Entity;
@@ -45,7 +46,7 @@ namespace Tests
 
         public static AStarGrid CreateASTarGrid() {
             GameObject obj = new GameObject();
-            obj.name = "A*Grid";
+            obj.name = "A*";
             obj.tag = Tags.Untagged;
             obj.layer = 0;
             return obj.AddComponent<AStarGrid>();

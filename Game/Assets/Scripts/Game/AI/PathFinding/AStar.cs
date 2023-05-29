@@ -6,29 +6,32 @@ namespace Game.AI
 {
     public class AStar
     {
-        private readonly AStarGrid grid;
         private AStarNode startNode;
         private AStarNode targetNode;
+        private readonly AStarGrid grid;
         private readonly float colliderRadius = 0.5f;
         public const float STRAIGHT_MOVE_COST = 10;
         public const float DIAGOANAL_MOVE_COST = 14;
      
-        public AStar(AStarGrid grid) : this(grid, 0.5f) { }
-        public AStar(AStarGrid grid, float colliderRadius) {
+        public AStar(AStarGrid grid) {
             this.grid = grid;
-            this.colliderRadius = colliderRadius;
+            colliderRadius = grid.NodeRadius;
         }
 
         public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
         public AStarNode TargetNode { get => targetNode; set { if (value.IsWalkable) targetNode = value; } }
 
+        // ####################################################
+        // find path:
+        // finde path with the a* algorithm
+        // ####################################################
+        
         public Path FindPath(Vector3 startPos, Vector3 targetPos)
             => FindPath(grid.GetNodeFromPosition(startPos), grid.GetNodeFromPosition(targetPos));
 
         // finds a path with the aStar algorithm
         public Path FindPath(AStarNode start, AStarNode target) {
-            startNode = start;
-            targetNode = target;
+            startNode = start; targetNode = target;
             AStarNode currentNode = startNode;
 
             if (!targetNode.IsWalkable || !startNode.IsWalkable) return new Path(new AStarNode[0], Path.Optimized.False);
@@ -37,48 +40,20 @@ namespace Game.AI
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
             }
-
-            Path path = new Path(GetPathViaBacktracking(startNode, targetNode).ToArray(), Path.Optimized.False);
+            Path path = new Path(GetPath(startNode, targetNode).ToArray(), Path.Optimized.False);
             grid.Clear();
             return path;
         }
 
-        // filters out the important nodes of the aStar path
-        public Path FindOptimizedPath(Vector3 start, Vector3 target)
-            => FindOptimizedPath(grid.GetNodeFromPosition(start), grid.GetNodeFromPosition(target));
-
-        public Path FindOptimizedPath(AStarNode start, AStarNode target) 
-            => FindOptimizedPath(FindPath(start, target));
-
-        public Path FindOptimizedPath(Path unoptimizedPath) {
-            List<AStarNode> optimizedPath = new List<AStarNode>();
-            AStarNode currentSectionStart = startNode;
-
-            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, Path.Optimized.True);
-            // search in every loop one section
-            while (currentSectionStart != targetNode) {
-                currentSectionStart = FindNewSection(unoptimizedPath.Nodes, currentSectionStart);
-                optimizedPath.Add(currentSectionStart);
+        public static List<AStarNode> GetPath(AStarNode startNode, AStarNode lastNode) {
+            List<AStarNode> path = new List<AStarNode>();
+            if (lastNode == startNode) {
+                path.Add(lastNode);
+                return path;
             }
-            return new Path(optimizedPath.ToArray(), Path.Optimized.True);
-        }
-
-        private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {
-            AStarNode newSectionStart = FidnSectionViaBacktracking(path, oldSectionStart, Array.IndexOf(path, oldSectionStart) + 1);
-            // fixes the problem that the search sometimes gets stuck on a node
-            if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
-            return newSectionStart;
-        }
-
-        private AStarNode FidnSectionViaBacktracking(AStarNode[] path, AStarNode searchNode, int index) {
-            if (path[index] == targetNode) return path[index];
-
-            Vector3 direction = path[index].Position - searchNode.Position;
-            Ray ray = new Ray(searchNode.Position, direction);
-            float rayLength = Vector3.Distance(searchNode.Position, path[index].Position);
-
-            if (Physics.SphereCast(ray, colliderRadius, rayLength, grid.unwalkableMask)) return path[index - 1];
-            return FidnSectionViaBacktracking(path, searchNode, index + 1);
+            path = GetPath(startNode, lastNode.LastNodeInPath);
+            path.Add(lastNode);
+            return path;
         }
 
         public void UpdateNeighbors(AStarNode currentNode) {
@@ -106,9 +81,6 @@ namespace Game.AI
             return updatingNode.gCost + gCostIncreas;
         }
 
-        public static bool NodeIsStraightToNeighbor(AStarNode node, AStarNode updatingNode)
-            => node.Position.x == updatingNode.Position.x || node.Position.y == updatingNode.Position.y;
-
         public static float CalculateHCost(AStarNode node, AStarNode targetNode) {
             if (node.hCost > 0) return node.hCost;
 
@@ -120,16 +92,51 @@ namespace Game.AI
             return hCost;
         }
 
-        public static List<AStarNode> GetPathViaBacktracking(AStarNode startNode, AStarNode lastNode) {
-            List<AStarNode> path = new List<AStarNode>();
-            if (lastNode == startNode) {
-                path.Add(lastNode);
-                return path;
+        // ####################################################
+        // Optimize path:
+        // filters the important nodes of the aStar path out
+        // ####################################################
+
+        public Path FindOptimizedPath(Vector3 start, Vector3 target)
+            => FindOptimizedPath(grid.GetNodeFromPosition(start), grid.GetNodeFromPosition(target));
+
+        public Path FindOptimizedPath(AStarNode start, AStarNode target) 
+            => FindOptimizedPath(FindPath(start, target));
+
+        public Path FindOptimizedPath(Path unoptimizedPath) {
+            List<AStarNode> optimizedPath = new List<AStarNode>();
+            AStarNode currentSectionStart = startNode;
+
+            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, Path.Optimized.True);
+            // search in every loop one section
+            while (currentSectionStart != targetNode) {
+                currentSectionStart = FindNewSection(unoptimizedPath.Nodes, currentSectionStart);
+                optimizedPath.Add(currentSectionStart);
             }
-            path = GetPathViaBacktracking(startNode, lastNode.LastNodeInPath);
-            path.Add(lastNode);
-            return path;
+            return new Path(optimizedPath.ToArray(), Path.Optimized.True);
         }
+
+        private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {
+            AStarNode newSectionStart = GetNextSection(path, oldSectionStart, Array.IndexOf(path, oldSectionStart) + 1);
+            // fixes the problem that the search sometimes gets stuck on a node
+            if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
+            return newSectionStart;
+        }
+
+        private AStarNode GetNextSection(AStarNode[] path, AStarNode searchNode, int index) {
+            if (path[index] == targetNode) 
+                return path[index];
+            if (Magic.Conditions.DirectPathIsBlocked(path[index].Position, searchNode.Position, colliderRadius, grid.unwalkableMask)) 
+                return path[index - 1];
+            return GetNextSection(path, searchNode, index + 1);
+        }
+
+        // ####################################################
+        // some conditions:
+        // ####################################################
+
+        public static bool NodeIsStraightToNeighbor(AStarNode node, AStarNode updatingNode)
+            => node.Position.x == updatingNode.Position.x || node.Position.y == updatingNode.Position.y;
 
         private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
             Vector2Int[] array = { new Vector2Int(olsPos.x - 1, olsPos.y), new Vector2Int(olsPos.x + 1, olsPos.y),

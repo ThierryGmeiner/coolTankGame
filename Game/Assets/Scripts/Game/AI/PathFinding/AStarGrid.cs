@@ -15,6 +15,7 @@ namespace Game.AI
         [SerializeField] private bool drawBoard = false;
 
         public AStarNode[,] Grid { get; set; } = new AStarNode[0, 0];
+        public float NodeRadius { get => nodeRadius; }
 
         private void OnDrawGizmos() {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));

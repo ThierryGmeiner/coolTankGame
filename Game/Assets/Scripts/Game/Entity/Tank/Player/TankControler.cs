@@ -35,6 +35,7 @@ namespace Game.InputSystem
             Vector3 startPos = transform.position, targetPos = GetMousePosition();
             Thread pathFindingThread = new Thread(() => tank.Movement.SetPath(startPos, targetPos));
             pathFindingThread.Start();
+            //tank.Movement.SetPath(startPos, targetPos);
         }
 
         private void Shoot() {

@@ -32,7 +32,7 @@ namespace Game.Entity.Tank
 
             groundLayer = LayerMask.GetMask("Ground");
             grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
-            aStar = new AStar(grid, System.Math.Max(tank.transform.localScale.x, tank.transform.localScale.z) / 2);
+            aStar = new AStar(grid);
         }
 
         public float Speed { get => speed; }
@@ -54,6 +54,7 @@ namespace Game.Entity.Tank
             // check every frame if the path is optimized because the FindOptimizedPath cant run in a second thread
             // the findPath methode gets caled via second thread (for performance)
             if (!path.IsOptimized) path = aStar.FindOptimizedPath(Path);
+
             Rotate(path.Nodes[pathIndex].Position);
             Move(path.Nodes[pathIndex].Position);
 
