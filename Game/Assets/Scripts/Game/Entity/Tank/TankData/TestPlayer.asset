@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: PlayerTank
   Speed: 5
-  TurboMultiplier: 4
+  TurboMultiplier: 5
   JumpForce: 3.5
   Health: 100
   ArmorProcent: 5

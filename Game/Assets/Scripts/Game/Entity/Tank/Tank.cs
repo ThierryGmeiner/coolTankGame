@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Game.Entity.Tank
 {
     [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
-    public class Tank : MonoBehaviour, IEntity
+    public class Tank : MonoBehaviour, IEntity, IDamagable, IRepairable
     {
         [SerializeField] private TankData data;
         [SerializeField] private GameObject tankHead;
@@ -25,11 +25,9 @@ namespace Game.Entity.Tank
             Movement.Move();
         }
 
-        public void GetDestroyed() {
-            Destroy(gameObject);
-        }
-
-        public void GetBeaten(int damage) => Health.GetDamaged(damage);
+        public void GetDestroyed() => Destroy(gameObject);
+        public void GetDamaged(int damage) => Health.GetDamaged(damage);
+        public void GetRepaired(int healing) => Health.GetRepaired(healing);
 
         private void InstantiateData() {
             data ??= ScriptableObject.CreateInstance<TankData>();
