@@ -20,6 +20,7 @@ namespace Game.Entity.Tank
         private float speed;
         private readonly float defaultSpeed;
         private readonly float jumpForce;
+        private readonly float turboMultiplier;
         private const float AIR_MULTIPLIER = 0.65f;
         private const float BODY_ROTATION_SPEED = 6;
         private const float HEAD_ROTATION_SPEED = 5;
@@ -30,6 +31,7 @@ namespace Game.Entity.Tank
             defaultSpeed = tank.Data.Speed;
             speed = tank.Data.Speed;
             jumpForce = tank.Data.JumpForce;
+            turboMultiplier = tank.Data.TurboMultiplier;
 
             groundLayer = LayerMask.GetMask("Ground");
             grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
@@ -70,7 +72,7 @@ namespace Game.Entity.Tank
         public void RotateHead(Vector3 target) {
             Vector3 direction = (target - tank.transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            tank.TankHead.transform.rotation 
+            tank.TankHead.transform.rotation  
                 = Quaternion.Slerp(tank.TankHead.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
         }
 
@@ -87,7 +89,7 @@ namespace Game.Entity.Tank
             }
         }
 
-        public void EnableTurbo() => speed = defaultSpeed * 1.5f;
+        public void EnableTurbo() => speed = defaultSpeed * turboMultiplier;
 
         public void DisableTurbo() => speed = defaultSpeed;
 

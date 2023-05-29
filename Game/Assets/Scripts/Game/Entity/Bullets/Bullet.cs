@@ -4,7 +4,7 @@ using Magic;
 namespace Game.Entity
 {
     [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(PlannedTimer))]
-    public abstract class Bullet : MonoBehaviour
+    public abstract class Bullet : MonoBehaviour, IEntity
     {
         [Header("Attack")]
         [SerializeField] protected new string name;
@@ -32,21 +32,22 @@ namespace Game.Entity
             timer.OnTimerEnds += () => Destroy(gameObject);
             timer.SetupTimer(lifeTime, timerMode);
             timer.StartTimer();
-        }
+        }   
 
         protected virtual void OnCollisionEnter(Collision collision) {
-            Debug.Log("hit");
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
-                Destroy(gameObject);
-                collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage);
-                return;
+                collision.gameObject.GetComponent<IEntity>()?.GetBeaten(damage);
             }
-            Destroy(gameObject);
+            GetDestroyed();
         }
 
         public virtual void Shoot(Vector3 direction) {
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
+
+        public virtual void GetBeaten(int damage) => GetDestroyed();
+
+        public virtual void GetDestroyed() => Destroy(gameObject);
 
         private void OnDestroy() {
             // play sound and particles

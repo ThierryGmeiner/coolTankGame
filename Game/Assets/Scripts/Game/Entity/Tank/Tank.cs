@@ -3,32 +3,21 @@ using UnityEngine;
 namespace Game.Entity.Tank
 {
     [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
-    public class Tank : MonoBehaviour
+    public class Tank : MonoBehaviour, IEntity
     {
         [SerializeField] private TankData data;
         [SerializeField] private GameObject tankHead;
         [SerializeField] private Transform groundCheck;
         [SerializeField] private Transform shootingSpot;
 
-        public string Name { get; private set; }
-        public GameObject TankHead { get => tankHead; }
-        public TankHealth Health { get; private set; } = null;
-        public TankMovement Movement { get; private set; } = null;
-        public TankArmor Armor { get; private set; } = null;
-        public TankAttack Attack { get; private set; } = null;
-        public Rigidbody RigidBody { get; private set; } = null;
-        public BoxCollider Collider { get; private set; } = null;
-        public TankData Data { get => data; set { data = value; InstantiateData(); } }
-        public Transform ShootingSpot { get => shootingSpot; }
-        public bool IsGrounded { get; private set; }
-
         private void Awake() {
             data?.BulletStorage.ManualAwake();
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
-            if (groundCheck == null) groundCheck = CreateGroundCheck();
-            if (tankHead == null) new GameObject();
+            groundCheck ??= CreateGroundCheck();
+            tankHead ??= new GameObject();
             InstantiateData();
+            Health.OnDestruction += GetDestroyed;
         }
 
         private void Update() { 
@@ -36,8 +25,14 @@ namespace Game.Entity.Tank
             Movement.Move();
         }
 
+        public void GetDestroyed() {
+            Destroy(gameObject);
+        }
+
+        public void GetBeaten(int damage) => Health.GetDamaged(damage);
+
         private void InstantiateData() {
-            if (data == null) data = ScriptableObject.CreateInstance<TankData>();
+            data ??= ScriptableObject.CreateInstance<TankData>();
             Name = data.Name; 
             Health = new TankHealth(this, data.Health);
             Movement = new TankMovement(this, groundCheck);
@@ -51,5 +46,17 @@ namespace Game.Entity.Tank
             obj.parent = gameObject.transform;
             return obj.transform;
         }
+
+        public string Name { get; private set; }
+        public GameObject TankHead { get => tankHead; }
+        public TankHealth Health { get; private set; } = null;
+        public TankMovement Movement { get; private set; } = null;
+        public TankArmor Armor { get; private set; } = null;
+        public TankAttack Attack { get; private set; } = null;
+        public Rigidbody RigidBody { get; private set; } = null;
+        public BoxCollider Collider { get; private set; } = null;
+        public TankData Data { get => data; set { data = value; InstantiateData(); } }
+        public Transform ShootingSpot { get => shootingSpot; }
+        public bool IsGrounded { get; private set; }
     }
 }

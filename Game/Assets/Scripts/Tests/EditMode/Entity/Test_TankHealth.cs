@@ -21,7 +21,7 @@ namespace Tests.EditMode.Entity
             int hp = 100;
 
             health = new TankHealth(tank, hp);
-            int tankHP = health.HP;
+            int tankHP = health.HitPoints;
 
             Assert.AreEqual(hp, tankHP);
         }
@@ -33,7 +33,7 @@ namespace Tests.EditMode.Entity
             int hp = 100;
 
             health = new TankHealth(tank, hp);
-            int tankMaxHP = health.MaxHP;
+            int tankMaxHP = health.MaxHitPoints;
 
             Assert.AreEqual(hp, tankMaxHP);
         }
@@ -47,7 +47,7 @@ namespace Tests.EditMode.Entity
 
             health.GetDamaged(damage);
 
-            Assert.AreEqual(hp - damage, health.HP);
+            Assert.AreEqual(hp - damage, health.HitPoints);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Tests.EditMode.Entity
 
             health.GetDamaged(damage);
 
-            Assert.AreEqual(hp - damage, health.HP);
+            Assert.AreEqual(hp - damage, health.HitPoints);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Tests.EditMode.Entity
 
             health.GetDamaged(damage);
 
-            Assert.AreEqual(90, health.HP);
+            Assert.AreEqual(90, health.HitPoints);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Tests.EditMode.Entity
             health.GetDamaged(damage);
             health.GetRepaired(repair);
 
-            Assert.AreEqual(hp - damage + repair, health.HP);
+            Assert.AreEqual(hp - damage + repair, health.HitPoints);
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace Tests.EditMode.Entity
             health.GetDamaged(damage);
             health.GetRepaired(repair);
 
-            Assert.AreEqual(hp - damage + System.Math.Abs(repair), health.HP);
+            Assert.AreEqual(hp - damage + System.Math.Abs(repair), health.HitPoints);
         }
    }
 }

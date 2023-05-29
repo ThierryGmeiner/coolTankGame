@@ -60,7 +60,7 @@ namespace Tests.PlayMode.Entity
             TankData data = ScriptableObject.CreateInstance<TankData>();
             yield return null;
 
-            Assert.AreEqual(data.Health, tank.Health.HP);
+            Assert.AreEqual(data.Health, tank.Health.HitPoints);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }

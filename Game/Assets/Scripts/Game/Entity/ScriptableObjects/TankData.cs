@@ -11,6 +11,7 @@ namespace Game.Entity
         [Space]
         [Header("Movement")]
         public float Speed = 10;
+        public float TurboMultiplier = 1.6f;
         public float JumpForce = 10;
 
         [Space]

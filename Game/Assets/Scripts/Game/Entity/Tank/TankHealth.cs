@@ -9,24 +9,25 @@ namespace Game.Entity.Tank
         public event Action<int> OnRepaired;
         public event Action OnDestruction;
 
-        public int MaxHP { get; private set; }
-        public int HP { get; private set; }
-
         public TankHealth(Tank tank, int maxHealth) {
             this.tank = tank;
-            MaxHP = maxHealth;
-            HP = maxHealth;
+            MaxHitPoints = maxHealth;
+            HitPoints = maxHealth;
         }
+        public int MaxHitPoints { get; }
+        public int HitPoints { get; private set; }
 
         public void GetDamaged(int damage) {
-            HP -= Math.Abs(damage);
+            HitPoints -= Math.Abs(damage);
+            UnityEngine.Debug.Log($"{tank.Name} has {HitPoints} hp");
+
             OnDamaged?.Invoke(damage);
-            if (HP <= 0) OnDestruction?.Invoke();
+            if (HitPoints <= 0) OnDestruction?.Invoke();
         }
 
         public void GetRepaired(int healing) {
-            if (HP + healing > MaxHP) healing = MaxHP - HP;
-            HP += Math.Abs(healing);
+            if (HitPoints + healing > MaxHitPoints) healing = MaxHitPoints - HitPoints;
+            HitPoints += Math.Abs(healing);
             OnRepaired?.Invoke(healing);
         }
     }
