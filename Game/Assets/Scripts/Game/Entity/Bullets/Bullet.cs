@@ -20,7 +20,7 @@ namespace Game.Entity
         private new BoxCollider collider;
         private Rigidbody rigidBody;
 
-        public event Action<int> OnDamaged;
+        public event Action<int, int, int> OnDamaged;
         public event Action OnDestruction;
 
         public string Name { get => name; }
@@ -28,8 +28,8 @@ namespace Game.Entity
         public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
         public Rigidbody RigidBody { get => rigidBody; }
         public BoxCollider Collider { get => collider; }
-        public int MaxHitPoints { get; } = 1;
-        public int HitPoints { get; } = 1;
+        public int MaxHitPoints { get; } = 0;
+        public int HitPoints { get; } = 0;
 
         protected virtual void Awake() {
             rigidBody = GetComponent<Rigidbody>();
@@ -48,22 +48,21 @@ namespace Game.Entity
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
                 collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage);
             }
-            GetDestroyed(int.MaxValue);
+            GetDestroyed();
         }
 
         public virtual void Shoot(Vector3 direction) {
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
-        public virtual void GetDamaged(int damage) => GetDestroyed(damage);
-        public virtual void GetDestroyed(int damage) {
+        public virtual void GetDamaged(int damage) => GetDestroyed();
+        public virtual void GetDestroyed() {
             OnDestruction?.Invoke();
             Destroy(gameObject);
         }
 
         private void OnDestroy() {
             // play sound and particles
-            Debug.Log("destroy bullet");
         }
     }
 }

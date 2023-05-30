@@ -52,7 +52,7 @@ namespace Tests.PlayMode.Entity
             int damage = 10, eventSubscribtion = 0;
             yield return null;
 
-            health.OnDamaged += (int damage) => eventSubscribtion = damage;
+            health.OnDamaged += (int maxHP, int hp, int damage) => eventSubscribtion = damage;
             health.GetDamaged(damage);
 
             Assert.AreEqual(damage, eventSubscribtion);
@@ -99,7 +99,7 @@ namespace Tests.PlayMode.Entity
             int eventHasFiered = 0;
             yield return null;
 
-            health.OnRepaired += (int repair) => eventHasFiered = repair;
+            health.OnRepaired += (int maxHP, int hp, int repair) => eventHasFiered = repair;
             health.GetDamaged(damage);
             health.GetRepaired(repair);
 

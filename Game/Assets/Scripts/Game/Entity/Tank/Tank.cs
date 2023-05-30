@@ -23,7 +23,7 @@ namespace Game.Entity.Tank
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             Health = GetComponent<TankHealth>();
-            Health.OnDamaged += GetDestroyed;
+            Health.OnDamaged += (int maxHP, int HP, int damage) => { if (HP <= 0) GetDestroyed(); };
         }
 
         private void Update() { 
@@ -34,8 +34,7 @@ namespace Game.Entity.Tank
         public string Name { get => data.Name; }
         public Rigidbody RigidBody { get; private set; } = null;
         public BoxCollider Collider { get; private set; } = null;
-        public void GetDestroyed(int damage) {
-            if (Health.HitPoints > 0) return;
+        public void GetDestroyed() {
             OnDestruction?.Invoke();
             Destroy(gameObject);
         }

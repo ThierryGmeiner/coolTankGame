@@ -129,10 +129,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: DefaultBullet
-  damage: 10
+  damage: 15
   shootingSpeed: 20
   lifeTime: 6
-  timerMode: 0
 --- !u!114 &4603368707967738351
 MonoBehaviour:
   m_ObjectHideFlags: 0

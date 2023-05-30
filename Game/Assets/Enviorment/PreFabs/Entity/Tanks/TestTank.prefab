@@ -182,9 +182,9 @@ GameObject:
   - component: {fileID: 4727148177894066641}
   - component: {fileID: 454440592837191526}
   - component: {fileID: 3116490773924542255}
-  - component: {fileID: 979965358072196769}
+  - component: {fileID: 7886188493885686244}
   m_Layer: 5
-  m_Name: HealthCanvas
+  m_Name: HealthBarCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &979965358072196769
+--- !u!114 &7886188493885686244
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -283,11 +283,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1915450960957748254}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46b946d79513c594186e99f62e2fc211, type: 3}
+  m_Script: {fileID: 11500000, guid: 322cc81a7c2a524459d73f8c0ed19ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 4864593692875131945}
+  hpBar: {fileID: 2999429550389339858}
   loockAt: 1
+  reductionSpeed: 1
 --- !u!1 &2867120354105027225
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,7 +417,6 @@ GameObject:
   - component: {fileID: 4902868653811906715}
   - component: {fileID: 6203845364926094008}
   - component: {fileID: -5861590840713135274}
-  - component: {fileID: -1063694751969685412}
   m_Layer: 6
   m_Name: TestTank
   m_TagString: Entity
@@ -510,18 +510,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50d6cd68097f462469669eef806d6e80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-1063694751969685412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4864593692875131940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 322cc81a7c2a524459d73f8c0ed19ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4864593693566337535
@@ -785,7 +773,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.913
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

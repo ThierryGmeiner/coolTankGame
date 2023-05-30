@@ -8,7 +8,7 @@ namespace Game.Entity
         public string Name { get; }
         public Rigidbody RigidBody { get; }
         public BoxCollider Collider { get; }
-        public void GetDestroyed(int damage);
+        public void GetDestroyed();
         public event Action OnDestruction;
     }
 
@@ -18,7 +18,7 @@ namespace Game.Entity
         public int HitPoints { get; }
 
         public void GetDamaged(int damage);
-        public event Action<int> OnDamaged;
+        public event Action<int, int, int> OnDamaged; // maxHP, currentHP, damage
     }
 
     public interface IRepairable
@@ -27,7 +27,7 @@ namespace Game.Entity
         public int HitPoints { get; }
 
         public void GetRepaired(int healing);
-        public event Action<int> OnRepaired;
+        public event Action<int, int, int> OnRepaired; // maxHP, currentHP, healing
     }
 
     public interface IRangeAttack
