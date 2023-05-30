@@ -16,9 +16,15 @@ namespace Game.Entity.Tank
             bullets.Current = bullet;
         }
 
+        public void DropMine() {
+            throw new System.NotImplementedException();
+        }
+
         public void Shoot(Vector3 direction) {
-            GameObject.Instantiate(bullets.Current, tank.ShootingSpot.position, tank.ShootingSpot.rotation)
-                .GetComponent<Bullet>()?.Shoot(direction);
+            Bullet bullet 
+                = GameObject.Instantiate(bullets.Current, tank.ShootingSpot.position, tank.ShootingSpot.rotation).GetComponent<Bullet>();
+            bullet.ShootingEntity = tank.gameObject;
+            bullet.Shoot(direction);
         }
     }
 }
