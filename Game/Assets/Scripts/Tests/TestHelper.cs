@@ -14,8 +14,8 @@ namespace Tests
             tank.name = "TestTank";
             tank.tag = Tags.Entity;
             tank.layer = 6;
-            // collider and rigidbody are requiredComponents
             tank.AddComponent<Tank>().Data = ScriptableObject.CreateInstance<TankData>();
+            tank.AddComponent<TankHealth>(); 
             return tank;
         }
 

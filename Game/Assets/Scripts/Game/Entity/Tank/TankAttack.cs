@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Entity.Tank
 {
-    public class TankAttack
+    public class TankAttack : IRangeAttack, IDropMine
     {
         private readonly Tank tank;
         private BulletStorage bullets;

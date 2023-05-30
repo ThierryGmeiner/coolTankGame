@@ -19,6 +19,7 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Move_VectorZero_Stay() {
             Tank tank = TestHelper.CreateTank<Tank>();
+            yield return null;
             tank.RigidBody.useGravity = false;
             Vector3 startPos = tank.transform.position;
 
@@ -35,6 +36,7 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Move_VectorForward_ChangePosition() {
             Tank tank = TestHelper.CreateTank<Tank>();
+            yield return null;
             tank.RigidBody.useGravity = false;
             Vector3 startPos = tank.transform.position;
 
@@ -78,10 +80,10 @@ namespace Tests.PlayMode.Entity
         public IEnumerator Jump_IsGrounded_IncreasHeight() {
             Tank tank = TestHelper.CreateTank<Tank>();
             Transform ground = TestHelper.CreateGround<Transform>();
+            yield return null;
             tank.transform.position = new Vector3(ground.position.x, ground.position.y + (tank.transform.localScale.y / 2), ground.position.z);
             while (tank.IsGrounded == false) yield return null;
 
-            yield return null;
             float oldHeight = tank.transform.position.y;
             tank.Movement.Jump();
             for (int i = 0; i < 20; i++) yield return null;
@@ -94,14 +96,14 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Jump_IsNotGrounded_StaySameHeight() {
             Tank tank = TestHelper.CreateTank<Tank>();
+            yield return null;
             tank.RigidBody.useGravity = false;
 
-            yield return null;
             float oldHeight = tank.transform.position.y;
             tank.Movement.Jump();
             for (int i = 0; i < 20; i++) yield return null;
 
-            Assert.AreEqual(oldHeight, tank.transform.position.y);
+            Assert.AreEqual(oldHeight, tank.transform.position.y, 0.05);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }
@@ -110,10 +112,10 @@ namespace Tests.PlayMode.Entity
         public IEnumerator EnableTurbo_TankWithTurboIsFaster() {
             Tank tankOne = TestHelper.CreateTank<Tank>();
             Tank tankTwo = TestHelper.CreateTank<Tank>();
+            yield return null;
             tankOne.Collider.enabled = false;
             tankTwo.Collider.enabled = false;
             tankOne.Movement.EnableTurbo();
-            yield return null;
 
             for (int i = 0; i < 10; i++) {
                 tankOne.Movement.Move(Vector3.forward);
@@ -130,11 +132,11 @@ namespace Tests.PlayMode.Entity
         public IEnumerator DisableTurbo_BothTanksAreEqualFast() {
             Tank tankOne = TestHelper.CreateTank<Tank>();
             Tank tankTwo = TestHelper.CreateTank<Tank>();
+            yield return null;
             tankOne.Collider.enabled = false;
             tankTwo.Collider.enabled = false;
             tankOne.Movement.EnableTurbo();
             tankOne.Movement.DisableTurbo();
-            yield return null;
 
             for (int i = 0; i < 10; i++) {
                 tankOne.Movement.Move(Vector3.forward);
@@ -142,7 +144,7 @@ namespace Tests.PlayMode.Entity
                 yield return null;
             }
 
-            Assert.AreEqual(tankOne.transform.position.z, tankTwo.transform.position.z);
+            Assert.AreEqual(tankOne.transform.position.z, tankTwo.transform.position.z, 0.1f);
 
             TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);
         }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Magic;
+using System;
 
 namespace Game.Entity
 {
@@ -18,12 +19,17 @@ namespace Game.Entity
 
         private new BoxCollider collider;
         private Rigidbody rigidBody;
-        
+
+        public event Action<int> OnDamaged;
+        public event Action OnDestruction;
+
         public string Name { get => name; }
         public int Damage { get => damage; }
         public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
         public Rigidbody RigidBody { get => rigidBody; }
         public BoxCollider Collider { get => collider; }
+        public int MaxHitPoints { get; } = 1;
+        public int HitPoints { get; } = 1;
 
         protected virtual void Awake() {
             rigidBody = GetComponent<Rigidbody>();
@@ -42,15 +48,18 @@ namespace Game.Entity
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
                 collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage);
             }
-            GetDestroyed();
+            GetDestroyed(int.MaxValue);
         }
 
         public virtual void Shoot(Vector3 direction) {
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
-        public virtual void GetDamaged(int damage) => GetDestroyed();
-        public virtual void GetDestroyed() => Destroy(gameObject);
+        public virtual void GetDamaged(int damage) => GetDestroyed(damage);
+        public virtual void GetDestroyed(int damage) {
+            OnDestruction?.Invoke();
+            Destroy(gameObject);
+        }
 
         private void OnDestroy() {
             // play sound and particles

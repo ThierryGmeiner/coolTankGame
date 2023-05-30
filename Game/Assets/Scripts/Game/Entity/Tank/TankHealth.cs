@@ -1,33 +1,33 @@
 using System;
+using UnityEngine;
 
 namespace Game.Entity.Tank
 {
-    public class TankHealth
+    [RequireComponent(typeof(Tank))]
+    public class TankHealth : MonoBehaviour, IDamagable, IRepairable
     {
-        private readonly Tank tank;
-        private int hitPoints;
+        private Tank tank;
         
         public event Action<int> OnDamaged;
         public event Action<int> OnRepaired;
-        public event Action OnDestruction;
 
-        public TankHealth(Tank tank, int maxHealth) {
-            this.tank = tank;
-            MaxHitPoints = maxHealth;
-            hitPoints = maxHealth;
+        private void Start() {
+            tank = GetComponent<Tank>();
+            MaxHitPoints = tank.Data.Health;
+            HitPoints = MaxHitPoints;
         }
-        public int MaxHitPoints { get; }
-        public int HitPoints { get => hitPoints; }
+
+        public int MaxHitPoints { get; set; }
+        public int HitPoints { get; private set; }
 
         public void GetDamaged(int damage) {
-            hitPoints -= Math.Abs(damage);
-            if (HitPoints <= 0) OnDestruction?.Invoke();
+            HitPoints -= Math.Abs(damage);
             OnDamaged?.Invoke(damage);
         }
 
         public void GetRepaired(int healing) {
             if (HitPoints + healing > MaxHitPoints) healing = MaxHitPoints - HitPoints;
-            hitPoints += Math.Abs(healing);
+            HitPoints += Math.Abs(healing);
             OnRepaired?.Invoke(healing);
         }
     }

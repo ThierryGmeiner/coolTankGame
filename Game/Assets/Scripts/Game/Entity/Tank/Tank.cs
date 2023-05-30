@@ -3,25 +3,27 @@ using UnityEngine;
 
 namespace Game.Entity.Tank
 {
-    [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
-    public class Tank : MonoBehaviour, IEntity, IDamagable, IRepairable, IRangeAttack, IDropMine
+    [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(TankHealth))]
+    public class Tank : MonoBehaviour, IEntity
     {
         [SerializeField] private TankData data;
         [SerializeField] private GameObject tankHead;
         [SerializeField] private Transform groundCheck;
         [SerializeField] private Transform shootingSpot;
-
         public event Action OnDestruction;
-        public event Action<int> OnDamaged;
-        public event Action<int> OnRepaired;
 
         private void Awake() {
             data?.BulletStorage.ManualAwake();
             groundCheck ??= CreateGroundCheck();
             tankHead ??= new GameObject();
-
             InstantiateData();
-            OnDestruction += GetDestroyed;
+        }
+
+        private void Start() {
+            RigidBody = GetComponent<Rigidbody>();
+            Collider = GetComponent<BoxCollider>();
+            Health = GetComponent<TankHealth>();
+            Health.OnDamaged += GetDestroyed;
         }
 
         private void Update() { 
@@ -29,19 +31,15 @@ namespace Game.Entity.Tank
             Movement.Move();
         }
 
-        // implementation IEntity
         public string Name { get => data.Name; }
         public Rigidbody RigidBody { get; private set; } = null;
         public BoxCollider Collider { get; private set; } = null;
+        public void GetDestroyed(int damage) {
+            if (Health.HitPoints > 0) return;
+            OnDestruction?.Invoke();
+            Destroy(gameObject);
+        }
 
-        // implementation IDamagable, IRepairable, IRangeAttack, IDropMine
-        public void GetDestroyed() => Destroy(gameObject);
-        public void GetDamaged(int damage) => Health.GetDamaged(damage);
-        public void GetRepaired(int healing) => Health.GetRepaired(healing);
-        public void Shoot(Vector3 direction) => Attack.Shoot(direction);
-        public void DropMine() => Attack.DropMine();
-
-        // implementation intern variables
         public GameObject TankHead { get => tankHead; }
         public TankHealth Health { get; private set; } = null;
         public TankMovement Movement { get; private set; } = null;
@@ -52,10 +50,7 @@ namespace Game.Entity.Tank
         public bool IsGrounded { get; private set; }
 
         private void InstantiateData() {
-            RigidBody = GetComponent<Rigidbody>();
-            Collider = GetComponent<BoxCollider>();
             data ??= ScriptableObject.CreateInstance<TankData>();
-            Health = new TankHealth(this, data.Health);
             Movement = new TankMovement(this, groundCheck);
             Armor = new TankArmor(this, data.ArmorProcent);
             Attack = new TankAttack(this, data.BulletStorage);
