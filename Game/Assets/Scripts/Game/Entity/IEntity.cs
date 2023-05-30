@@ -32,7 +32,7 @@ namespace Game.Entity
 
     public interface IRangeAttack
     {
-        public void Shoot(Vector3 direction);
+        public void Shoot(Quaternion direction);
     }
 
     public interface IDropMine

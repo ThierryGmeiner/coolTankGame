@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace Game.Entity.Tank
 {
-    public class TankAttack : IRangeAttack, IDropMine
+    public class TankAttack : MonoBehaviour, IRangeAttack, IDropMine
     {
-        private readonly Tank tank;
+        private Tank tank;
         private BulletStorage bullets;
 
-        public TankAttack(Tank tank, BulletStorage bullets) {
-            this.tank = tank;
-            this.bullets = bullets;
+        private void Start() {
+            tank = GetComponent<Tank>();
+            bullets = tank.Data.BulletStorage;
         }
 
         public void ChangeBullet(GameObject bullet) {
@@ -20,11 +20,23 @@ namespace Game.Entity.Tank
             throw new System.NotImplementedException();
         }
 
+        public void Shoot(Quaternion direction) {
+            Shoot(GetShootingVector(direction));
+        }
+
         public void Shoot(Vector3 direction) {
-            Bullet bullet 
-                = GameObject.Instantiate(bullets.Current, tank.ShootingSpot.position, tank.ShootingSpot.rotation).GetComponent<Bullet>();
+            GameObject obj = GameObject.Instantiate(bullets.Current, tank.ShootingSpot.position, tank.ShootingSpot.rotation);
+            Bullet bullet = obj.GetComponent<Bullet>();
             bullet.ShootingEntity = tank.gameObject;
             bullet.Shoot(direction);
+        }
+
+        private Vector3 GetShootingVector(Quaternion rotation) {
+            // https://answers.unity.com/questions/54495/how-do-i-convert-angle-to-vector3.html
+            // convert the y rotation into an eulerAngle and convert it to an vector3
+
+            float angle = rotation.eulerAngles.y;
+            return new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0, Mathf.Cos(Mathf.Deg2Rad * angle));
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Tests
             tank.layer = 6;
             tank.AddComponent<Tank>().Data = ScriptableObject.CreateInstance<TankData>();
             tank.AddComponent<TankHealth>(); 
+            tank.AddComponent<TankAttack>(); 
             return tank;
         }
 

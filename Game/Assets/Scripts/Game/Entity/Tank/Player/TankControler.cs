@@ -38,8 +38,7 @@ namespace Game.InputSystem
         }
 
         private void Shoot() {
-            Vector3 attackDirection = -(tank.ShootingSpot.position - GetMousePosition());
-            tank.Attack.Shoot(new Vector3(attackDirection.x, 0, attackDirection.z));
+            tank.Attack.Shoot(tank.TankHead.transform.rotation);
         }
 
         private Vector3 GetMousePosition() {

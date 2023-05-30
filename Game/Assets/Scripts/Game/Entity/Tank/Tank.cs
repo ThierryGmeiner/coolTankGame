@@ -23,6 +23,7 @@ namespace Game.Entity.Tank
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             Health = GetComponent<TankHealth>();
+            Attack = GetComponent<TankAttack>();
             Health.OnDamaged += (int maxHP, int HP, int damage) => { if (HP <= 0) GetDestroyed(); };
         }
 
@@ -52,7 +53,6 @@ namespace Game.Entity.Tank
             data ??= ScriptableObject.CreateInstance<TankData>();
             Movement = new TankMovement(this, groundCheck);
             Armor = new TankArmor(this, data.ArmorProcent);
-            Attack = new TankAttack(this, data.BulletStorage);
         }
 
         private Transform CreateGroundCheck() {
