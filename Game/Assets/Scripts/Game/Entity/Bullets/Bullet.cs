@@ -49,8 +49,8 @@ namespace Game.Entity
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
-        public virtual void GetDestroyed() => Destroy(gameObject);
         public virtual void GetDamaged(int damage) => GetDestroyed();
+        public virtual void GetDestroyed() => Destroy(gameObject);
 
         private void OnDestroy() {
             // play sound and particles

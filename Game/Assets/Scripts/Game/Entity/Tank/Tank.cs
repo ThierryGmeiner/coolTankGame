@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Game.Entity.Tank
@@ -10,13 +11,17 @@ namespace Game.Entity.Tank
         [SerializeField] private Transform groundCheck;
         [SerializeField] private Transform shootingSpot;
 
+        public event Action OnDestruction;
+        public event Action<int> OnDamaged;
+        public event Action<int> OnRepaired;
+
         private void Awake() {
             data?.BulletStorage.ManualAwake();
             groundCheck ??= CreateGroundCheck();
             tankHead ??= new GameObject();
 
             InstantiateData();
-            Health.OnDestruction += GetDestroyed;
+            OnDestruction += GetDestroyed;
         }
 
         private void Update() { 

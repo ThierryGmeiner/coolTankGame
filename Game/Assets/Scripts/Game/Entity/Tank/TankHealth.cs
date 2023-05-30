@@ -21,10 +21,8 @@ namespace Game.Entity.Tank
 
         public void GetDamaged(int damage) {
             hitPoints -= Math.Abs(damage);
-            UnityEngine.Debug.Log($"{tank.Name} has {HitPoints} hp");
-
-            OnDamaged?.Invoke(damage);
             if (HitPoints <= 0) OnDestruction?.Invoke();
+            OnDamaged?.Invoke(damage);
         }
 
         public void GetRepaired(int healing) {
