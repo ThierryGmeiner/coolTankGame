@@ -40,7 +40,7 @@ namespace Game.Entity.Tank
             Destroy(gameObject);
         }
 
-        public GameObject TankHead { get => tankHead; }
+        public GameObject Head { get => tankHead; }
         public TankHealth Health { get; private set; } = null;
         public TankMovement Movement { get; private set; } = null;
         public TankArmor Armor { get; private set; } = null;

@@ -47,20 +47,18 @@ namespace Game.Entity.Tank
         public void Move(Vector3 target) {
             float movementSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
             tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, movementSpeed);
+            if (ReachTarget()) Path = null;
+            else if (ReachInterimTarget()) pathIndex++;
         }
 
         public void Move() {
             if (Path == null || Path.Nodes.Length == 0) return;
-            
-            // check every frame if the path is optimized because the FindOptimizedPath cant run in a second thread
-            // the findPath methode gets caled via second thread (for performance)
-            if (!path.IsOptimized) path = aStar.FindOptimizedPath(Path);
-
+            // FindOptimizedPath can't bee caled in a second thread, so check manuel for it an cal it when necessary
+            if (!path.IsOptimized) {
+                path = aStar.FindOptimizedPath(Path);
+            }
             RotateBody(path.Nodes[pathIndex].Position);
             Move(path.Nodes[pathIndex].Position);
-
-            if (ReachTarget()) Path = null;
-            else if (ReachInterimTarget()) pathIndex++;
         }
 
         public void Jump() {
@@ -70,23 +68,24 @@ namespace Game.Entity.Tank
         }
 
         public void RotateHead(Vector3 target) {
-            Vector3 direction = (target - tank.transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            tank.TankHead.transform.rotation  
-                = Quaternion.Slerp(tank.TankHead.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
+            Rotate(tank.Head, target, HEAD_ROTATION_SPEED);
         }
 
         public void RotateBody(Vector3 target) {
-            Vector3 direction = (target - tank.transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            tank.transform.rotation = Quaternion.Slerp(tank.transform.rotation, lookRotation, Time.deltaTime * BODY_ROTATION_SPEED);
+            Rotate(tank.gameObject, target, BODY_ROTATION_SPEED);
         }
 
-        public void SetPath(Vector3 startPos, Vector3 targetPos) {
+        private void Rotate(GameObject obj, Vector3 target, float rotationSpeed) {
+            Vector3 direction = (target - tank.transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
+        }
+
+        public Path SetPath(Vector3 startPos, Vector3 targetPos) {
             Path newPath = aStar.FindPath(startPos, targetPos);
             if (newPath.Nodes.Length > 0) {
-                tank.Movement.Path = newPath;
-            }
+                Path = newPath;
+            } return Path;
         }
 
         public void EnableTurbo() => speed = defaultSpeed * turboMultiplier;
@@ -97,6 +96,6 @@ namespace Game.Entity.Tank
 
         private bool ReachInterimTarget() => Vector3.Distance(tank.transform.position, Path.Nodes[pathIndex].Position) < 0.1;
 
-        private bool ReachTarget() => Vector3.Distance(tank.transform.position, Path.Nodes[Path.Nodes.Length - 1].Position) < 0.1;
+        private bool ReachTarget() => Vector3.Distance(tank.transform.position, Path.Nodes[Path.Nodes.Length - 1].Position) < 0.1; 
     }
 }

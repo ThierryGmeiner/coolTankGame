@@ -121,5 +121,19 @@ namespace Tests.PlayMode.Entity
 
             TestHelper.DestroyObjects(tank.gameObject);
         }
+
+        [UnityTest]
+        public IEnumerator OnDestruction_EventFires() {
+            Tank tank = TestHelper.CreateTank<Tank>();
+            bool eventHasFired = false;
+            yield return null;
+
+            tank.OnDestruction += () => eventHasFired = true;
+            tank.GetDestroyed();
+
+            Assert.IsTrue(eventHasFired);
+
+            TestHelper.DestroyObjects(tank.gameObject);
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace Game.InputSystem
         private void Awake() {
             controler = new PlayerControler();
             controler.TankDrive.Enable();
+            controler.TankAttack.Enable();
         }
 
         private void Start() {
@@ -23,7 +24,7 @@ namespace Game.InputSystem
             controler.TankDrive.Turbo.started += (InputAction.CallbackContext c) => tank.Movement.EnableTurbo();
             controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext c) => tank.Movement.DisableTurbo();
             controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
-            controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => tank.Attack.Shoot(tank.TankHead.transform.rotation);
+            controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => tank.Attack.Shoot(tank.Head.transform.rotation);
             controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
         }
 
