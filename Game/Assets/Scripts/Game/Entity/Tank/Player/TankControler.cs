@@ -20,25 +20,21 @@ namespace Game.InputSystem
 
         private void Start() {
             tank = GetComponent<Tank>();
-            controler.TankDrive.Turbo.started += (InputAction.CallbackContext context) => tank.Movement.EnableTurbo();
-            controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext context) => tank.Movement.DisableTurbo();
-            controler.TankDrive.Jump.started += (InputAction.CallbackContext context) => tank.Movement.Jump();
+            controler.TankDrive.Turbo.started += (InputAction.CallbackContext c) => tank.Movement.EnableTurbo();
+            controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext c) => tank.Movement.DisableTurbo();
+            controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
+            controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => tank.Attack.Shoot(tank.TankHead.transform.rotation);
+            controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
         }
 
         private void Update() {
             tank.Movement.RotateHead(GetMousePosition());
-            if (Input.GetMouseButtonDown(1)) SetNewPath();
-            if (Input.GetMouseButtonDown(0)) Shoot();
         }
 
         private void SetNewPath() {
             Vector3 startPos = transform.position, targetPos = GetMousePosition();
             Thread pathFindingThread = new Thread(() => tank.Movement.SetPath(startPos, targetPos));
             pathFindingThread.Start();
-        }
-
-        private void Shoot() {
-            tank.Attack.Shoot(tank.TankHead.transform.rotation);
         }
 
         private Vector3 GetMousePosition() {

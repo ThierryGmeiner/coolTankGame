@@ -30,15 +30,6 @@ namespace Game.InputSystem
             ""id"": ""c3f672a9-810e-4f66-9492-3d680fe72485"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""cd8165b4-d128-4075-b636-093310049f26"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Turbo"",
                     ""type"": ""Button"",
                     ""id"": ""aea617b4-b226-40bf-b2d4-364f5937bc6f"",
@@ -55,64 +46,18 @@ namespace Game.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SetPath"",
+                    ""type"": ""Button"",
+                    ""id"": ""27b63dde-70ca-46df-969d-638af953efde"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""6da44fe5-7927-484a-82c8-0f2b26b1c965"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""9e51f15a-cfc1-4d64-9eeb-fdf501329407"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""41a6ff5e-6f6c-4e07-99a9-73cd858a8e68"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""588e1be3-c6a8-4bf2-b06c-8231a30ab11c"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""2325f767-eb8f-40a0-ad1f-553991978f41"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": """",
                     ""id"": ""417cfc98-1e7a-45ef-930f-c0bcaf9b92bb"",
@@ -134,6 +79,45 @@ namespace Game.InputSystem
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""675f6216-1258-438f-bf9d-9d93538a368f"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetPath"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""TankAttack"",
+            ""id"": ""2b7d887d-3b41-4b59-8f44-3b8a64d5b11e"",
+            ""actions"": [
+                {
+                    ""name"": ""ShootAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""225cde7a-ff54-42f7-8e4d-86024b6ac028"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6eee167d-b427-4cd1-8955-ebd88067ff13"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -142,9 +126,12 @@ namespace Game.InputSystem
 }");
             // TankDrive
             m_TankDrive = asset.FindActionMap("TankDrive", throwIfNotFound: true);
-            m_TankDrive_Move = m_TankDrive.FindAction("Move", throwIfNotFound: true);
             m_TankDrive_Turbo = m_TankDrive.FindAction("Turbo", throwIfNotFound: true);
             m_TankDrive_Jump = m_TankDrive.FindAction("Jump", throwIfNotFound: true);
+            m_TankDrive_SetPath = m_TankDrive.FindAction("SetPath", throwIfNotFound: true);
+            // TankAttack
+            m_TankAttack = asset.FindActionMap("TankAttack", throwIfNotFound: true);
+            m_TankAttack_ShootAttack = m_TankAttack.FindAction("ShootAttack", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -204,16 +191,16 @@ namespace Game.InputSystem
         // TankDrive
         private readonly InputActionMap m_TankDrive;
         private ITankDriveActions m_TankDriveActionsCallbackInterface;
-        private readonly InputAction m_TankDrive_Move;
         private readonly InputAction m_TankDrive_Turbo;
         private readonly InputAction m_TankDrive_Jump;
+        private readonly InputAction m_TankDrive_SetPath;
         public struct TankDriveActions
         {
             private @PlayerControler m_Wrapper;
             public TankDriveActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Move => m_Wrapper.m_TankDrive_Move;
             public InputAction @Turbo => m_Wrapper.m_TankDrive_Turbo;
             public InputAction @Jump => m_Wrapper.m_TankDrive_Jump;
+            public InputAction @SetPath => m_Wrapper.m_TankDrive_SetPath;
             public InputActionMap Get() { return m_Wrapper.m_TankDrive; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -223,37 +210,74 @@ namespace Game.InputSystem
             {
                 if (m_Wrapper.m_TankDriveActionsCallbackInterface != null)
                 {
-                    @Move.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnMove;
-                    @Move.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnMove;
-                    @Move.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnMove;
                     @Turbo.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
                     @Turbo.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
                     @Turbo.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
                     @Jump.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
                     @Jump.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
                     @Jump.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
+                    @SetPath.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnSetPath;
+                    @SetPath.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnSetPath;
+                    @SetPath.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnSetPath;
                 }
                 m_Wrapper.m_TankDriveActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @Move.started += instance.OnMove;
-                    @Move.performed += instance.OnMove;
-                    @Move.canceled += instance.OnMove;
                     @Turbo.started += instance.OnTurbo;
                     @Turbo.performed += instance.OnTurbo;
                     @Turbo.canceled += instance.OnTurbo;
                     @Jump.started += instance.OnJump;
                     @Jump.performed += instance.OnJump;
                     @Jump.canceled += instance.OnJump;
+                    @SetPath.started += instance.OnSetPath;
+                    @SetPath.performed += instance.OnSetPath;
+                    @SetPath.canceled += instance.OnSetPath;
                 }
             }
         }
         public TankDriveActions @TankDrive => new TankDriveActions(this);
+
+        // TankAttack
+        private readonly InputActionMap m_TankAttack;
+        private ITankAttackActions m_TankAttackActionsCallbackInterface;
+        private readonly InputAction m_TankAttack_ShootAttack;
+        public struct TankAttackActions
+        {
+            private @PlayerControler m_Wrapper;
+            public TankAttackActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
+            public InputAction @ShootAttack => m_Wrapper.m_TankAttack_ShootAttack;
+            public InputActionMap Get() { return m_Wrapper.m_TankAttack; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(TankAttackActions set) { return set.Get(); }
+            public void SetCallbacks(ITankAttackActions instance)
+            {
+                if (m_Wrapper.m_TankAttackActionsCallbackInterface != null)
+                {
+                    @ShootAttack.started -= m_Wrapper.m_TankAttackActionsCallbackInterface.OnShootAttack;
+                    @ShootAttack.performed -= m_Wrapper.m_TankAttackActionsCallbackInterface.OnShootAttack;
+                    @ShootAttack.canceled -= m_Wrapper.m_TankAttackActionsCallbackInterface.OnShootAttack;
+                }
+                m_Wrapper.m_TankAttackActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @ShootAttack.started += instance.OnShootAttack;
+                    @ShootAttack.performed += instance.OnShootAttack;
+                    @ShootAttack.canceled += instance.OnShootAttack;
+                }
+            }
+        }
+        public TankAttackActions @TankAttack => new TankAttackActions(this);
         public interface ITankDriveActions
         {
-            void OnMove(InputAction.CallbackContext context);
             void OnTurbo(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnSetPath(InputAction.CallbackContext context);
+        }
+        public interface ITankAttackActions
+        {
+            void OnShootAttack(InputAction.CallbackContext context);
         }
     }
 }
