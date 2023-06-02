@@ -132,6 +132,9 @@ MonoBehaviour:
   damage: 15
   shootingSpeed: 20
   lifeTime: 6
+  timer: {fileID: 4603368707967738351}
+  collider: {fileID: 7136877454970224425}
+  rigidBody: {fileID: 7136877454970224426}
 --- !u!114 &4603368707967738351
 MonoBehaviour:
   m_ObjectHideFlags: 0

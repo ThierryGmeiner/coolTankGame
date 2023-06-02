@@ -4,7 +4,7 @@ using System;
 
 namespace Game.Entity
 {
-    [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(PlannedTimer))]
+    [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(PlannedTimer))]
     public abstract class Bullet : MonoBehaviour, IEntity, IDamagable
     {
         [Header("Attack")]
@@ -15,26 +15,27 @@ namespace Game.Entity
         [Space]
         [Header("Lifetime")]
         [SerializeField] private float lifeTime;
-        private PlannedTimer timer;
+        [SerializeField] private PlannedTimer timer;
 
-        private new BoxCollider collider;
-        private Rigidbody rigidBody;
+        [Space]
+        [Header("Components")]
+        [SerializeField] private new BoxCollider collider;
+        [SerializeField] private Rigidbody rigidBody;
 
         public event Action<int, int, int> OnDamaged;
         public event Action OnDestruction;
 
         public string Name { get => name; }
-        public int Damage { get => damage; }
         public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
         public Rigidbody RigidBody { get => rigidBody; }
-        public BoxCollider Collider { get => collider; }
+        public Collider Collider { get => collider; }
         public int MaxHitPoints { get; } = 0;
         public int HitPoints { get; } = 0;
 
         protected virtual void Awake() {
-            rigidBody = GetComponent<Rigidbody>();
-            collider = GetComponent<BoxCollider>();
-            timer = GetComponent<PlannedTimer>();
+            rigidBody ??= GetComponent<Rigidbody>();
+            collider ??= GetComponent<BoxCollider>();
+            timer ??= GetComponent<PlannedTimer>();
         }
 
         private void Start() {
@@ -56,6 +57,7 @@ namespace Game.Entity
         }
 
         public virtual void GetDamaged(int damage) => GetDestroyed();
+
         public virtual void GetDestroyed() {
             OnDestruction?.Invoke();
             Destroy(gameObject);

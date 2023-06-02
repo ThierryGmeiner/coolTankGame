@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Entity.Tank
 {
-    [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(TankHealth))]
+    [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(TankHealth))]
     public class Tank : MonoBehaviour, IEntity
     {
         [SerializeField] private TankData data;
@@ -13,10 +13,11 @@ namespace Game.Entity.Tank
         public event Action OnDestruction;
 
         private void Awake() {
-            data?.BulletStorage.ManualAwake();
-            groundCheck ??= CreateGroundCheck();
-            tankHead ??= new GameObject();
             InstantiateData();
+            groundCheck ??= CreateGroundCheck();
+            shootingSpot ??= CreateShootingSpot();
+            tankHead ??= new GameObject();
+            data?.BulletStorage.Awake();
         }
 
         private void Start() {
@@ -34,7 +35,7 @@ namespace Game.Entity.Tank
 
         public string Name { get => data.Name; }
         public Rigidbody RigidBody { get; private set; } = null;
-        public BoxCollider Collider { get; private set; } = null;
+        public Collider Collider { get; private set; } = null;
         public void GetDestroyed() {
             OnDestruction?.Invoke();
             Destroy(gameObject);
@@ -51,6 +52,7 @@ namespace Game.Entity.Tank
 
         private void InstantiateData() {
             data ??= ScriptableObject.CreateInstance<TankData>();
+            data.BulletStorage ??= ScriptableObject.CreateInstance<BulletStorage>();
             Movement = new TankMovement(this, groundCheck);
             Armor = new TankArmor(this, data.ArmorProcent);
         }
@@ -58,6 +60,13 @@ namespace Game.Entity.Tank
         private Transform CreateGroundCheck() {
             Transform obj = Instantiate(new GameObject()).transform;
             obj.position = new Vector3(transform.position.x, transform.position.y - (transform.localScale.z / 2), transform.position.z);
+            obj.parent = gameObject.transform;
+            return obj.transform;
+        }
+
+        private Transform CreateShootingSpot() {
+            Transform obj = Instantiate(new GameObject()).transform;
+            obj.position = new Vector3(transform.position.x, transform.position.y + (transform.localScale.z / 2), transform.position.z);
             obj.parent = gameObject.transform;
             return obj.transform;
         }

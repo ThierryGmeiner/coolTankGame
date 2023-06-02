@@ -14,13 +14,26 @@ namespace Tests
             tank.name = "TestTank";
             tank.tag = Tags.Entity;
             tank.layer = 6;
-            tank.AddComponent<Tank>().Data = ScriptableObject.CreateInstance<TankData>();
+            tank.AddComponent<BoxCollider>();
+            Tank tankClass = tank.AddComponent<Tank>();
+            tankClass.Data = ScriptableObject.CreateInstance<TankData>();
             tank.AddComponent<TankHealth>(); 
-            tank.AddComponent<TankAttack>(); 
+            tank.AddComponent<TankAttack>();
             return tank;
         }
 
         public static T CreateTank<T>() => CreateTank().GetComponent<T>();
+
+        public static GameObject CreateBullet() {
+            GameObject bullet = new GameObject();
+            bullet.AddComponent<Rigidbody>();
+            bullet.AddComponent<BoxCollider>();
+            bullet.AddComponent<DefaultBullet>();
+            bullet.AddComponent<PlannedTimer>();
+            return bullet;
+        }
+
+        public static T CreateBullet<T>() => CreateBullet().GetComponent<T>();
 
         public static GameObject CreateGround() {
             GameObject ground = new GameObject();
@@ -99,7 +112,7 @@ namespace Tests
                 DestroyObjects(gameObject);
         }
 
-        private static Vector3 GetEmtySpace(Vector3 localScale) {
+        public static Vector3 GetEmtySpace(Vector3 localScale) {
             Vector3 spawnPos;
             float radius = Magic.MathM.Max(localScale.x, localScale.y, localScale.z) * 2;
             do {

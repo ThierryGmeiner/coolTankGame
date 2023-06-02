@@ -7,7 +7,7 @@ namespace Game.Entity
     {
         public string Name { get; }
         public Rigidbody RigidBody { get; }
-        public BoxCollider Collider { get; }
+        public Collider Collider { get; }
         public void GetDestroyed();
         public event Action OnDestruction;
     }
@@ -32,7 +32,7 @@ namespace Game.Entity
 
     public interface IRangeAttack
     {
-        public void Shoot(Quaternion direction);
+        public Bullet Shoot(Quaternion direction);
     }
 
     public interface IDropMine
