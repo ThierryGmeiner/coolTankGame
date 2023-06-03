@@ -34,7 +34,7 @@ namespace Game.AI
             startNode = start; targetNode = target;
             AStarNode currentNode = startNode;
 
-            if (!targetNode.IsWalkable || !startNode.IsWalkable) return new Path(new AStarNode[0], Path.Optimized.False);
+            if (StartOrTargetNodeIsNotValide()) return new Path(new AStarNode[0], Path.Optimized.False);
             // search every loop the cheapest node and update them
             for (int i = 0; currentNode != targetNode && i < 10000; i++) {
                 UpdateNeighbors(currentNode);
@@ -146,6 +146,7 @@ namespace Game.AI
             return array;
         }
 
+        private bool StartOrTargetNodeIsNotValide() => !targetNode.IsWalkable || !startNode.IsWalkable || startNode == targetNode;
         private static bool NewCostIsLower(float newCost, float oldCost) => newCost < oldCost;
         private static bool OldCostIsUndefined(float oldCost) => oldCost <= 0;
         public static bool NodeIsOutsideOfGrid(AStarNode node, AStarGrid grid) => NodeIsOutsideOfGrid(node.ArrayIndex, grid);

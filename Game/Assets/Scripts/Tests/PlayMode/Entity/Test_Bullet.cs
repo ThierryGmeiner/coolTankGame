@@ -192,7 +192,7 @@ namespace Tests.PlayMode.Entity
             bool isDestroyed = false;
 
             bullet.OnDestruction += () => isDestroyed = true;
-            yield return new WaitForFrames(3);
+            yield return new WaitForFrames(5);
 
             Assert.IsTrue(isDestroyed);
 

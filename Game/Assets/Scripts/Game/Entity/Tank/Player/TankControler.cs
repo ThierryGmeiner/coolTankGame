@@ -2,6 +2,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.Entity.Tank;
+using Game.Cam;
 using Game.AI;
 
 namespace Game.InputSystem
@@ -10,13 +11,15 @@ namespace Game.InputSystem
     public class TankControler : MonoBehaviour
     {
         private PlayerControler controler;
-        private Tank tank;
         private Plane plane = new Plane(Vector3.up, 0);
+        private Tank tank;
+        private CameraMovement camera;
 
         private void Awake() {
             controler = new PlayerControler();
             controler.TankDrive.Enable();
             controler.TankAttack.Enable();
+            controler.Camera.Enable();
         }
 
         private void Start() {
@@ -24,12 +27,16 @@ namespace Game.InputSystem
             controler.TankDrive.Turbo.started += (InputAction.CallbackContext c) => tank.Movement.EnableTurbo();
             controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext c) => tank.Movement.DisableTurbo();
             controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
-            controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => tank.Attack.Shoot(tank.Head.transform.rotation);
+            controler.TankAttack.ShootAttack.started 
+                += (InputAction.CallbackContext c) => { if (!ClickOnTank()) tank.Attack.Shoot(tank.Head.transform.rotation); };
             controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
+            camera = Camera.main.GetComponent<CameraMovement>();
+            controler.Camera.LockCamera.started += (InputAction.CallbackContext c) => { if (ClickOnTank()) camera.LockCamToPlayer(); };
         }
 
         private void Update() {
             tank.Movement.RotateHead(GetMousePosition());
+            camera.Move(controler.Camera.Move.ReadValue<Vector2>());
         }
 
         private void SetNewPath() {
@@ -44,6 +51,9 @@ namespace Game.InputSystem
             plane.Raycast(ray, out distance);
             return ray.GetPoint(distance);
         }
+
+        private bool ClickOnTank()
+            => tank.Movement.grid.GetNodeFromPosition(GetMousePosition()) == tank.Movement.grid.GetNodeFromPosition(tank.transform.position);
 
         private void OnDrawGizmos() {
             if (tank == null || tank.Movement == null) return;

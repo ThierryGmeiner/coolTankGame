@@ -120,6 +120,98 @@ namespace Game.InputSystem
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""479350e7-073e-4c6e-a536-6be3fd843bbe"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""5cf00569-0a43-48d9-97bf-1d94c29073d6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LockCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""21b809df-d370-4598-9365-3e9aa6872da2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""f14527fb-7a02-4178-8104-c1f620b8902e"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e0ffd44b-bb32-47cf-8ea6-ddaee88d631c"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ec5203c8-418b-4947-8d8e-7a6c1e33f712"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a8fd2ba0-0ad2-40aa-8de0-ad119190c9c2"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""9980f372-e0e7-4edd-9dc4-4bc0d11ed2fa"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df1ad329-79c2-4bad-abcc-070b6650ffe6"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -132,6 +224,10 @@ namespace Game.InputSystem
             // TankAttack
             m_TankAttack = asset.FindActionMap("TankAttack", throwIfNotFound: true);
             m_TankAttack_ShootAttack = m_TankAttack.FindAction("ShootAttack", throwIfNotFound: true);
+            // Camera
+            m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+            m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
+            m_Camera_LockCamera = m_Camera.FindAction("LockCamera", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -269,6 +365,47 @@ namespace Game.InputSystem
             }
         }
         public TankAttackActions @TankAttack => new TankAttackActions(this);
+
+        // Camera
+        private readonly InputActionMap m_Camera;
+        private ICameraActions m_CameraActionsCallbackInterface;
+        private readonly InputAction m_Camera_Move;
+        private readonly InputAction m_Camera_LockCamera;
+        public struct CameraActions
+        {
+            private @PlayerControler m_Wrapper;
+            public CameraActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Move => m_Wrapper.m_Camera_Move;
+            public InputAction @LockCamera => m_Wrapper.m_Camera_LockCamera;
+            public InputActionMap Get() { return m_Wrapper.m_Camera; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+            public void SetCallbacks(ICameraActions instance)
+            {
+                if (m_Wrapper.m_CameraActionsCallbackInterface != null)
+                {
+                    @Move.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
+                    @Move.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
+                    @Move.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
+                    @LockCamera.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
+                    @LockCamera.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
+                    @LockCamera.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
+                }
+                m_Wrapper.m_CameraActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Move.started += instance.OnMove;
+                    @Move.performed += instance.OnMove;
+                    @Move.canceled += instance.OnMove;
+                    @LockCamera.started += instance.OnLockCamera;
+                    @LockCamera.performed += instance.OnLockCamera;
+                    @LockCamera.canceled += instance.OnLockCamera;
+                }
+            }
+        }
+        public CameraActions @Camera => new CameraActions(this);
         public interface ITankDriveActions
         {
             void OnTurbo(InputAction.CallbackContext context);
@@ -278,6 +415,11 @@ namespace Game.InputSystem
         public interface ITankAttackActions
         {
             void OnShootAttack(InputAction.CallbackContext context);
+        }
+        public interface ICameraActions
+        {
+            void OnMove(InputAction.CallbackContext context);
+            void OnLockCamera(InputAction.CallbackContext context);
         }
     }
 }
