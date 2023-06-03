@@ -9,9 +9,9 @@ namespace Tests.PlayMode.AI
 {
     public class Test_AStarGrid
     {
-        [UnityTest]
-        public IEnumerator Test_AStarGridWithEnumeratorPasses() {
-            yield return null;
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
             Assert.IsTrue(true);
         }
 

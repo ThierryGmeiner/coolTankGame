@@ -9,6 +9,12 @@ namespace Tests.PlayMode.Magic
 {
     public class Test_PlanedTimer
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
+
         [UnityTest]
         public IEnumerator SetupTimer_SetTimeTo5_TimeIs5()
         {
@@ -44,8 +50,7 @@ namespace Tests.PlayMode.Magic
             
             timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
             timer.StartTimer();
-            yield return null;
-            yield return null;
+            yield return new WaitForFrames(2);
 
             Assert.IsNull(obj.GetComponent<PlannedTimer>());
         }

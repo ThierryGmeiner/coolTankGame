@@ -9,6 +9,12 @@ namespace Tests.PlayMode.AI
 {
     public class Test_AStar
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
+
         [UnityTest]
         public IEnumerator Test_AStarSimplePasses() {
             yield return null;

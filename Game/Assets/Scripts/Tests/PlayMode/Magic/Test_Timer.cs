@@ -9,6 +9,12 @@ namespace Tests.PlayMode.Magic
 {
     public class Test_Timer
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
+
         [UnityTest]
         public IEnumerator Update_TimerRuns()
         {
@@ -56,8 +62,7 @@ namespace Tests.PlayMode.Magic
 
             timer.SetupTimer(startTime, Timer.Modes.restartWhenTimeIsUp);
             timer.StartTimer();
-            yield return null;
-            yield return null;
+            yield return new WaitForFrames(2);
 
             Assert.AreNotEqual(startTime, timer.time);
         }
@@ -73,10 +78,7 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return null;
             timer.StopTimer();
-            yield return null;
-            yield return null;
-            yield return null;
-            yield return null;
+            yield return new WaitForFrames(5);
 
             Assert.AreEqual(startTime, timer.time, 0.1);
         }

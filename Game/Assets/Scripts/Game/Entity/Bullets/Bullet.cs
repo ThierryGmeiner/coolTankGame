@@ -8,13 +8,13 @@ namespace Game.Entity
     public abstract class Bullet : MonoBehaviour, IEntity, IDamagable
     {
         [Header("Attack")]
-        [SerializeField] protected new string name;
-        [SerializeField] protected int damage;
-        [SerializeField] private float shootingSpeed;
+        [SerializeField] protected new string name = "Bullet";
+        [SerializeField] protected int damage = 10;
+        [SerializeField] private float shootingSpeed = 20;
 
         [Space]
         [Header("Lifetime")]
-        [SerializeField] private float lifeTime;
+        [SerializeField] private float lifeTime = 10;
         [SerializeField] private PlannedTimer timer;
 
         [Space]
@@ -25,13 +25,6 @@ namespace Game.Entity
         public event Action<int, int, int> OnDamaged;
         public event Action OnDestruction;
 
-        public string Name { get => name; }
-        public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
-        public Rigidbody RigidBody { get => rigidBody; }
-        public Collider Collider { get => collider; }
-        public int MaxHitPoints { get; } = 0;
-        public int HitPoints { get; } = 0;
-
         protected virtual void Awake() {
             rigidBody ??= GetComponent<Rigidbody>();
             collider ??= GetComponent<BoxCollider>();
@@ -39,9 +32,7 @@ namespace Game.Entity
         }
 
         private void Start() {
-            timer.OnTimerEnds += () => Destroy(gameObject);
-            timer.SetupTimer(lifeTime, Timer.Modes.destroyWhenTimeIsUp);
-            timer.StartTimer();
+            InitializeTimer();
         }   
 
         protected virtual void OnCollisionEnter(Collision collision) {
@@ -56,15 +47,38 @@ namespace Game.Entity
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
-        public virtual void GetDamaged(int damage) => GetDestroyed();
+        public virtual void GetDamaged(int damage) {
+            OnDamaged?.Invoke(MaxHitPoints, HitPoints - damage, damage);
+            GetDestroyed();
+        }
 
         public virtual void GetDestroyed() {
             OnDestruction?.Invoke();
             Destroy(gameObject);
         }
 
+        private void InitializeTimer() {
+            timer.OnTimerEnds += () => GetDestroyed();
+            timer.SetupTimer(lifeTime, Timer.Modes.destroyWhenTimeIsUp);
+            timer.StartTimer();
+        }
+
         private void OnDestroy() {
             // play sound and particles
+        }
+
+        public string Name { get => name; }
+        public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
+        public Rigidbody RigidBody { get => rigidBody; }
+        public Collider Collider { get => collider; }
+        public int MaxHitPoints { get; } = 0;
+        public int HitPoints { get; } = 0;
+        public float LifeTime {
+            get => lifeTime;
+            set {
+                lifeTime = value;
+                InitializeTimer();
+            }
         }
     }
 }

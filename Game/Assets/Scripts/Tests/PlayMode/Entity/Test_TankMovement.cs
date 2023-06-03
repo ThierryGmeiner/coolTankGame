@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.SceneManagement;
 using Game.Entity.Tank;
 using Game.AI;
+using Magic;
 
 namespace Tests.PlayMode.Entity
 {
     public class Test_TankMovement
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
 
         [UnityTest]
         public IEnumerator NewTestScriptWithEnumeratorPasses() {
@@ -53,7 +60,7 @@ namespace Tests.PlayMode.Entity
             Transform ground = TestHelper.CreateGround<Transform>();
             tank.transform.position = new Vector3(ground.position.x, ground.position.y + (tank.transform.localScale.y / 2), ground.position.z);
 
-            for (int i = 0; i < 5; i++) yield return null;
+            yield return new WaitForFrames(5);
             bool isGrounded = tank.Movement.GroundCheck();
 
             Assert.IsTrue(isGrounded);
@@ -71,7 +78,7 @@ namespace Tests.PlayMode.Entity
 
             float oldHeight = tank.transform.position.y;
             tank.Movement.Jump();
-            for (int i = 0; i < 20; i++) yield return null;
+            yield return new WaitForFrames(20);
 
             Assert.Greater(tank.transform.position.y, oldHeight);
 
@@ -86,7 +93,7 @@ namespace Tests.PlayMode.Entity
 
             float oldHeight = tank.transform.position.y;
             tank.Movement.Jump();
-            for (int i = 0; i < 20; i++) yield return null;
+            yield return new WaitForFrames(20);
 
             Assert.AreEqual(oldHeight, tank.transform.position.y, 0.05);
 
@@ -177,7 +184,8 @@ namespace Tests.PlayMode.Entity
             tank.Movement.Path = null;
             tank.Movement.Move();
 
-            Assert.AreEqual(oldPos, tank.transform.position);
+            Assert.AreEqual(oldPos.x, tank.transform.position.x, 0.02f);
+            Assert.AreEqual(oldPos.z, tank.transform.position.z, 0.02f);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }

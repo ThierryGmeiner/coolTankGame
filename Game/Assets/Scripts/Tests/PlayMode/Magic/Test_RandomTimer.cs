@@ -9,6 +9,12 @@ namespace Tests.PlayMode.Magic
 {
     public class Test_RandomTimer
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
+
         [UnityTest]
         public IEnumerator SetupTimer_SetTimeMin5_Max6_IsInBetween()
         {
@@ -50,8 +56,7 @@ namespace Tests.PlayMode.Magic
 
             timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
             timer.StartTimer();
-            yield return null;
-            yield return null;
+            yield return new WaitForFrames(2);
 
             Assert.IsNull(obj.GetComponent<RandomTimer>());
         }

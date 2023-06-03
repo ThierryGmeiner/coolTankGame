@@ -1,8 +1,9 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using Game.Entity;
 using Game.Entity.Tank;
 using Game.AI;
 using Magic;
-using UnityEngine;
 
 namespace Tests
 {
@@ -119,6 +120,10 @@ namespace Tests
                 spawnPos = new Vector3(Random.Range(10000, 1000000), Random.Range(10000, 1000000), Random.Range(10000, 1000000));
             } while (Physics.CheckSphere(spawnPos, radius));
             return spawnPos;
+        }
+
+        public static void LoadEmptyScene() {
+            SceneManager.LoadScene("Test_EmptyScene", LoadSceneMode.Single);
         }
     }
 }

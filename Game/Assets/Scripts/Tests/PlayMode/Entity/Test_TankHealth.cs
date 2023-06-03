@@ -9,6 +9,12 @@ namespace Tests.PlayMode.Entity
 {
     public class Test_TankHealth
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
+
         [UnityTest]
         public IEnumerator Test_TankHealthSimplePasses() {
             yield return null;

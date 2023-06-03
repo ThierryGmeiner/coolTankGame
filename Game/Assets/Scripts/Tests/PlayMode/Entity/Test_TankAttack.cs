@@ -10,6 +10,12 @@ namespace Tests.PlayMode.Entity
 {
     public class Test_TankAttack
     {
+        [Test]
+        public void AAA_LoadNewScene() {
+            TestHelper.LoadEmptyScene();
+            Assert.IsTrue(true);
+        }
+
         [UnityTest]
         public IEnumerator Test_TankAttackWithEnumeratorPasses() {
             Assert.IsTrue(true);
