@@ -62,6 +62,7 @@ namespace Game.InputSystem
         }
 
         private void SetupControlsCameraMovement() {
+            controler.Camera.FindPlayer.started += (InputAction.CallbackContext c) => camera.ChangeLockingState();
             controler.Camera.LockCamera.started += (InputAction.CallbackContext c) => {
                 if (ClickOnTank()) camera.ChangeLockingState();
             };

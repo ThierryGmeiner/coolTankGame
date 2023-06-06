@@ -142,6 +142,15 @@ namespace Game.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FindPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""4552ac23-8a30-4e3c-b14c-0ca4bfb3fe16"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -210,6 +219,17 @@ namespace Game.InputSystem
                     ""action"": ""LockCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d7cb476-ddef-4510-8470-abeecd1977cc"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FindPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -228,6 +248,7 @@ namespace Game.InputSystem
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
             m_Camera_LockCamera = m_Camera.FindAction("LockCamera", throwIfNotFound: true);
+            m_Camera_FindPlayer = m_Camera.FindAction("FindPlayer", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -371,12 +392,14 @@ namespace Game.InputSystem
         private ICameraActions m_CameraActionsCallbackInterface;
         private readonly InputAction m_Camera_Move;
         private readonly InputAction m_Camera_LockCamera;
+        private readonly InputAction m_Camera_FindPlayer;
         public struct CameraActions
         {
             private @PlayerControler m_Wrapper;
             public CameraActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Camera_Move;
             public InputAction @LockCamera => m_Wrapper.m_Camera_LockCamera;
+            public InputAction @FindPlayer => m_Wrapper.m_Camera_FindPlayer;
             public InputActionMap Get() { return m_Wrapper.m_Camera; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -392,6 +415,9 @@ namespace Game.InputSystem
                     @LockCamera.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
                     @LockCamera.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
                     @LockCamera.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
+                    @FindPlayer.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnFindPlayer;
+                    @FindPlayer.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnFindPlayer;
+                    @FindPlayer.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnFindPlayer;
                 }
                 m_Wrapper.m_CameraActionsCallbackInterface = instance;
                 if (instance != null)
@@ -402,6 +428,9 @@ namespace Game.InputSystem
                     @LockCamera.started += instance.OnLockCamera;
                     @LockCamera.performed += instance.OnLockCamera;
                     @LockCamera.canceled += instance.OnLockCamera;
+                    @FindPlayer.started += instance.OnFindPlayer;
+                    @FindPlayer.performed += instance.OnFindPlayer;
+                    @FindPlayer.canceled += instance.OnFindPlayer;
                 }
             }
         }
@@ -420,6 +449,7 @@ namespace Game.InputSystem
         {
             void OnMove(InputAction.CallbackContext context);
             void OnLockCamera(InputAction.CallbackContext context);
+            void OnFindPlayer(InputAction.CallbackContext context);
         }
     }
 }

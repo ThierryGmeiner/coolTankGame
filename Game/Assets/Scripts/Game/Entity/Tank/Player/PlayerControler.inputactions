@@ -118,6 +118,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "FindPlayer",
+                    "type": "Button",
+                    "id": "4552ac23-8a30-4e3c-b14c-0ca4bfb3fe16",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -184,6 +193,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LockCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d7cb476-ddef-4510-8470-abeecd1977cc",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FindPlayer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
