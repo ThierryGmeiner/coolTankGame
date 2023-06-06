@@ -24,14 +24,10 @@ namespace Game.InputSystem
 
         private void Start() {
             tank = GetComponent<Tank>();
-            controler.TankDrive.Turbo.started += (InputAction.CallbackContext c) => tank.Movement.EnableTurbo();
-            controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext c) => tank.Movement.DisableTurbo();
-            controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
-            controler.TankAttack.ShootAttack.started 
-                += (InputAction.CallbackContext c) => { if (!ClickOnTank()) tank.Attack.Shoot(tank.Head.transform.rotation); };
-            controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
             camera = Camera.main.GetComponent<CameraMovement>();
-            controler.Camera.LockCamera.started += (InputAction.CallbackContext c) => { if (ClickOnTank()) camera.LockCamToPlayer(); };
+            SetupControlsMovement();
+            SetupControlsAttack();
+            SetupControlsCameraMovement();
         }
 
         private void Update() {
@@ -52,8 +48,26 @@ namespace Game.InputSystem
             return ray.GetPoint(distance);
         }
 
-        private bool ClickOnTank()
-            => tank.Movement.grid.GetNodeFromPosition(GetMousePosition()) == tank.Movement.grid.GetNodeFromPosition(tank.transform.position);
+        private void SetupControlsMovement() {
+            controler.TankDrive.Turbo.started += (InputAction.CallbackContext c) => tank.Movement.EnableTurbo();
+            controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext c) => tank.Movement.DisableTurbo();
+            controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
+        }
+
+        private void SetupControlsAttack() {
+            controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
+            controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => { 
+                if (!ClickOnTank()) tank.Attack.Shoot(tank.Head.transform.rotation); 
+            };
+        }
+
+        private void SetupControlsCameraMovement() {
+            controler.Camera.LockCamera.started += (InputAction.CallbackContext c) => {
+                if (ClickOnTank()) camera.ChangeLockingState();
+            };
+        }
+
+        private bool ClickOnTank() => Physics.CheckSphere(GetMousePosition(), 0.3f, LayerMask.GetMask("Player"));
 
         private void OnDrawGizmos() {
             if (tank == null || tank.Movement == null) return;

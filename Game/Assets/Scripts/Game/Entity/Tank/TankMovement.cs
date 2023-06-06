@@ -76,9 +76,13 @@ namespace Game.Entity.Tank
         }
 
         private void Rotate(GameObject obj, Vector3 target, float rotationSpeed) {
+            // rotate object
             Vector3 direction = (target - tank.transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
+
+            // to ensure only the y angle rotates
+            obj.transform.rotation = new Quaternion(0, obj.transform.rotation.y, 0, obj.transform.rotation.w);
         }
 
         public Path SetPath(Vector3 startPos, Vector3 targetPos) {
