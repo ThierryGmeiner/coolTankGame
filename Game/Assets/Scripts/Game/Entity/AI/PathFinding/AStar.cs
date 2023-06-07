@@ -108,6 +108,7 @@ namespace Game.AI
             AStarNode currentSectionStart = startNode;
 
             if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, Path.Optimized.True);
+
             // search in every loop one section
             while (currentSectionStart != targetNode) {
                 currentSectionStart = FindNewSection(unoptimizedPath.Nodes, currentSectionStart);
@@ -118,6 +119,7 @@ namespace Game.AI
 
         private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {
             AStarNode newSectionStart = GetNextSection(path, oldSectionStart, Array.IndexOf(path, oldSectionStart) + 1);
+
             // fixes the problem that the search sometimes gets stuck on a node
             if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
             return newSectionStart;

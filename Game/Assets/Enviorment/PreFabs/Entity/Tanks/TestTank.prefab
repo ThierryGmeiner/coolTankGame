@@ -415,7 +415,6 @@ GameObject:
   - component: {fileID: 155875499861655678}
   - component: {fileID: 8835084522209406287}
   - component: {fileID: 4902868653811906715}
-  - component: {fileID: 6203845364926094008}
   - component: {fileID: -5861590840713135274}
   - component: {fileID: 1251385326127198655}
   m_Layer: 6
@@ -489,18 +488,6 @@ MonoBehaviour:
   tankHead: {fileID: 178150196904012783}
   groundCheck: {fileID: 4864593693566337504}
   shootingSpot: {fileID: 4478861191213471276}
---- !u!114 &6203845364926094008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4864593692875131940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b36d593f0db9c2d47a7259e741de6e19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-5861590840713135274
 MonoBehaviour:
   m_ObjectHideFlags: 0

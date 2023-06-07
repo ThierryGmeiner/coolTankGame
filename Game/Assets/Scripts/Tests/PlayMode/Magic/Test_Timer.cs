@@ -26,7 +26,7 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return null;
 
-            Assert.Greater(startTime, timer.time);
+            Assert.Greater(startTime, timer.timeInSeconds);
         }
 
         [UnityTest]
@@ -64,7 +64,7 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return new WaitForFrames(2);
 
-            Assert.AreNotEqual(startTime, timer.time);
+            Assert.AreNotEqual(startTime, timer.timeInSeconds);
         }
 
         [UnityTest]
@@ -80,7 +80,7 @@ namespace Tests.PlayMode.Magic
             timer.StopTimer();
             yield return new WaitForFrames(5);
 
-            Assert.AreEqual(startTime, timer.time, 0.1);
+            Assert.AreEqual(startTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -95,7 +95,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.SetTime(newTime);
 
-            Assert.AreEqual(newTime, timer.time, 0.1);
+            Assert.AreEqual(newTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -110,7 +110,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.SetTime(newTime);
 
-            Assert.AreEqual(newTime, timer.time, 0.1);
+            Assert.AreEqual(newTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -125,7 +125,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.SetTime(newTime);
 
-            Assert.AreEqual(newTime, timer.time, 0.1);
+            Assert.AreEqual(newTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -140,7 +140,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.ReduceTime(reducingTime);
 
-            Assert.AreEqual(startTime - reducingTime, timer.time, 0.1);
+            Assert.AreEqual(startTime - reducingTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -155,7 +155,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.ReduceTime(reducingTime);
 
-            Assert.AreEqual(startTime - System.Math.Abs(reducingTime), timer.time, 0.1);
+            Assert.AreEqual(startTime - System.Math.Abs(reducingTime), timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -170,7 +170,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.ReduceTime(reducingTime);
 
-            Assert.AreEqual(startTime - reducingTime, timer.time, 0.1);
+            Assert.AreEqual(startTime - reducingTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -185,7 +185,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.IncreaseTime(increaseTime);
 
-            Assert.AreEqual(startTime + increaseTime, timer.time, 0.1);
+            Assert.AreEqual(startTime + increaseTime, timer.timeInSeconds, 0.1);
         }
 
         [UnityTest]
@@ -200,7 +200,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
             timer.IncreaseTime(increaseTime);
 
-            Assert.AreEqual(startTime + increaseTime, timer.time, 0.1);
+            Assert.AreEqual(startTime + increaseTime, timer.timeInSeconds, 0.1);
         }
     }
 }

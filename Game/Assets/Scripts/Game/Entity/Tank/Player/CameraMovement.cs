@@ -58,6 +58,7 @@ namespace Game.Cam
         }
 
         private void MoveTowardsPlayer() {
+            SetNewTarget();
             transform.position = Vector3.Lerp(transform.position, targetPos, LERP_SPEED * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, targetPos) < 0.1f) {

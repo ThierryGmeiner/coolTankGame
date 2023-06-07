@@ -8,7 +8,7 @@ namespace Magic
         protected bool timerIsActive = false;
         protected Action RunTimer;
 
-        public float time { get; protected set; }
+        public float timeInSeconds { get; protected set; }
         public Modes timerMode { get; protected set; }
 
         public abstract event Action OnTimerEnds;
@@ -26,7 +26,7 @@ namespace Magic
 
         private void Update()
         {
-            if (timerIsActive) 
+            if (timerIsActive)
                 RunTimer();
         }
 
@@ -54,10 +54,10 @@ namespace Magic
         public void StartTimer() => timerIsActive = true;
         public void StopTimer() => timerIsActive = false;
 
-        public void SetTime(float time) => this.time = time;
-        public void ReduceTime(float reducedTime) => time -= Math.Abs(reducedTime);
-        public void IncreaseTime(float increasedTime) => time += increasedTime;
+        public void SetTime(float time) => this.timeInSeconds = time;
+        public void ReduceTime(float reducedTime) => timeInSeconds -= Math.Abs(reducedTime);
+        public void IncreaseTime(float increasedTime) => timeInSeconds += increasedTime;
 
-        protected bool TimeIsUp() => time <= 0;
+        protected bool TimeIsUp() => timeInSeconds <= 0;
     }
 }

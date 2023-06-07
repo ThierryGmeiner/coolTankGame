@@ -25,7 +25,7 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
             
-            Assert.AreEqual(startTime, timer.time);
+            Assert.AreEqual(startTime, timer.timeInSeconds);
         }
  
         [UnityTest]
@@ -38,7 +38,7 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
             
-            Assert.AreEqual(startTime, timer.time);
+            Assert.AreEqual(startTime, timer.timeInSeconds);
         }
 
         [UnityTest]
@@ -112,7 +112,7 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return null;
 
-            Assert.Greater(startTime, timer.time);
+            Assert.Greater(startTime, timer.timeInSeconds);
         }
 
         [UnityTest]

@@ -26,7 +26,7 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
 
-            bool TimeIsInBetween = timer.time > startTimeMin && timer.time < startTimeMax;
+            bool TimeIsInBetween = timer.timeInSeconds > startTimeMin && timer.timeInSeconds < startTimeMax;
             Assert.IsTrue(TimeIsInBetween);
         }
         
@@ -41,7 +41,7 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
 
-            bool TimeIsInBetween = timer.time > startTimeMin && timer.time < startTimeMax;
+            bool TimeIsInBetween = timer.timeInSeconds > startTimeMin && timer.timeInSeconds < startTimeMax;
             Assert.IsTrue(TimeIsInBetween);
         }
 
@@ -122,7 +122,7 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return null;
 
-            Assert.Greater(startTimeMin, timer.time);
+            Assert.Greater(startTimeMin, timer.timeInSeconds);
         }
 
         [UnityTest]

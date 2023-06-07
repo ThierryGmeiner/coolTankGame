@@ -12,15 +12,15 @@ namespace Magic
         {
             this.minStartingTime = minStartingTime;
             this.maxStartingTime = maxStartingTime;
-            base.time = SetRandomTime();
+            base.timeInSeconds = SetRandomTime();
             base.SetTimerMode(timerMode);
         }
 
-        private float SetRandomTime() => base.time = UnityEngine.Random.Range(minStartingTime, maxStartingTime);
+        private float SetRandomTime() => base.timeInSeconds = UnityEngine.Random.Range(minStartingTime, maxStartingTime);
 
         protected override void RunTimer_DestroyWhenTimeIsUp()
         {
-            base.time -= Time.deltaTime;
+            base.timeInSeconds -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();
                 Destroy(this);
@@ -29,16 +29,16 @@ namespace Magic
 
         protected override void RunTimer_RestartWhenTimeIsUp()
         {
-            time -= Time.deltaTime;
+            timeInSeconds -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();
-                base.time = SetRandomTime();
+                base.timeInSeconds = SetRandomTime();
             }
         }
 
         protected override void RunTimer_ContinuesWhenTimeIsUp()
         {
-            base.time -= Time.deltaTime;
+            base.timeInSeconds -= Time.deltaTime;
             if (base.TimeIsUp())
                 OnTimerEnds?.Invoke();
         }
