@@ -6,15 +6,6 @@
             "id": "c3f672a9-810e-4f66-9492-3d680fe72485",
             "actions": [
                 {
-                    "name": "Turbo",
-                    "type": "Button",
-                    "id": "aea617b4-b226-40bf-b2d4-364f5937bc6f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Jump",
                     "type": "Button",
                     "id": "255988a9-42fc-48f3-a93c-c05b36ae5cc0",
@@ -34,17 +25,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "417cfc98-1e7a-45ef-930f-c0bcaf9b92bb",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "Hold",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turbo",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "0779389c-5221-4a0c-87a6-9d922cdd2b56",
@@ -109,6 +89,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MoveFaster",
+                    "type": "Button",
+                    "id": "bcb6f22f-d8c5-4291-894f-16c9c5ff28e3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "LockCamera",
@@ -204,6 +193,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "FindPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7dc3ed16-6d70-4a5a-bf5e-0cf3c0bf5263",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveFaster",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

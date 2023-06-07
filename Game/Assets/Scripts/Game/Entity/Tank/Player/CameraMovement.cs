@@ -7,7 +7,9 @@ namespace Game.Cam
     public class CameraMovement : MonoBehaviour
     {
         [SerializeField] private GameObject player;
-        [SerializeField] private float speed = 10;
+        [SerializeField] private float normalSpeed = 10;
+        [SerializeField] private float sprintSpeed = 25;
+        private float speed;
 
         private bool camIsLocked;
         private bool camIsMoving;
@@ -23,6 +25,7 @@ namespace Game.Cam
         private const float LERP_SPEED = 5;
 
         private void Awake() {
+            speed = normalSpeed;
             defaultRotation = transform.rotation;
             rigidBody = GetComponent<Rigidbody>();
         }
@@ -31,23 +34,22 @@ namespace Game.Cam
             player ??= GameObject.FindGameObjectWithTag(Magic.Tags.Player);
         }
 
+        public void Move(Vector2 direction) {
+            rigidBody.velocity = new Vector3(direction.x * speed, 0, direction.y * speed);
+
+            playerOffset = transform.position - player.transform.position;
+            camIsMoving = direction != Vector2.zero;
+        }
+
         private void Update() {
             bool camHasTarget = targetPos != noTarget;
             if (camHasTarget) {
                 MoveTowardsPlayer();
             }
             else if (camIsLocked) {
-                if (camIsMoving) { ChangeLockingState(); }
+                if (camIsMoving) ChangeLockingState();
                 else FollowPlayer();
             }
-        }
-
-        public void Move(Vector2 direction) {
-            Vector3 newDirection = new Vector3(direction.x, 0, direction.y);
-            rigidBody.AddForce(newDirection * speed, ForceMode.Force);
-
-            playerOffset = transform.position - player.transform.position;
-            camIsMoving = newDirection != Vector3.zero;
         }
 
         private void FollowPlayer() {
@@ -73,17 +75,16 @@ namespace Game.Cam
             targetPos = new Vector3(newTargetPos.x, transform.position.y, newTargetPos.z);
         }
 
-        private bool CamIsTooFarAwayFromPlayer() {
-            float distance = Vector3.Distance(GetScreenMiddlePosition(), player.transform.position);
-            return distance > 10;
-        }
-
         private Vector3 GetScreenMiddlePosition() {
             float distance;
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
             plane.Raycast(ray, out distance);
             return ray.GetPoint(distance);
         }
+
+        public void EnableTurbo() => speed = sprintSpeed;
+
+        public void DisableTurbo() => speed = normalSpeed;
 
         private Vector3 noTarget { get => Vector3.zero; }
     }

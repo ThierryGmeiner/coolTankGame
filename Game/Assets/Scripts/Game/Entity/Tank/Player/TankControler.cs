@@ -13,7 +13,7 @@ namespace Game.InputSystem
         private PlayerControler controler;
         private Plane plane = new Plane(Vector3.up, 0);
         private Tank tank;
-        private CameraMovement camera;
+        private CameraMovement cam;
 
         private void Awake() {
             controler = new PlayerControler();
@@ -24,7 +24,8 @@ namespace Game.InputSystem
 
         private void Start() {
             tank = GetComponent<Tank>();
-            camera = Camera.main.GetComponent<CameraMovement>();
+            cam = Camera.main.GetComponent<CameraMovement>();
+            
             SetupControlsMovement();
             SetupControlsAttack();
             SetupControlsCameraMovement();
@@ -32,7 +33,7 @@ namespace Game.InputSystem
 
         private void Update() {
             tank.Movement.RotateHead(GetMousePosition());
-            camera.Move(controler.Camera.Move.ReadValue<Vector2>());
+            cam.Move(controler.Camera.Move.ReadValue<Vector2>());
         }
 
         private void SetNewPath() {
@@ -49,8 +50,6 @@ namespace Game.InputSystem
         }
 
         private void SetupControlsMovement() {
-            controler.TankDrive.Turbo.started += (InputAction.CallbackContext c) => tank.Movement.EnableTurbo();
-            controler.TankDrive.Turbo.canceled += (InputAction.CallbackContext c) => tank.Movement.DisableTurbo();
             controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
         }
 
@@ -62,9 +61,11 @@ namespace Game.InputSystem
         }
 
         private void SetupControlsCameraMovement() {
-            controler.Camera.FindPlayer.started += (InputAction.CallbackContext c) => camera.ChangeLockingState();
+            controler.Camera.MoveFaster.started += (InputAction.CallbackContext c) => cam.EnableTurbo();
+            controler.Camera.MoveFaster.canceled += (InputAction.CallbackContext c) => cam.DisableTurbo();
+            controler.Camera.FindPlayer.started += (InputAction.CallbackContext c) => cam.ChangeLockingState();
             controler.Camera.LockCamera.started += (InputAction.CallbackContext c) => {
-                if (ClickOnTank()) camera.ChangeLockingState();
+                if (ClickOnTank()) cam.ChangeLockingState();
             };
         }
 
@@ -73,6 +74,7 @@ namespace Game.InputSystem
         private void OnDrawGizmos() {
             if (tank == null || tank.Movement == null) return;
             if (tank.Movement.Path == null || tank.Movement.Path.Nodes.Length == 0) return;
+
             foreach (AStarNode node in tank.Movement.Path.Nodes) {
                 Gizmos.color = Color.cyan;
                 if (Magic.Array.Contains(tank.Movement.Path.Nodes, node)) Gizmos.color = Color.yellow;

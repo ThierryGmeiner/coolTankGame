@@ -42,7 +42,7 @@ namespace Tests.PlayMode.Entity
             TestHelper.DestroyObjects(tank.gameObject);
         }
 
-        [UnityTest] 
+        [UnityTest]
         public IEnumerator GroundCheck_IsNotGrounded_False() {
             Tank tank = TestHelper.CreateTank<Tank>();
             yield return null;
@@ -98,53 +98,6 @@ namespace Tests.PlayMode.Entity
             Assert.AreEqual(oldHeight, tank.transform.position.y, 0.05);
 
             TestHelper.DestroyObjects(tank.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator EnableTurbo_TankWithTurboIsFaster() {
-            Tank tankOne = TestHelper.CreateTank<Tank>();
-            Tank tankTwo = TestHelper.CreateTank<Tank>();
-            yield return null;
-            tankOne.Movement.SetPath(tankOne.transform.position, new Vector3(5, 0, 5));
-            tankTwo.Movement.SetPath(tankTwo.transform.position, new Vector3(5, 0, 5));
-            tankOne.Collider.enabled = false;
-            tankTwo.Collider.enabled = false;
-            tankOne.Movement.EnableTurbo();
-
-            Vector3 target = new Vector3(100, 0, 100);
-            for (int i = 0; i < 10; i++) {
-                tankOne.Movement.Move(target);
-                tankTwo.Movement.Move(target);
-                yield return null;
-            }
-
-            Assert.Greater(tankOne.transform.position.z, tankTwo.transform.position.z);
-
-            TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator DisableTurbo_BothTanksAreEqualFast() {
-            Tank tankOne = TestHelper.CreateTank<Tank>();
-            Tank tankTwo = TestHelper.CreateTank<Tank>();
-            yield return null;
-            tankOne.Movement.SetPath(tankOne.transform.position, new Vector3(5, 0, 5));
-            tankTwo.Movement.SetPath(tankTwo.transform.position, new Vector3(5, 0, 5));
-            tankOne.Collider.enabled = false;
-            tankTwo.Collider.enabled = false;
-            tankOne.Movement.EnableTurbo();
-            tankOne.Movement.DisableTurbo();
-
-            Vector3 target = new Vector3(100, 0, 100);
-            for (int i = 0; i < 10; i++) {
-                tankOne.Movement.Move(target);
-                tankTwo.Movement.Move(target);
-                yield return null;
-            }
-
-            Assert.AreEqual(tankOne.transform.position.z, tankTwo.transform.position.z, 0.1f);
-
-            TestHelper.DestroyObjects(tankOne.gameObject, tankTwo.gameObject);
         }
 
         [UnityTest]

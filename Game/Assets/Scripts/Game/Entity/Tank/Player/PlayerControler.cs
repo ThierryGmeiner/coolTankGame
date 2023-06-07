@@ -30,15 +30,6 @@ namespace Game.InputSystem
             ""id"": ""c3f672a9-810e-4f66-9492-3d680fe72485"",
             ""actions"": [
                 {
-                    ""name"": ""Turbo"",
-                    ""type"": ""Button"",
-                    ""id"": ""aea617b4-b226-40bf-b2d4-364f5937bc6f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""255988a9-42fc-48f3-a93c-c05b36ae5cc0"",
@@ -58,17 +49,6 @@ namespace Game.InputSystem
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""417cfc98-1e7a-45ef-930f-c0bcaf9b92bb"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": ""Hold"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Turbo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""0779389c-5221-4a0c-87a6-9d922cdd2b56"",
@@ -133,6 +113,15 @@ namespace Game.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MoveFaster"",
+                    ""type"": ""Button"",
+                    ""id"": ""bcb6f22f-d8c5-4291-894f-16c9c5ff28e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""LockCamera"",
@@ -230,6 +219,17 @@ namespace Game.InputSystem
                     ""action"": ""FindPlayer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7dc3ed16-6d70-4a5a-bf5e-0cf3c0bf5263"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveFaster"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -238,7 +238,6 @@ namespace Game.InputSystem
 }");
             // TankDrive
             m_TankDrive = asset.FindActionMap("TankDrive", throwIfNotFound: true);
-            m_TankDrive_Turbo = m_TankDrive.FindAction("Turbo", throwIfNotFound: true);
             m_TankDrive_Jump = m_TankDrive.FindAction("Jump", throwIfNotFound: true);
             m_TankDrive_SetPath = m_TankDrive.FindAction("SetPath", throwIfNotFound: true);
             // TankAttack
@@ -247,6 +246,7 @@ namespace Game.InputSystem
             // Camera
             m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
             m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
+            m_Camera_MoveFaster = m_Camera.FindAction("MoveFaster", throwIfNotFound: true);
             m_Camera_LockCamera = m_Camera.FindAction("LockCamera", throwIfNotFound: true);
             m_Camera_FindPlayer = m_Camera.FindAction("FindPlayer", throwIfNotFound: true);
         }
@@ -308,14 +308,12 @@ namespace Game.InputSystem
         // TankDrive
         private readonly InputActionMap m_TankDrive;
         private ITankDriveActions m_TankDriveActionsCallbackInterface;
-        private readonly InputAction m_TankDrive_Turbo;
         private readonly InputAction m_TankDrive_Jump;
         private readonly InputAction m_TankDrive_SetPath;
         public struct TankDriveActions
         {
             private @PlayerControler m_Wrapper;
             public TankDriveActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Turbo => m_Wrapper.m_TankDrive_Turbo;
             public InputAction @Jump => m_Wrapper.m_TankDrive_Jump;
             public InputAction @SetPath => m_Wrapper.m_TankDrive_SetPath;
             public InputActionMap Get() { return m_Wrapper.m_TankDrive; }
@@ -327,9 +325,6 @@ namespace Game.InputSystem
             {
                 if (m_Wrapper.m_TankDriveActionsCallbackInterface != null)
                 {
-                    @Turbo.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
-                    @Turbo.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
-                    @Turbo.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnTurbo;
                     @Jump.started -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
                     @Jump.performed -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
                     @Jump.canceled -= m_Wrapper.m_TankDriveActionsCallbackInterface.OnJump;
@@ -340,9 +335,6 @@ namespace Game.InputSystem
                 m_Wrapper.m_TankDriveActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @Turbo.started += instance.OnTurbo;
-                    @Turbo.performed += instance.OnTurbo;
-                    @Turbo.canceled += instance.OnTurbo;
                     @Jump.started += instance.OnJump;
                     @Jump.performed += instance.OnJump;
                     @Jump.canceled += instance.OnJump;
@@ -391,6 +383,7 @@ namespace Game.InputSystem
         private readonly InputActionMap m_Camera;
         private ICameraActions m_CameraActionsCallbackInterface;
         private readonly InputAction m_Camera_Move;
+        private readonly InputAction m_Camera_MoveFaster;
         private readonly InputAction m_Camera_LockCamera;
         private readonly InputAction m_Camera_FindPlayer;
         public struct CameraActions
@@ -398,6 +391,7 @@ namespace Game.InputSystem
             private @PlayerControler m_Wrapper;
             public CameraActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Camera_Move;
+            public InputAction @MoveFaster => m_Wrapper.m_Camera_MoveFaster;
             public InputAction @LockCamera => m_Wrapper.m_Camera_LockCamera;
             public InputAction @FindPlayer => m_Wrapper.m_Camera_FindPlayer;
             public InputActionMap Get() { return m_Wrapper.m_Camera; }
@@ -412,6 +406,9 @@ namespace Game.InputSystem
                     @Move.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMove;
+                    @MoveFaster.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMoveFaster;
+                    @MoveFaster.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMoveFaster;
+                    @MoveFaster.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMoveFaster;
                     @LockCamera.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
                     @LockCamera.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
                     @LockCamera.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
@@ -425,6 +422,9 @@ namespace Game.InputSystem
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
+                    @MoveFaster.started += instance.OnMoveFaster;
+                    @MoveFaster.performed += instance.OnMoveFaster;
+                    @MoveFaster.canceled += instance.OnMoveFaster;
                     @LockCamera.started += instance.OnLockCamera;
                     @LockCamera.performed += instance.OnLockCamera;
                     @LockCamera.canceled += instance.OnLockCamera;
@@ -437,7 +437,6 @@ namespace Game.InputSystem
         public CameraActions @Camera => new CameraActions(this);
         public interface ITankDriveActions
         {
-            void OnTurbo(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnSetPath(InputAction.CallbackContext context);
         }
@@ -448,6 +447,7 @@ namespace Game.InputSystem
         public interface ICameraActions
         {
             void OnMove(InputAction.CallbackContext context);
+            void OnMoveFaster(InputAction.CallbackContext context);
             void OnLockCamera(InputAction.CallbackContext context);
             void OnFindPlayer(InputAction.CallbackContext context);
         }

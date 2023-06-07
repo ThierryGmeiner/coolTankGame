@@ -18,9 +18,7 @@ namespace Game.Entity.Tank
 
         // movement
         private float speed;
-        private readonly float defaultSpeed;
         private readonly float jumpForce;
-        private readonly float turboMultiplier;
         private const float AIR_MULTIPLIER = 0.65f;
         private const float BODY_ROTATION_SPEED = 6;
         private const float HEAD_ROTATION_SPEED = 5;
@@ -28,10 +26,8 @@ namespace Game.Entity.Tank
         public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;
             this.groundCheck = groundCheck;
-            defaultSpeed = tank.Data.Speed;
             speed = tank.Data.Speed;
             jumpForce = tank.Data.JumpForce;
-            turboMultiplier = tank.Data.TurboMultiplier;
 
             groundLayer = LayerMask.GetMask("Ground");
             grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
@@ -39,24 +35,27 @@ namespace Game.Entity.Tank
         }
 
         public float Speed { get => speed; }
+
         public Path Path {
             get => path;
             set { pathIndex = 0; path = value; }
         }
 
         public void Move(Vector3 target) {
-            float movementSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
-            tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, movementSpeed);
+            float moveSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
+            tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, moveSpeed);
             if (ReachTarget()) Path = null;
             else if (ReachInterimTarget()) pathIndex++;
         }
 
         public void Move() {
             if (Path == null || Path.Nodes.Length == 0) return;
+
             // FindOptimizedPath can't bee caled in a second thread, so check manuel for it an cal it when necessary
             if (!path.IsOptimized) {
                 path = aStar.FindOptimizedPath(Path);
             }
+            
             RotateBody(path.Nodes[pathIndex].Position);
             Move(path.Nodes[pathIndex].Position);
         }
@@ -91,10 +90,6 @@ namespace Game.Entity.Tank
                 Path = newPath;
             } return Path;
         }
-
-        public void EnableTurbo() => speed = defaultSpeed * turboMultiplier;
-
-        public void DisableTurbo() => speed = defaultSpeed;
 
         public bool GroundCheck() => Physics.CheckSphere(groundCheck.position, 0.1f, groundLayer);
 
