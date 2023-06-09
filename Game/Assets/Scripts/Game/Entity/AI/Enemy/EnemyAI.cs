@@ -6,43 +6,53 @@ namespace Game.AI
 {
     public abstract class EnemyAI : MonoBehaviour
     {
-        [SerializeField] private float FOV = 10;
-        [SerializeField] private float extended_FOV = 14;
+        [Header("View")]
+        [SerializeField] protected float viewRadius = 7;
+        [SerializeField] protected float viewRadiusExtended = 12;
+        [SerializeField] [Range(0, 360)] protected float viewAngle = 80;
 
-        protected GameObject enemyPlayer;
-        protected Tank tank;
+        protected GameObject target;
+        protected LayerMask obstacleLayer;
 
-        private LayerMask obstacleLayer;
-
-        protected void Awake() {
-            tank = GetComponent<Tank>();
+        protected virtual void Awake() {
             obstacleLayer = LayerMask.GetMask("Obstacle");
         }
 
         protected void Start() {
-            enemyPlayer = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
+            target = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
         }
 
-        protected virtual bool CanSeePlayer() {
-            if (PlayerIsOutOfSightRadius()) {
+        public float ViewAngle { get => viewAngle; }
+        public float ViewRadius { get => viewRadius; }
+        public float ViewRadiusExtended { get => viewRadiusExtended; }
+
+        protected virtual bool CanSeeTarget() {
+            if (!TargetIsInView()) {
                 return false;
             }
-            return !Physics.Linecast(transform.position, enemyPlayer.transform.position, obstacleLayer);
+            return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
 
         }
 
-        private bool PlayerIsOutOfSightRadius() {
-            bool playerOutsideExtendedSight = Vector3.Distance(transform.position, enemyPlayer.transform.position) > extended_FOV;
-            
-            if (playerOutsideExtendedSight) return true;
+        protected virtual bool TargetIsInView() {
+            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
+            bool targetInAngle = Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2;
+            bool targetOutsideExtendedSight = Vector3.Distance(transform.position, target.transform.position) < viewRadiusExtended;
 
-            bool playerOutsideSight = Vector3.Distance(transform.position, enemyPlayer.transform.position) > FOV;
-            return playerOutsideSight;
+            // target is in extendet FOV
+            if (targetOutsideExtendedSight && targetInAngle) return true;
+
+            // target is in inner FOV
+            bool targetInSight = Vector3.Distance(transform.position, target.transform.position) < viewRadius;
+            return targetInSight;
         }
 
-        private void OnDrawGizmos() {
-            Handles.color = new Color(0, 1, 0, 0.2f);
-            //Handles.DrawSolidDisc(transform.position, transform.up, FOV);
+        public virtual Vector3 ViewDirection(float angleInDegrees, bool angleIsGlobal) {
+            if (!angleIsGlobal) {
+                angleInDegrees += transform.eulerAngles.y;
+            }
+            return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
+
     }
 }

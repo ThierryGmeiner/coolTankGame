@@ -13,7 +13,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 9bd48ffac9d248443b008aeaf94cbc2f, type: 2}
     - target: {fileID: 4864593692875131940, guid: e9f3d5b3da8ad8b43b5539dadae0fdee, type: 3}
       propertyPath: m_Name
-      value: TestTank_Enemy22
+      value: TestTank_Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4864593692875131945, guid: e9f3d5b3da8ad8b43b5539dadae0fdee, type: 3}
       propertyPath: m_RootOrder
@@ -82,3 +82,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a1e8439f08ef584c87cf7e44d087e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewAngle: 75
+  viewRadius: 7
+  viewRadiusExtended: 12
