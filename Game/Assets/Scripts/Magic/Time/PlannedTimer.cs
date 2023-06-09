@@ -9,6 +9,8 @@ namespace Magic
         private float startTimeInSeconds;
         public override event Action OnTimerEnds;
 
+        public float StartTimeInSeconds { get => startTimeInSeconds; }
+
         public void SetupTimer(float timeInSeconds, Modes timerMode)
         {
             this.startTimeInSeconds = timeInSeconds;

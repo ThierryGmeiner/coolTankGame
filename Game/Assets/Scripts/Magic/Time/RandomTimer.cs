@@ -16,6 +16,9 @@ namespace Magic
             base.SetTimerMode(timerMode);
         }
 
+        public float MinSartingTime { get => minStartingTime; }
+        public float MaxStartingTime { get => maxStartingTime; }
+
         private float SetRandomTime() => base.timeInSeconds = UnityEngine.Random.Range(minStartingTime, maxStartingTime);
 
         protected override void RunTimer_DestroyWhenTimeIsUp()

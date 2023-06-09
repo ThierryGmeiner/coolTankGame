@@ -24,30 +24,28 @@ namespace Magic
             ConitinuesWhenTimeIsUp
         }
 
-        private void Update()
-        {
+        private void Update() {
             if (timerIsActive)
                 RunTimer();
         }
 
-        public void SetTimerMode(Modes timerMode)
-        {
+        public void SetTimerMode(Modes timerMode) {
             this.timerMode = timerMode;
             switch (timerMode) {
                 case Modes.destroyWhenTimeIsUp:
-                    RunTimer = RunTimer_DestroyWhenTimeIsUp;
-                    break;
+                RunTimer = RunTimer_DestroyWhenTimeIsUp;
+                break;
                 case Modes.restartWhenTimeIsUp:
-                    RunTimer = RunTimer_RestartWhenTimeIsUp;
-                    break;
+                RunTimer = RunTimer_RestartWhenTimeIsUp;
+                break;
                 case Modes.ConitinuesWhenTimeIsUp:
-                    RunTimer = RunTimer_ContinuesWhenTimeIsUp;
-                    break;
+                RunTimer = RunTimer_ContinuesWhenTimeIsUp;
+                break;
                 default:
-                    RunTimer = RunTimer_ContinuesWhenTimeIsUp;
-                    Debug.Log($"{nameof(Timer)}.{nameof(SetTimerMode)}: {nameof(timerMode)} not found.");
-                    Debug.Log($"{nameof(RunTimer)} was set to {nameof(RunTimer_ContinuesWhenTimeIsUp)}");
-                    break;
+                RunTimer = RunTimer_ContinuesWhenTimeIsUp;
+                Debug.Log($"{nameof(Timer)}.{nameof(SetTimerMode)}: {nameof(timerMode)} not found.");
+                Debug.Log($"{nameof(RunTimer)} was set to {nameof(RunTimer_ContinuesWhenTimeIsUp)}");
+                break;
             }
         }
 

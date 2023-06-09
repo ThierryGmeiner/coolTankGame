@@ -1,5 +1,6 @@
 using UnityEngine;
 using Game.Entity.Tank;
+using Magic;
 
 namespace Game.AI
 {
@@ -13,8 +14,15 @@ namespace Game.AI
             tank ??= GetComponent<Tank>();
         }
 
+        private void Start() {
+            RandomTimer timer = gameObject.AddComponent<RandomTimer>();
+            timer.OnTimerEnds += RotateHeadRandom;
+            timer.SetupTimer(2, 5, Timer.Modes.restartWhenTimeIsUp);
+            timer.StartTimer();
+        }
+
         private void Update() {
-            Debug.Log(CanSeeTarget());
+            
         }
 
         private void HandleMovement() {
@@ -29,6 +37,10 @@ namespace Game.AI
                     tank.Movement.SetPath(transform.position, target.transform.position);
                 }
             }
+        }
+
+        private void RotateHeadRandom() {
+            Debug.Log("rotate");
         }
 
         public override Vector3 ViewDirection(float angleInDegrees, bool angleIsGlobal) {
