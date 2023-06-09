@@ -425,6 +425,7 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator GetPathViaBacktracking_Test1() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node1 = new AStarNode(true, Vector2.zero);
             AStarNode node2 = new AStarNode(true, Vector2.one);
             AStarNode node3 = new AStarNode(true, Vector2.left);
@@ -432,7 +433,7 @@ namespace Tests.PlayMode.AI
             node2.LastNodeInPath = node1;
             yield return null;
 
-            List<AStarNode> path = AStar.GetPath(node1, node3);
+            List<AStarNode> path = aStar.GetPath(node1, node3);
 
             List<AStarNode> expectedPath = new List<AStarNode>();
             expectedPath.Add(node1);
@@ -443,6 +444,7 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator GetPathViaBacktracking_Test2() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node1 = new AStarNode(true, Vector2.zero);
             AStarNode node2 = new AStarNode(true, Vector2.one);
             AStarNode node3 = new AStarNode(true, Vector2.left);
@@ -454,7 +456,7 @@ namespace Tests.PlayMode.AI
             node2.LastNodeInPath = node1;
             yield return null;
 
-            List<AStarNode> path = AStar.GetPath(node1, node5);
+            List<AStarNode> path = aStar.GetPath(node1, node5);
 
             List<AStarNode> expectedPath = new List<AStarNode>();
             expectedPath.Add(node1);
@@ -467,19 +469,21 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator UpdateNode_UpdateLastNodeInPath() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.zero, Vector2Int.up);
             AStarNode targetNode = new AStarNode(true, Vector3.zero, Vector2Int.down);
             updatingNode.gCost = 10;
             yield return null;
 
-            AStar.UpdateNode(node, updatingNode, targetNode);
+            aStar.UpdateNode(node, updatingNode, targetNode);
 
             Assert.AreEqual(updatingNode, node.LastNodeInPath);
         }
 
         [UnityTest]
         public IEnumerator UpdateNode_UpdateGCost() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.zero, Vector2Int.up);
             AStarNode targetNode = new AStarNode(true, Vector3.zero, Vector2Int.down);
@@ -487,20 +491,21 @@ namespace Tests.PlayMode.AI
             updatingNode.gCost = 10;
             yield return null;
 
-            AStar.UpdateNode(node, updatingNode, targetNode);
+            aStar.UpdateNode(node, updatingNode, targetNode);
 
             Assert.AreNotEqual(oldGCost, node.gCost);
         }
 
         [UnityTest]
         public IEnumerator UpdateNode_UpdateHCost() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.back, Vector2Int.down);
             AStarNode targetNode = new AStarNode(true, Vector3.forward, Vector2Int.up);
             float oldHCost = node.hCost;
             updatingNode.gCost = 10;
 
-            AStar.UpdateNode(node, updatingNode, targetNode);
+            aStar.UpdateNode(node, updatingNode, targetNode);
             yield return null;
 
             Assert.AreNotEqual(oldHCost, node.hCost);
@@ -508,19 +513,21 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator UpdateNode_GCostIsUndefinde_Update() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.zero, Vector2Int.up);
             AStarNode targetNode = new AStarNode(true, Vector3.zero, Vector2Int.down);
             updatingNode.gCost = 10;
             yield return null;
 
-            AStar.UpdateNode(node, updatingNode, targetNode);
+            aStar.UpdateNode(node, updatingNode, targetNode);
 
             Assert.AreEqual(updatingNode, node.LastNodeInPath);
         }
 
         [UnityTest]
         public IEnumerator UpdateNode_GCostIsLower_Update() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.zero, Vector2Int.up);
             AStarNode targetNode = new AStarNode(true, Vector3.zero, Vector2Int.down);
@@ -528,13 +535,14 @@ namespace Tests.PlayMode.AI
             node.gCost = 100;
             yield return null;
 
-            AStar.UpdateNode(node, updatingNode, targetNode);
+            aStar.UpdateNode(node, updatingNode, targetNode);
 
             Assert.AreEqual(updatingNode, node.LastNodeInPath);
         }
 
         [UnityTest]
         public IEnumerator UpdateNode_GCostIsHigher_DontUpdate() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode node = new AStarNode(true, Vector3.zero, Vector2Int.zero);
             AStarNode updatingNode = new AStarNode(true, Vector3.zero, Vector2Int.up);
             AStarNode targetNode = new AStarNode(true, Vector3.zero, Vector2Int.down);
@@ -542,7 +550,7 @@ namespace Tests.PlayMode.AI
             node.gCost = 8;
             yield return null;
 
-            AStar.UpdateNode(node, updatingNode, targetNode);
+            aStar.UpdateNode(node, updatingNode, targetNode);
 
             Assert.AreEqual(null, node.LastNodeInPath);
         }

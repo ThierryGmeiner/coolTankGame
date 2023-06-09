@@ -26,7 +26,7 @@ namespace Game.AI
         // finde path with the a* algorithm
         // ####################################################
         
-        public Path FindPath(Vector3 startPos, Vector3 targetPos)
+        public Path FindPath(Vector3 startPos, Vector3 targetPos) 
             => FindPath(grid.GetNodeFromPosition(startPos), grid.GetNodeFromPosition(targetPos));
 
         // finds a path with the aStar algorithm
@@ -45,7 +45,7 @@ namespace Game.AI
             return path;
         }
 
-        public static List<AStarNode> GetPath(AStarNode startNode, AStarNode lastNode) {
+        public List<AStarNode> GetPath(AStarNode startNode, AStarNode lastNode) {
             List<AStarNode> path = new List<AStarNode>();
             if (lastNode == startNode) {
                 path.Add(lastNode);
@@ -66,9 +66,8 @@ namespace Game.AI
             }
         }
 
-        public static void UpdateNode(AStarNode node, AStarNode updatingNeighbor, AStarNode target) {
+        public void UpdateNode(AStarNode node, AStarNode updatingNeighbor, AStarNode target) {
             node.hCost = CalculateHCost(node, target);
-
             float gCost = CalculateGCost(node, updatingNeighbor);
             if (NewCostIsLower(gCost, node.gCost) || OldCostIsUndefined(node.gCost)) {
                 node.LastNodeInPath = updatingNeighbor;
@@ -100,8 +99,7 @@ namespace Game.AI
         public Path FindOptimizedPath(Vector3 start, Vector3 target)
             => FindOptimizedPath(grid.GetNodeFromPosition(start), grid.GetNodeFromPosition(target));
 
-        public Path FindOptimizedPath(AStarNode start, AStarNode target) 
-            => FindOptimizedPath(FindPath(start, target));
+        public Path FindOptimizedPath(AStarNode start, AStarNode target)  => FindOptimizedPath(FindPath(start, target));
 
         public Path FindOptimizedPath(Path unoptimizedPath) {
             List<AStarNode> optimizedPath = new List<AStarNode>();

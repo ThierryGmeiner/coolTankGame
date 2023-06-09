@@ -8,9 +8,21 @@ namespace Game.AI
     {
 
         private void Update() {
-            Debug.Log(CanSeePlayer());
+
         }
 
+        private void HandleMovement() {
 
+            if (Vector3.Distance(transform.position, enemyPlayer.transform.position) < 4) {
+                tank.Movement.Path = null;
+                return;
+            }
+
+            if (CanSeePlayer()) {
+                if (tank.Movement.Path == null || tank.Movement.Path.Nodes.Length == 0) {
+                    tank.Movement.SetPath(transform.position, enemyPlayer.transform.position);
+                }
+            }
+        }
     }
 }
