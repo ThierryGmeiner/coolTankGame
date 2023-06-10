@@ -9,20 +9,28 @@ namespace Game.AI
         [Header("Object")]
         [SerializeField] private Tank tank;
 
+        private Vector3 rotationTarget = Vector3.zero;
+
         protected override void Awake() {
             base.Awake();
             tank ??= GetComponent<Tank>();
         }
 
-        private void Start() {
+        protected override void Start() {
+            base.Start();
             RandomTimer timer = gameObject.AddComponent<RandomTimer>();
-            timer.OnTimerEnds += RotateHeadRandom;
-            timer.SetupTimer(2, 5, Timer.Modes.restartWhenTimeIsUp);
+            timer.OnTimerEnds += SetRandomRotationTarget;
+            timer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
             timer.StartTimer();
         }
 
         private void Update() {
-            
+            if (CanSeeTarget()) {
+
+            }
+            else {
+                tank.Movement.RotateHead(rotationTarget);
+            }
         }
 
         private void HandleMovement() {
@@ -39,8 +47,8 @@ namespace Game.AI
             }
         }
 
-        private void RotateHeadRandom() {
-            Debug.Log("rotate");
+        private void SetRandomRotationTarget() {
+            rotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
         }
 
         public override Vector3 ViewDirection(float angleInDegrees, bool angleIsGlobal) {

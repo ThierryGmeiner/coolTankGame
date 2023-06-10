@@ -78,7 +78,7 @@ namespace Game.Entity.Tank
             // rotate object
             Vector3 direction = (target - tank.transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
+            obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
 
             // to ensure only the y angle rotates
             obj.transform.rotation = new Quaternion(0, obj.transform.rotation.y, 0, obj.transform.rotation.w);

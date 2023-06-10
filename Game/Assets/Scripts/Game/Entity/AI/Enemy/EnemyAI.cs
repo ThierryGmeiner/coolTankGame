@@ -18,7 +18,7 @@ namespace Game.AI
             obstacleLayer = LayerMask.GetMask("Obstacle");
         }
 
-        protected void Start() {
+        protected virtual void Start() {
             target = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
         }
 
