@@ -13,6 +13,7 @@ namespace Game.InputSystem
         private PlayerControler controler;
         private Plane plane = new Plane(Vector3.up, 0);
         private Tank tank;
+        private TankMovement movement;
         private CameraMovement cam;
 
         private void Awake() {
@@ -24,6 +25,7 @@ namespace Game.InputSystem
 
         private void Start() {
             tank = GetComponent<Tank>();
+            movement = tank.Movement;
             cam = Camera.main.GetComponent<CameraMovement>();
             
             SetupControlsMovement();
@@ -32,13 +34,13 @@ namespace Game.InputSystem
         }
 
         private void Update() {
-            tank.Movement.HeadRotationTarget = GetMousePosition();
+            movement.HeadRotationTarget = GetMousePosition();
             cam.Move(controler.Camera.Move.ReadValue<Vector2>());
         }
 
         private void SetNewPath() {
             Vector3 startPos = transform.position, targetPos = GetMousePosition();
-            Thread pathFindingThread = new Thread(() => tank.Movement.SetPath(startPos, targetPos));
+            Thread pathFindingThread = new Thread(() => movement.SetPath(startPos, targetPos));
             pathFindingThread.Start();
         }
 
@@ -50,7 +52,7 @@ namespace Game.InputSystem
         }
 
         private void SetupControlsMovement() {
-            controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => tank.Movement.Jump();
+            controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => movement.Jump();
         }
 
         private void SetupControlsAttack() {
@@ -72,12 +74,12 @@ namespace Game.InputSystem
         private bool ClickOnTank() => Physics.CheckSphere(GetMousePosition(), 0.3f, LayerMask.GetMask("Player"));
 
         private void OnDrawGizmos() {
-            if (tank == null || tank.Movement == null) return;
-            if (tank.Movement.Path == null || tank.Movement.Path.Nodes.Length == 0) return;
+            if (tank == null || movement == null) return;
+            if (movement.Path == null || movement.Path.Nodes.Length == 0) return;
 
-            foreach (AStarNode node in tank.Movement.Path.Nodes) {
+            foreach (AStarNode node in movement.Path.Nodes) {
                 Gizmos.color = Color.cyan;
-                if (Magic.Array.Contains(tank.Movement.Path.Nodes, node)) Gizmos.color = Color.yellow;
+                if (Magic.Array.Contains(movement.Path.Nodes, node)) Gizmos.color = Color.yellow;
                 Gizmos.DrawCube(new Vector3(node.Position.x, 0.25f, node.Position.z), Vector3.one * (0.5f));
             }
         }

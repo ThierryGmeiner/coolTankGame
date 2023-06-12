@@ -36,14 +36,15 @@ namespace Game.AI
         }
 
         private void StateDefault() {
-            if (movement.aStar.StartNode == null) movement.SetPath(transform.position, transform.position);
+            AStarNode currentPosNode = movement.grid.GetNodeFromPosition(transform.position);
 
-            bool tankTargetsStartPos = movement.grid.GetNodeFromPosition(transform.position) == movement.grid.GetNodeFromPosition(startPos);
-            if (!tankTargetsStartPos) {
-
-
+            if (movement.aStar.TargetNode != startPosNode && currentPosNode != startPosNode) {
+                movement.SetPath(transform.position, startPos);
             }
+        }
 
+        private void StateFollowPath() {
+            
         }
 
         private void StateAttack() {

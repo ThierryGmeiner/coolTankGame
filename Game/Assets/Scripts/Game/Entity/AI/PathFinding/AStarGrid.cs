@@ -27,7 +27,8 @@ namespace Game.AI
             }
         }
 
-        private void Start() {
+        private void Awake() {
+            gameObject.name = "A*";
             if (transform.position.x != 0 || transform.position.z != 0) {
                 Debug.LogError($"x and z possition of {nameof(AStarGrid)} has to bee zero");
             }

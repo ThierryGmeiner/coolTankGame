@@ -47,7 +47,11 @@ namespace Game.Entity.Tank
         public void Move(Vector3 target) {
             float moveSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
             tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, moveSpeed);
-            if (ReachTarget()) Path = null;
+            if (ReachTarget()) {
+                aStar.StartNode = new AStarNode(false, Vector3.zero);
+                aStar.TargetNode = aStar.StartNode;
+                Path = null;
+            }
             else if (ReachInterimTarget()) pathIndex++;
         }
 

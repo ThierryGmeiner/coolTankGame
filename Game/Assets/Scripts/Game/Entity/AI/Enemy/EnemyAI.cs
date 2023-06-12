@@ -14,6 +14,7 @@ namespace Game.AI
         protected LayerMask obstacleLayer;
         protected Action StateMachine;
         protected Vector3 startPos;
+        protected AStarNode startPosNode;
 
         protected virtual void Awake() {
             startPos = transform.position;
@@ -21,6 +22,7 @@ namespace Game.AI
         }
 
         protected virtual void Start() {
+            startPosNode = GameObject.Find("A*")?.GetComponent<AStarGrid>()?.GetNodeFromPosition(startPos);
             target = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
         }
 
