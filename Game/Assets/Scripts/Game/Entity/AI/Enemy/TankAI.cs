@@ -4,20 +4,21 @@ using Magic;
 
 namespace Game.AI
 {
+    [RequireComponent(typeof(Tank))]
     public class TankAI : EnemyAI
     {
         [Header("Object")]
         [SerializeField] private Tank tank;
 
         private Vector3 rotationTarget = Vector3.zero;
+        private TankMovement movement;
 
-        protected override void Awake() {
-            base.Awake();
-            tank ??= GetComponent<Tank>();
-        }
 
         protected override void Start() {
             base.Start();
+            tank ??= GetComponent<Tank>();
+            movement = tank.Movement;
+
             RandomTimer timer = gameObject.AddComponent<RandomTimer>();
             timer.OnTimerEnds += SetRandomRotationTarget;
             timer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
@@ -25,24 +26,46 @@ namespace Game.AI
         }
 
         private void Update() {
-            if (CanSeeTarget()) {
+            movement.HeadRotationTarget = rotationTarget;
+            StateMachine = GetState();
+            StateMachine();
+        }
+
+        private System.Action GetState() {
+            return StateDefault;
+        }
+
+        private void StateDefault() {
+            if (movement.aStar.StartNode == null) movement.SetPath(transform.position, transform.position);
+
+            bool tankTargetsStartPos = movement.grid.GetNodeFromPosition(transform.position) == movement.grid.GetNodeFromPosition(startPos);
+            if (!tankTargetsStartPos) {
+
 
             }
+
+        }
+
+        private void StateAttack() {
+
+            if (CanSeeTarget()) {
+                rotationTarget = target.transform.position;
+            }
             else {
-                tank.Movement.RotateHead(rotationTarget);
+
             }
         }
 
         private void HandleMovement() {
 
             if (Vector3.Distance(transform.position, target.transform.position) < 4) {
-                tank.Movement.Path = null;
+                movement.Path = null;
                 return;
             }
 
             if (CanSeeTarget()) {
-                if (tank.Movement.Path == null || tank.Movement.Path.Nodes.Length == 0) {
-                    tank.Movement.SetPath(transform.position, target.transform.position);
+                if (movement.Path == null || movement.Path.Nodes.Length == 0) {
+                    movement.SetPath(transform.position, target.transform.position);
                 }
             }
         }

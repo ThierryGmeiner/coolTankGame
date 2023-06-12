@@ -17,7 +17,8 @@ namespace Game.Entity.Tank
         public readonly AStarGrid grid;
 
         // movement
-        private float speed;
+        private Vector3 headRotationTarget;
+        private readonly float speed;
         private readonly float jumpForce;
         private const float AIR_MULTIPLIER = 0.65f;
         private const float BODY_ROTATION_SPEED = 6;
@@ -34,6 +35,8 @@ namespace Game.Entity.Tank
             aStar = new AStar(grid);
         }
 
+        public Vector3 HeadRotationTarget { set => headRotationTarget = value; }
+
         public float Speed { get => speed; }
 
         public Path Path {
@@ -48,14 +51,14 @@ namespace Game.Entity.Tank
             else if (ReachInterimTarget()) pathIndex++;
         }
 
-        public void Move() {
-            if (Path == null || Path.Nodes.Length == 0) return;
+        public void HandleMovement() {
+            RotateHead();
 
+            if (Path == null || Path.Nodes.Length == 0) return;
             // FindOptimizedPath can't bee caled in a second thread, so check manuel for it an cal it when necessary
             if (!path.IsOptimized) {
                 path = aStar.FindOptimizedPath(Path);
             }
-            
             RotateBody(path.Nodes[pathIndex].Position);
             Move(path.Nodes[pathIndex].Position);
         }
@@ -66,8 +69,8 @@ namespace Game.Entity.Tank
             }
         }
 
-        public void RotateHead(Vector3 target) {
-            Rotate(tank.Head, target, HEAD_ROTATION_SPEED);
+        public void RotateHead() {
+            Rotate(tank.Head, headRotationTarget, HEAD_ROTATION_SPEED);
         }
 
         public void RotateBody(Vector3 target) {
@@ -78,7 +81,7 @@ namespace Game.Entity.Tank
             // rotate object
             Vector3 direction = (target - tank.transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, lookRotation, Time.deltaTime * HEAD_ROTATION_SPEED);
+            obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
 
             // to ensure only the y angle rotates
             obj.transform.rotation = new Quaternion(0, obj.transform.rotation.y, 0, obj.transform.rotation.w);

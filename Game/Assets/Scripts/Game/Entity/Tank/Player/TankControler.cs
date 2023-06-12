@@ -32,7 +32,7 @@ namespace Game.InputSystem
         }
 
         private void Update() {
-            tank.Movement.RotateHead(GetMousePosition());
+            tank.Movement.HeadRotationTarget = GetMousePosition();
             cam.Move(controler.Camera.Move.ReadValue<Vector2>());
         }
 

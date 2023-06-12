@@ -30,7 +30,7 @@ namespace Game.Entity.Tank
 
         private void Update() { 
             IsGrounded = Movement.GroundCheck();
-            Movement.Move();
+            Movement.HandleMovement();
         }
 
         public string Name { get => data.Name; }

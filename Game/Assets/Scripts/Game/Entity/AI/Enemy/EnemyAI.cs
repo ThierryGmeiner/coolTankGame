@@ -1,6 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEditor;
-using Game.Entity.Tank;
 
 namespace Game.AI
 {
@@ -13,8 +12,11 @@ namespace Game.AI
 
         protected GameObject target;
         protected LayerMask obstacleLayer;
+        protected Action StateMachine;
+        protected Vector3 startPos;
 
         protected virtual void Awake() {
+            startPos = transform.position;
             obstacleLayer = LayerMask.GetMask("Obstacle");
         }
 

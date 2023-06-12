@@ -135,7 +135,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             tank.Movement.Path = null;
-            tank.Movement.Move();
+            tank.Movement.HandleMovement();
 
             Assert.AreEqual(oldPos.x, tank.transform.position.x, 0.02f);
             Assert.AreEqual(oldPos.z, tank.transform.position.z, 0.02f);
@@ -150,7 +150,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             tank.Movement.Path = new Path(new AStarNode[0], Path.Optimized.True);
-            tank.Movement.Move();
+            tank.Movement.HandleMovement();
 
             Assert.AreEqual(oldPos.x, tank.transform.position.x, 0.05f);
 
@@ -165,7 +165,7 @@ namespace Tests.PlayMode.Entity
 
             // set unoptimized path
             Path unoptimizedPath = tank.Movement.SetPath(grid.Grid[0, 0].Position, grid.Grid[5, 5].Position);
-            tank.Movement.Move();
+            tank.Movement.HandleMovement();
 
             Assert.AreNotEqual(unoptimizedPath.Nodes.Length, tank.Movement.Path.Nodes.Length);
 
@@ -180,7 +180,7 @@ namespace Tests.PlayMode.Entity
 
             Path unoptimizedPath = tank.Movement.SetPath(grid.Grid[0, 0].Position, grid.Grid[5, 5].Position);
             Path optimizedPath = tank.Movement.aStar.FindOptimizedPath(unoptimizedPath);
-            tank.Movement.Move();
+            tank.Movement.HandleMovement();
 
             Assert.AreEqual(optimizedPath.Nodes.Length, tank.Movement.Path.Nodes.Length);
 
