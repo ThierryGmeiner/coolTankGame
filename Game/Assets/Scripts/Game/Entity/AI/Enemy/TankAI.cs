@@ -7,12 +7,10 @@ namespace Game.AI
     [RequireComponent(typeof(Tank))]
     public class TankAI : EnemyAI
     {
-        [Header("Object")]
-        [SerializeField] private Tank tank;
-
-        private Vector3 rotationTarget = Vector3.zero;
         private TankMovement movement;
 
+        [Header("Object")]
+        [SerializeField] private Tank tank;
 
         protected override void Start() {
             base.Start();
@@ -23,38 +21,65 @@ namespace Game.AI
             timer.OnTimerEnds += SetRandomRotationTarget;
             timer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
             timer.StartTimer();
+
+            if (wayPoints.Length != 0) {
+                wayPointPaths = CnvertWayPointsToPaths(movement.aStar, wayPoints);
+            }
         }
 
         private void Update() {
-            movement.HeadRotationTarget = rotationTarget;
             StateMachine = GetState();
             StateMachine();
         }
 
         private System.Action GetState() {
-            return StateDefault;
+            return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+
+            if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
+                // can go to attack
+            }
+            else if (StateMachine == StateSearch) {
+                // can go to attack or default/followPath
+                return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+            }
+            else if (StateMachine == StateAttack) {
+                // can go to search
+            }
+            return StateMachine;
         }
 
-        private void StateDefault() {
+        public void StateStayAtStart() {
             AStarNode currentPosNode = movement.grid.GetNodeFromPosition(transform.position);
-
             if (movement.aStar.TargetNode != startPosNode && currentPosNode != startPosNode) {
                 movement.SetPath(transform.position, startPos);
             }
         }
 
-        private void StateFollowPath() {
-            
+        public void StateFollowPath() {
+
+            movement.Path = wayPointPaths[0];
+
+
+
+            if (Array.Contains(wayPointPaths, movement.Path)) {
+                Debug.Log("contains");
+            }
+
+
+
+            //Debug.Log(wayPointPaths.Length);
+            //foreach (Path path in wayPointPaths) {
+            //    Debug.Log(path.Start.Position + " => " + path.Target.Position);
+            //}
         }
 
-        private void StateAttack() {
+        public void StateSearch() {
 
-            if (CanSeeTarget()) {
-                rotationTarget = target.transform.position;
-            }
-            else {
+        }
 
-            }
+        public void StateAttack() {
+            movement.HeadRotationTarget = target.transform.position;
+
         }
 
         private void HandleMovement() {
@@ -72,7 +97,9 @@ namespace Game.AI
         }
 
         private void SetRandomRotationTarget() {
-            rotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
+            if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
+                movement.HeadRotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
+            }
         }
 
         public override Vector3 ViewDirection(float angleInDegrees, bool angleIsGlobal) {

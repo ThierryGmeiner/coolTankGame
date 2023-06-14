@@ -18,8 +18,21 @@ namespace Game.AI
             colliderRadius = grid.NodeRadius;
         }
 
-        public AStarNode StartNode { get => startNode; set { if (value.IsWalkable) startNode = value; } }
-        public AStarNode TargetNode { get => targetNode; set { if (value.IsWalkable) targetNode = value; } }
+        public AStarNode StartNode { 
+            get => startNode; 
+            set { 
+                if (value.IsWalkable) startNode = value;
+                else Debug.LogError($"new {nameof(startNode)} isn't walkable");
+            }
+        }
+
+        public AStarNode TargetNode { 
+            get => targetNode; 
+            set {
+                if (value.IsWalkable) targetNode = value;
+                else Debug.LogError($"new {nameof(targetNode)} isn't walkable");
+            } 
+        }
 
         // ####################################################
         // find path:
@@ -34,13 +47,13 @@ namespace Game.AI
             startNode = start; targetNode = target;
             AStarNode currentNode = startNode;
 
-            if (StartOrTargetNodeIsNotValide()) return new Path(new AStarNode[0], Path.Optimized.False);
+            if (StartOrTargetNodeIsNotValide()) return new Path(new AStarNode[0], false);
             // search every loop the cheapest node and update them
             for (int i = 0; currentNode != targetNode && i < 10000; i++) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
             }
-            Path path = new Path(GetPath(startNode, targetNode).ToArray(), Path.Optimized.False);
+            Path path = new Path(GetPath(startNode, targetNode).ToArray(), false);
             grid.Clear();
             return path;
         }
@@ -105,14 +118,14 @@ namespace Game.AI
             List<AStarNode> optimizedPath = new List<AStarNode>();
             AStarNode currentSectionStart = startNode;
 
-            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, Path.Optimized.True);
+            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, true);
 
             // search in every loop one section
             while (currentSectionStart != targetNode) {
                 currentSectionStart = FindNewSection(unoptimizedPath.Nodes, currentSectionStart);
                 optimizedPath.Add(currentSectionStart);
             }
-            return new Path(optimizedPath.ToArray(), Path.Optimized.True);
+            return new Path(optimizedPath.ToArray(), true);
         }
 
         private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {

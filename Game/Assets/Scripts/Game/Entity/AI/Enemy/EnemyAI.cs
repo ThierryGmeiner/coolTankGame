@@ -10,9 +10,13 @@ namespace Game.AI
         [SerializeField] protected float viewRadiusExtended = 12;
         [SerializeField] [Range(0, 360)] protected float viewAngle = 80;
 
+        [Header("Movement")]
+        [SerializeField] protected Transform[] wayPoints = new Transform[0];
+        protected Path[] wayPointPaths = new Path[0];
+
+        public Action StateMachine;
         protected GameObject target;
         protected LayerMask obstacleLayer;
-        protected Action StateMachine;
         protected Vector3 startPos;
         protected AStarNode startPosNode;
 
@@ -58,5 +62,15 @@ namespace Game.AI
             return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
 
+        protected static Path[] CnvertWayPointsToPaths(AStar aStar, Transform[] wayPoints) {
+            Path[] paths = new Path[wayPoints.Length];
+
+            for (int i = 0; i < wayPoints.Length; i++) {
+                Vector3 start = wayPoints[i].position;
+                Vector3 target = i + 1 < wayPoints.Length ? wayPoints[i + 1].position : wayPoints[0].position;
+                paths[i] = aStar.FindOptimizedPath(start, target);
+            }
+            return paths;
+        }
     }
 }

@@ -5,11 +5,12 @@ namespace Game.AI
         public AStarNode[] Nodes { get; set; }
         public bool IsOptimized { get; set; }
 
-        public Path(AStarNode[] path, Optimized optimization) {
-            Nodes = path;
-            IsOptimized = optimization == Optimized.True;
-        }
+        public AStarNode Start { get => Nodes[0]; }
+        public AStarNode Target { get => Nodes[Nodes.Length - 1]; }
 
-        public enum Optimized { True, False }
+        public Path(AStarNode[] path, bool optimized) {
+            Nodes = path;
+            IsOptimized = optimized;
+        }
     }
 }

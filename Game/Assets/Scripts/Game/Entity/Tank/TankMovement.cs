@@ -11,7 +11,7 @@ namespace Game.Entity.Tank
         private readonly LayerMask groundLayer;
 
         // pathFinding
-        private Path path = new Path(new AStarNode[0], Path.Optimized.True);
+        private Path path = new Path(new AStarNode[0], true);
         private int pathIndex = 0;
         public readonly AStar aStar;
         public readonly AStarGrid grid;
@@ -48,7 +48,7 @@ namespace Game.Entity.Tank
             float moveSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
             tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, moveSpeed);
             if (ReachTarget()) {
-                aStar.StartNode = new AStarNode(false, Vector3.zero);
+                aStar.StartNode = new AStarNode(isWalkable: true, Vector3.zero);
                 aStar.TargetNode = aStar.StartNode;
                 Path = null;
             }

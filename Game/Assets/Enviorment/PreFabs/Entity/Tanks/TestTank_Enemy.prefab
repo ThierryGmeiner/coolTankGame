@@ -82,6 +82,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a1e8439f08ef584c87cf7e44d087e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewAngle: 75
   viewRadius: 7
   viewRadiusExtended: 12
+  viewAngle: 80
+  wayPoints: []
+  tank: {fileID: 0}
