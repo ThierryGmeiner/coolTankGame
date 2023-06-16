@@ -16,8 +16,6 @@ namespace Game.AI
         protected Path wayPointPaths = new Path(new AStarNode[0], true);
         protected int currentPathIndex = 0;
 
-        [SerializeField] private  GameObject obj;
-
         public Action StateMachine;
         protected GameObject target;
         protected LayerMask obstacleLayer;

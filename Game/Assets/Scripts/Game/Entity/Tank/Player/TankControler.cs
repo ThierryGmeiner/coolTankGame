@@ -72,16 +72,5 @@ namespace Game.InputSystem
         }
 
         private bool ClickOnTank() => Physics.CheckSphere(GetMousePosition(), 0.3f, LayerMask.GetMask("Player"));
-
-        private void OnDrawGizmos() {
-            if (tank == null || movement == null) return;
-            if (movement.Path == null || movement.Path.Nodes.Length == 0) return;
-
-            foreach (AStarNode node in movement.Path.Nodes) {
-                Gizmos.color = Color.cyan;
-                if (Magic.Array.Contains(movement.Path.Nodes, node)) Gizmos.color = Color.yellow;
-                Gizmos.DrawCube(new Vector3(node.Position.x, 0.25f, node.Position.z), Vector3.one * (0.5f));
-            }
-        }
     }
 }

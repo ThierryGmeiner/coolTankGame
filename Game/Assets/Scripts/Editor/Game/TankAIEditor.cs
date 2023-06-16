@@ -4,8 +4,7 @@ using UnityEngine;
 namespace Game.AI
 {
     [CustomEditor(typeof(TankAI))]
-    public class TankAIEditor
-        : Editor
+    public class TankAIEditor : Editor
     {
         TankAI ai;
 
