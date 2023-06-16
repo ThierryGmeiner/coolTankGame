@@ -19,7 +19,7 @@ namespace Game.AI
         }
 
         public AStarNode StartNode { 
-            get => startNode; 
+            get { return startNode; } 
             set { 
                 if (value.IsWalkable) startNode = value;
                 else Debug.LogError($"new {nameof(startNode)} isn't walkable");
@@ -27,12 +27,14 @@ namespace Game.AI
         }
 
         public AStarNode TargetNode { 
-            get => targetNode; 
+            get { return targetNode; } 
             set {
                 if (value.IsWalkable) targetNode = value;
                 else Debug.LogError($"new {nameof(targetNode)} isn't walkable");
             } 
         }
+
+        public AStarGrid Grid { get { return grid; } }
 
         // ####################################################
         // find path:
@@ -142,6 +144,20 @@ namespace Game.AI
             if (Magic.Conditions.DirectPathIsBlocked(path[index].Position, searchNode.Position, colliderRadius, grid.unwalkableMask)) 
                 return path[index - 1];
             return GetNextSection(path, searchNode, index + 1);
+        }
+
+        // ####################################################
+        // some public functions:
+        // ####################################################
+
+        public Path CnvertWayPointsToPaths(Transform[] wayPoints) {
+            Path finalPath = new Path(new AStarNode[0], optimized: true);
+            for (int i = 0; i < wayPoints.Length; i++) {
+                Vector3 start = wayPoints[i].position;
+                Vector3 target = i + 1 < wayPoints.Length ? wayPoints[i + 1].position : wayPoints[0].position;
+                finalPath = finalPath + FindOptimizedPath(start, target);
+            }
+            return finalPath;
         }
 
         // ####################################################

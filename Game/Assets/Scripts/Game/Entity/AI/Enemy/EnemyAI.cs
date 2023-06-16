@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.AI
@@ -12,7 +13,10 @@ namespace Game.AI
 
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
-        protected Path[] wayPointPaths = new Path[0];
+        protected Path wayPointPaths = new Path(new AStarNode[0], true);
+        protected int currentPathIndex = 0;
+
+        [SerializeField] private  GameObject obj;
 
         public Action StateMachine;
         protected GameObject target;
@@ -23,6 +27,7 @@ namespace Game.AI
         protected virtual void Awake() {
             startPos = transform.position;
             obstacleLayer = LayerMask.GetMask("Obstacle");
+            currentPathIndex = 0;
         }
 
         protected virtual void Start() {
@@ -60,17 +65,6 @@ namespace Game.AI
                 angleInDegrees += transform.eulerAngles.y;
             }
             return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
-        }
-
-        protected static Path[] CnvertWayPointsToPaths(AStar aStar, Transform[] wayPoints) {
-            Path[] paths = new Path[wayPoints.Length];
-
-            for (int i = 0; i < wayPoints.Length; i++) {
-                Vector3 start = wayPoints[i].position;
-                Vector3 target = i + 1 < wayPoints.Length ? wayPoints[i + 1].position : wayPoints[0].position;
-                paths[i] = aStar.FindOptimizedPath(start, target);
-            }
-            return paths;
         }
     }
 }

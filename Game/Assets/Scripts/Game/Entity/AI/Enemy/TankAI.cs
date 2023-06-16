@@ -8,6 +8,7 @@ namespace Game.AI
     public class TankAI : EnemyAI
     {
         private TankMovement movement;
+        RandomTimer headRotationTimer;
 
         [Header("Object")]
         [SerializeField] private Tank tank;
@@ -16,15 +17,11 @@ namespace Game.AI
             base.Start();
             tank ??= GetComponent<Tank>();
             movement = tank.Movement;
+            wayPointPaths = movement.aStar.CnvertWayPointsToPaths(wayPoints);
 
-            RandomTimer timer = gameObject.AddComponent<RandomTimer>();
-            timer.OnTimerEnds += SetRandomRotationTarget;
-            timer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
-            timer.StartTimer();
-
-            if (wayPoints.Length != 0) {
-                wayPointPaths = CnvertWayPointsToPaths(movement.aStar, wayPoints);
-            }
+            headRotationTimer = gameObject.AddComponent<RandomTimer>();
+            headRotationTimer.OnTimerEnds += SetRandomRotationTarget;
+            headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
         }
 
         private void Update() {
@@ -56,14 +53,19 @@ namespace Game.AI
         }
 
         public void StateFollowPath() {
-
-            movement.Path = wayPointPaths[0];
-
-
-
-            if (Array.Contains(wayPointPaths, movement.Path)) {
-                Debug.Log("contains");
+            if (movement.Path == null || movement.Path.Nodes.Length == 0) {
+                movement.Path = wayPointPaths;
             }
+
+            //if (Vector3.Distance(transform.position, movement.Path.Target.Position) < 0.1f) {
+            //    Debug.Log("hit Distance");
+            //    currentPathIndex = currentPathIndex + 1 >= wayPointPaths.Length ? 0 : currentPathIndex + 1;
+            //    movement.Path = wayPointPaths[currentPathIndex];
+            //}
+
+            //if (Array.Contains(wayPointPaths, movement.Path)) {
+            //    Debug.Log("contains");
+            //}
 
 
 
@@ -80,20 +82,6 @@ namespace Game.AI
         public void StateAttack() {
             movement.HeadRotationTarget = target.transform.position;
 
-        }
-
-        private void HandleMovement() {
-
-            if (Vector3.Distance(transform.position, target.transform.position) < 4) {
-                movement.Path = null;
-                return;
-            }
-
-            if (CanSeeTarget()) {
-                if (movement.Path == null || movement.Path.Nodes.Length == 0) {
-                    movement.SetPath(transform.position, target.transform.position);
-                }
-            }
         }
 
         private void SetRandomRotationTarget() {

@@ -12,5 +12,12 @@ namespace Game.AI
             Nodes = path;
             IsOptimized = optimized;
         }
+
+        public static Path operator+ (Path a, Path b) {
+            AStarNode[] nodes = new AStarNode[a.Nodes.Length + b.Nodes.Length];
+            a.Nodes.CopyTo(nodes, 0);
+            b.Nodes.CopyTo(nodes, a.Nodes.Length);
+            return new Path(nodes, a.IsOptimized && b.IsOptimized);
+        }
     }
 }

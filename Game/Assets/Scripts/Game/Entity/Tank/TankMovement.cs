@@ -47,12 +47,15 @@ namespace Game.Entity.Tank
         public void Move(Vector3 target) {
             float moveSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
             tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, moveSpeed);
+
             if (ReachTarget()) {
-                aStar.StartNode = new AStarNode(isWalkable: true, Vector3.zero);
-                aStar.TargetNode = aStar.StartNode;
+                aStar.StartNode = new AStarNode(true, Vector3.zero);
+                aStar.TargetNode = new AStarNode(true, Vector3.zero);
                 Path = null;
             }
-            else if (ReachInterimTarget()) pathIndex++;
+            else if (ReachInterimTarget()) {
+                pathIndex++;
+            }
         }
 
         public void HandleMovement() {
