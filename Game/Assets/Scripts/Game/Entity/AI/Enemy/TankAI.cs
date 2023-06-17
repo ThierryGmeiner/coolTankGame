@@ -8,7 +8,9 @@ namespace Game.AI
     public class TankAI : EnemyAI
     {
         private TankMovement movement;
-        RandomTimer headRotationTimer;
+        private PlannedTimer searchTimer;
+        private RandomTimer headRotationTimer;
+
 
         [Header("Object")]
         [SerializeField] private Tank tank;
@@ -22,6 +24,7 @@ namespace Game.AI
             headRotationTimer = gameObject.AddComponent<RandomTimer>();
             headRotationTimer.OnTimerEnds += SetRandomRotationTarget;
             headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
+            headRotationTimer.StartTimer();
         }
 
         private void Update() {
@@ -30,17 +33,29 @@ namespace Game.AI
         }
 
         private System.Action GetState() {
-            return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
-
-            if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
+            if (StateMachine == null) {
+                return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+            }
+            else if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
                 // can go to attack
+                if (CanSeeTarget(tank.Head.transform)) {
+                    return StateAttack;
+                }
             }
             else if (StateMachine == StateSearch) {
                 // can go to attack or default/followPath
-                return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+                if (CanSeeTarget(tank.Head.transform)) {
+                    return StateAttack;
+                }
+                if (searchTimer.timeInSeconds <= 0) {
+                    return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+                }
             }
             else if (StateMachine == StateAttack) {
                 // can go to search
+                if (!CanSeeTarget(tank.Head.transform)) {
+                    return StateSearch;
+                }
             }
             return StateMachine;
         }
@@ -56,27 +71,14 @@ namespace Game.AI
             if (movement.Path == null || movement.Path.Nodes.Length == 0) {
                 movement.Path = wayPointPaths;
             }
-
-            //if (Vector3.Distance(transform.position, movement.Path.Target.Position) < 0.1f) {
-            //    Debug.Log("hit Distance");
-            //    currentPathIndex = currentPathIndex + 1 >= wayPointPaths.Length ? 0 : currentPathIndex + 1;
-            //    movement.Path = wayPointPaths[currentPathIndex];
-            //}
-
-            //if (Array.Contains(wayPointPaths, movement.Path)) {
-            //    Debug.Log("contains");
-            //}
-
-
-
-            //Debug.Log(wayPointPaths.Length);
-            //foreach (Path path in wayPointPaths) {
-            //    Debug.Log(path.Start.Position + " => " + path.Target.Position);
-            //}
         }
 
         public void StateSearch() {
-
+            if (searchTimer == null) {
+                searchTimer = gameObject.AddComponent<PlannedTimer>();
+                searchTimer.SetupTimer(Random.Range(6, 15), Timer.Modes.destroyWhenTimeIsUp);
+                searchTimer.StartTimer();
+            }
         }
 
         public void StateAttack() {
@@ -96,19 +98,5 @@ namespace Game.AI
             }
             return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
-
-        protected override bool TargetIsInView() {
-            Vector3 directionToTarget = (target.transform.position - tank.Head.transform.position).normalized;
-            bool targetInAngle = Vector3.Angle(tank.Head.transform.forward, directionToTarget) < viewAngle / 2;
-            bool targetOutsideExtendedSight = Vector3.Distance(transform.position, target.transform.position) < viewRadiusExtended;
-
-            // target is in extendet FOV
-            if (targetOutsideExtendedSight && targetInAngle) return true;
-
-            // target is in inner FOV
-            bool targetInSight = Vector3.Distance(transform.position, target.transform.position) < viewRadius;
-            return targetInSight;
-        }
-
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.AI
@@ -37,17 +36,16 @@ namespace Game.AI
         public float ViewRadius { get => viewRadius; }
         public float ViewRadiusExtended { get => viewRadiusExtended; }
 
-        protected virtual bool CanSeeTarget() {
-            if (!TargetIsInView()) {
+        protected virtual bool CanSeeTarget(Transform head) {
+            if (!TargetIsInView(head)) {
                 return false;
             }
             return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
-
         }
 
-        protected virtual bool TargetIsInView() {
-            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-            bool targetInAngle = Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2;
+        protected virtual bool TargetIsInView(Transform head) {
+            Vector3 directionToTarget = (target.transform.position - head.position).normalized;
+            bool targetInAngle = Vector3.Angle(head.forward, directionToTarget) < viewAngle / 2;
             bool targetOutsideExtendedSight = Vector3.Distance(transform.position, target.transform.position) < viewRadiusExtended;
 
             // target is in extendet FOV

@@ -36,6 +36,7 @@ namespace Game.Entity.Tank
         public string Name { get => data.Name; }
         public Rigidbody RigidBody { get; private set; } = null;
         public Collider Collider { get; private set; } = null;
+        
         public void GetDestroyed() {
             OnDestruction?.Invoke();
             Destroy(gameObject);
