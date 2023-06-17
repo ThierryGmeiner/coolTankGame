@@ -11,7 +11,6 @@ namespace Game.AI
         private PlannedTimer searchTimer;
         private RandomTimer headRotationTimer;
 
-
         [Header("Object")]
         [SerializeField] private Tank tank;
 
@@ -84,6 +83,27 @@ namespace Game.AI
         public void StateAttack() {
             movement.HeadRotationTarget = target.transform.position;
 
+
+            Vector3 targetPos;
+
+            if (Vector3.Distance(transform.position, target.transform.position) > preferTargetDistance) {
+                Debug.Log("to faraway");
+                targetPos = MathM.ClosestPointOfCircle(transform.position, target.transform.position, preferTargetDistance);
+            }
+            else {
+                // watch if nothing is in between the player and enemy
+                // else it is possible the tank gos behind a wall
+                Debug.Log("to close");
+                targetPos = MathM.ClosestPointOfCircle(target.transform.position, transform.position, preferTargetDistance);
+            }
+
+            if (movement.grid.GetNodeFromPosition(targetPos) != movement.aStar.TargetNode) {
+                Debug.Log("set path");
+                Vector3 currentPos= transform.position;
+                System.Threading.Thread t = new System.Threading.Thread( () 
+                    => movement.SetPath(currentPos, targetPos));
+                t.Start();
+            }
         }
 
         private void SetRandomRotationTarget() {

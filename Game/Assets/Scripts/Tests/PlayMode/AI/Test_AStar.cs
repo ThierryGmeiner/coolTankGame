@@ -113,90 +113,99 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsOverNode_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[1, 2], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[1, 2], grid[1, 1]);
 
             Assert.IsTrue(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsUnderNode_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[1, 0], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[1, 0], grid[1, 1]);
 
             Assert.IsTrue(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsLeftNode_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[0, 1], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[0, 1], grid[1, 1]);
 
             Assert.IsTrue(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsRightNode_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[2, 1], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[2, 1], grid[1, 1]);
 
             Assert.IsTrue(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsUpLeftNode_False() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[0, 2], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[0, 2], grid[1, 1]);
 
             Assert.IsFalse(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsUpRightNode_False() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[2, 2], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[2, 2], grid[1, 1]);
 
             Assert.IsFalse(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsDownLeftNode_False() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[0, 0], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[0, 0], grid[1, 1]);
 
             Assert.IsFalse(isStraight);
         }
 
         [UnityTest]
         public IEnumerator NodeIsStraightToNeighbor_IsDownRightNode_False() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             yield return null;
 
-            bool isStraight = AStar.NodeIsStraightToNeighbor(grid[2, 2], grid[1, 1]);
+            bool isStraight = aStar.NodeIsStraightToNeighbor(grid[2, 2], grid[1, 1]);
 
             Assert.IsFalse(isStraight);
         }
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_DontExistInGrid_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode node = new AStarNode(true, new Vector2(10, 10));
 
-            bool isOutside = AStar.NodeIsOutsideOfGrid(node, grid);
+            bool isOutside = aStar.NodeIsOutsideOfGrid(node, grid);
 
             Assert.IsTrue(isOutside);
 
@@ -205,11 +214,12 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_XtoLow_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(-5, 1));
 
-            bool isOutside = AStar.NodeIsOutsideOfGrid(node, grid);
+            bool isOutside = aStar.NodeIsOutsideOfGrid(node, grid);
 
             Assert.IsTrue(isOutside);
 
@@ -218,11 +228,12 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_YtoLow_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, -5));
 
-            bool isOutside = AStar.NodeIsOutsideOfGrid(node, grid);
+            bool isOutside = aStar.NodeIsOutsideOfGrid(node, grid);
 
             Assert.IsTrue(isOutside);
 
@@ -231,11 +242,12 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_XToHigh_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(+50, 1));
 
-            bool isOutside = AStar.NodeIsOutsideOfGrid(node, grid);
+            bool isOutside = aStar.NodeIsOutsideOfGrid(node, grid);
 
             Assert.IsTrue(isOutside);
 
@@ -244,11 +256,12 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_YToHigh_True() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, +50));
 
-            bool isOutside = AStar.NodeIsOutsideOfGrid(node, grid);
+            bool isOutside = aStar.NodeIsOutsideOfGrid(node, grid);
 
             Assert.IsTrue(isOutside);
 
@@ -257,11 +270,12 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator NodeIsOutsideOfGrid_IsInside_False() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, 1));
 
-            bool isOutside = AStar.NodeIsOutsideOfGrid(node, grid);
+            bool isOutside = aStar.NodeIsOutsideOfGrid(node, grid);
 
             Assert.IsFalse(isOutside);
 
@@ -271,47 +285,50 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateGCost_Horizontal_Add10() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             grid[1, 1].gCost = 10;
             yield return null;
 
-            float cost = AStar.CalculateGCost(grid[0, 1], grid[1, 1]);
+            float cost = aStar.CalculateGCost(grid[0, 1], grid[1, 1]);
 
             Assert.AreEqual(grid[1, 1].gCost + 10, cost);
         }
 
         [UnityTest]
         public IEnumerator CalculateGCost_Vertical_Add10() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             grid[1, 1].gCost = 10;
             yield return null;
 
-            float cost = AStar.CalculateGCost(grid[1, 0], grid[1, 1]);
+            float cost = aStar.CalculateGCost(grid[1, 0], grid[1, 1]);
 
             Assert.AreEqual(grid[1, 1].gCost + AStar.STRAIGHT_MOVE_COST, cost);
         }
 
         [UnityTest]
         public IEnumerator CalculateGCost_Diagonal_Add14() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarNode[,] grid = TestHelper.CreateAStarNodeArray(3, 3);
             grid[1, 1].gCost = 10;
             yield return null;
 
-            float cost = AStar.CalculateGCost(grid[0, 0], grid[1, 1]);
+            float cost = aStar.CalculateGCost(grid[0, 0], grid[1, 1]);
 
             Assert.AreEqual(grid[1, 1].gCost + AStar.DIAGOANAL_MOVE_COST, cost);
         }
 
         [UnityTest]
         public IEnumerator CalculateHCost_CostAlreadySet_ReturnOldCost() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
-            AStar aStar = new AStar(grid);
             AStarNode node = grid.Grid[0, 0];
             int oldHCost = 20;
             node.hCost = oldHCost;
 
-            float newHCost = AStar.CalculateHCost(node, aStar.TargetNode);
+            float newHCost = aStar.CalculateHCost(node, aStar.TargetNode);
 
             Assert.AreEqual(oldHCost, newHCost);
 
@@ -320,12 +337,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_StraightMoves() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[9, 0];
             AStarNode targetNode = grid.Grid[0, 0];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.STRAIGHT_MOVE_COST * 9; // 9 are the required amount of steps
             Assert.AreEqual(requiredHCost, hCost);
@@ -335,12 +353,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonaleMoves() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[9, 9];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 9; // 9 are the required amount of steps
             Assert.AreEqual(requiredHCost, hCost);
@@ -350,12 +369,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test1() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[2, 1];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 1 + AStar.STRAIGHT_MOVE_COST * 1;
             Assert.AreEqual(requiredHCost, hCost);
@@ -365,12 +385,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test2() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[0, 0];
             AStarNode targetNode = grid.Grid[2, 5];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 2 + AStar.STRAIGHT_MOVE_COST * 3;
             Assert.AreEqual(requiredHCost, hCost);
@@ -380,12 +401,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test3() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[6, 7];
             AStarNode targetNode = grid.Grid[1, 4];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 3 + AStar.STRAIGHT_MOVE_COST * 2;
             Assert.AreEqual(requiredHCost, hCost);
@@ -395,12 +417,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test4() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[6, 4];
             AStarNode targetNode = grid.Grid[1, 4];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 0 + AStar.STRAIGHT_MOVE_COST * 5;
             Assert.AreEqual(requiredHCost, hCost);
@@ -410,12 +433,13 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CalculateHCost_DiagonalAndStraight_Test5() {
+            AStar aStar = new AStar(TestHelper.CreateASTarGrid());
             AStarGrid grid = TestHelper.CreateASTarGrid();
             yield return null;
             AStarNode startNode = grid.Grid[6, 0];
             AStarNode targetNode = grid.Grid[1, 7];
 
-            float hCost = AStar.CalculateHCost(startNode, targetNode);
+            float hCost = aStar.CalculateHCost(startNode, targetNode);
 
             float requiredHCost = AStar.DIAGOANAL_MOVE_COST * 5 + AStar.STRAIGHT_MOVE_COST * 2;
             Assert.AreEqual(requiredHCost, hCost);

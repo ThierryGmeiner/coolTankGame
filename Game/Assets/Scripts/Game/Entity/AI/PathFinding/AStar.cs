@@ -90,12 +90,12 @@ namespace Game.AI
             }
         }
 
-        public static float CalculateGCost(AStarNode node, AStarNode updatingNode) {
+        public float CalculateGCost(AStarNode node, AStarNode updatingNode) {
             float gCostIncreas = NodeIsStraightToNeighbor(node, updatingNode) ? STRAIGHT_MOVE_COST : DIAGOANAL_MOVE_COST;
             return updatingNode.gCost + gCostIncreas;
         }
 
-        public static float CalculateHCost(AStarNode node, AStarNode targetNode) {
+        public float CalculateHCost(AStarNode node, AStarNode targetNode) {
             if (node.hCost > 0) return node.hCost;
 
             int distanceX = Math.Abs(Mathf.RoundToInt(targetNode.Position.x - node.Position.x));
@@ -164,7 +164,7 @@ namespace Game.AI
         // some conditions:
         // ####################################################
 
-        public static bool NodeIsStraightToNeighbor(AStarNode node, AStarNode updatingNode)
+        public bool NodeIsStraightToNeighbor(AStarNode node, AStarNode updatingNode)
             => node.Position.x == updatingNode.Position.x || node.Position.y == updatingNode.Position.y;
 
         private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
@@ -176,10 +176,10 @@ namespace Game.AI
         }
 
         private bool StartOrTargetNodeIsNotValide() => !targetNode.IsWalkable || !startNode.IsWalkable || startNode == targetNode;
-        private static bool NewCostIsLower(float newCost, float oldCost) => newCost < oldCost;
-        private static bool OldCostIsUndefined(float oldCost) => oldCost <= 0;
-        public static bool NodeIsOutsideOfGrid(AStarNode node, AStarGrid grid) => NodeIsOutsideOfGrid(node.ArrayIndex, grid);
-        public static bool NodeIsOutsideOfGrid(Vector2Int arrayIndex, AStarGrid grid)
+        private bool NewCostIsLower(float newCost, float oldCost) => newCost < oldCost;
+        private bool OldCostIsUndefined(float oldCost) => oldCost <= 0;
+        public bool NodeIsOutsideOfGrid(AStarNode node, AStarGrid grid) => NodeIsOutsideOfGrid(node.ArrayIndex, grid);
+        public bool NodeIsOutsideOfGrid(Vector2Int arrayIndex, AStarGrid grid)
             => arrayIndex.x < 0 || arrayIndex.y < 0 || arrayIndex.x >= grid.Grid.GetLength(0) || arrayIndex.y >= grid.Grid.GetLength(1);
     }
 }

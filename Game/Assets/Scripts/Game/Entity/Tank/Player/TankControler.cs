@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.Entity.Tank;
 using Game.Cam;
-using Game.AI;
 
 namespace Game.InputSystem
 {

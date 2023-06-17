@@ -12,6 +12,7 @@ namespace Game.AI
 
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
+        [SerializeField] protected float preferTargetDistance = 5;
         protected Path wayPointPaths = new Path(new AStarNode[0], true);
         protected int currentPathIndex = 0;
 
