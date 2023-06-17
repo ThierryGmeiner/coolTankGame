@@ -7,8 +7,8 @@ namespace Game.Cam
     public class CameraMovement : MonoBehaviour
     {
         [SerializeField] private GameObject player;
-        [SerializeField] private float normalSpeed = 10;
-        [SerializeField] private float sprintSpeed = 25;
+        [SerializeField] private float normalSpeed = 7;
+        [SerializeField] private float sprintSpeed = 18;
         private float speed;
 
         private bool camIsLocked;
@@ -19,6 +19,7 @@ namespace Game.Cam
         private Vector3 playerOffset;
         private Rigidbody rigidBody;
         private Quaternion defaultRotation;
+        private Camera cam;
 
         // move towards target when cam gets locked
         private Vector3 targetPos;
@@ -28,6 +29,7 @@ namespace Game.Cam
             speed = normalSpeed;
             defaultRotation = transform.rotation;
             rigidBody = GetComponent<Rigidbody>();
+            cam = GetComponent<Camera>();
         }
 
         private void Start() {
@@ -35,13 +37,16 @@ namespace Game.Cam
         }
 
         public void Move(Vector2 direction) {
-            rigidBody.velocity = new Vector3(direction.x * speed, 0, direction.y * speed);
+            float speedMultiplier = (speed * cam.orthographicSize) / 5;
+            rigidBody.velocity = new Vector3(direction.x * speedMultiplier, 0, direction.y * speedMultiplier);
 
             playerOffset = transform.position - player.transform.position;
             camIsMoving = direction != Vector2.zero;
         }
 
         private void Update() {
+            ControlZoom();
+
             bool camHasTarget = targetPos != noTarget;
             if (camHasTarget) {
                 MoveTowardsPlayer();
@@ -64,6 +69,11 @@ namespace Game.Cam
             if (Vector3.Distance(transform.position, targetPos) < 0.1f) {
                 targetPos = noTarget;
             }
+        }
+
+        private void ControlZoom() {
+            cam.orthographicSize += Input.mouseScrollDelta.y * -0.4f;
+            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 3, 12);
         }
 
         public void ChangeLockingState() {
