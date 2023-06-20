@@ -10,7 +10,7 @@ namespace Game.AI
         private TankMovement movement;
         private PlannedTimer searchTimer;
         private RandomTimer headRotationTimer;
-        protected Vector3 targetPos;
+        protected Vector3 movingTarget;
 
         [Header("Object")]
         [SerializeField] private Tank tank;
@@ -42,23 +42,31 @@ namespace Game.AI
             // in default: can go to attack
             else if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
                 if (canSeeTarget) {
-                    return StateAttack;
+                    return StateAttackOffensive;
                 }
             }
             // in searching: can go to attack or default/followPath
             else if (StateMachine == StateSearch) {
                 if (canSeeTarget) {
-                    return StateAttack;
+                    return StateAttackOffensive;
                 }
                 if (searchTimer.timeInSeconds <= 0) {
                     return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
                 }
             }
-            // in attack: can go to search
-            else if (StateMachine == StateAttack) {
+            // in attack defensive: can go to attack offensive
+            else if (StateMachine == StateAttackDefensive) {
+                // create a score from 1 to 100
+                // 50% of the scor coms from max HP the other 50% from amount of amo the tank can shoot until cooldown
+                // if the score is over 30 change to to offensive
+                return StateAttackOffensive;
+            }
+            // in attack offensive: can go to search or attack defensive
+            else if (StateMachine == StateAttackOffensive) {
                 if (!canSeeTarget) {
                     return StateSearch;
                 }
+                // if attackScore is under 30: return stateAttackDefensive
             }
             return StateMachine;
         }
@@ -84,7 +92,11 @@ namespace Game.AI
             }
         }
 
-        public void StateAttack() {
+        public void StateAttackDefensive() {
+
+        }
+
+        public void StateAttackOffensive() {
             movement.HeadRotationTarget = target.transform.position;
             StateAttack_HandleMovement();
             StateAttack_HandleAttack();
@@ -95,20 +107,24 @@ namespace Game.AI
         }
 
         public void StateAttack_HandleMovement() {
-            targetPos = GetAttackTargetPoss();
-            if (movement.grid.GetNodeFromPosition(targetPos) != movement.aStar.TargetNode) {
-                movement.SetPath(transform.position, targetPos);
+            movingTarget = GetAttackTargetPoss();
+            if (movement.grid.GetNodeFromPosition(movingTarget) != movement.aStar.TargetNode) {
+                movement.SetPath(transform.position, movingTarget);
             }
             if (obj != null) obj.transform.position = movement.aStar.TargetNode.Position;
         }
 
         private Vector3 GetAttackTargetPoss() {
-            Vector3 newTargetPos = MathM.ClosestPointOfCircle(transform.position, target.transform.position, preferTargetDistance);
-            return Physics.Linecast(transform.position, targetPos, obstacleLayer) ? targetPos : newTargetPos;
+            float distance = Vector3.Distance(movingTarget, target.transform.position);
+            if (distance > preferTargetDistanceMin && distance < preferTargetDistanceMax) return movingTarget;
+
+            float newTargetDistance = Random.Range(preferTargetDistanceMin, preferTargetDistanceMax);
+            Vector3 newTarget = MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
+            return Physics.Linecast(transform.position, movingTarget, obstacleLayer) ? movingTarget : newTarget;
         }
 
         private void SetRandomRotationTarget() {
-            if (StateMachine != StateAttack) {
+            if (StateMachine != StateAttackOffensive) {
                 movement.HeadRotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
             }
         }

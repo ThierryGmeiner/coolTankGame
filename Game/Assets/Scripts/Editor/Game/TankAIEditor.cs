@@ -20,7 +20,7 @@ namespace Game.AI
                 if (ai.StateMachine == ai.StateStayAtStart) EditorGUILayout.TextField($"State:  {nameof(ai.StateStayAtStart)}");
                 else if (ai.StateMachine == ai.StateFollowPath) EditorGUILayout.TextField($"State:  {nameof(ai.StateFollowPath)}");
                 else if (ai.StateMachine == ai.StateSearch) EditorGUILayout.TextField($"State:  {nameof(ai.StateSearch)}");
-                else if (ai.StateMachine == ai.StateAttack) EditorGUILayout.TextField($"State:  {nameof(ai.StateAttack)}");
+                else if (ai.StateMachine == ai.StateAttackOffensive) EditorGUILayout.TextField($"State:  {nameof(ai.StateAttackOffensive)}");
                 else EditorGUILayout.TextField($"State:  null");
             GUI.enabled = true;
         }

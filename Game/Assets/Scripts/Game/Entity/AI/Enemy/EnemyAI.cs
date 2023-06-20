@@ -6,13 +6,14 @@ namespace Game.AI
     public abstract class EnemyAI : MonoBehaviour
     {
         [Header("View")]
-        [SerializeField] protected float viewRadius = 7;
-        [SerializeField] protected float viewRadiusExtended = 12;
+        [SerializeField] protected float viewRadius = 6;
+        [SerializeField] protected float viewRadiusExtended = 18;
         [SerializeField] [Range(0, 360)] protected float viewAngle = 80;
 
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
-        [SerializeField] protected float preferTargetDistance = 10;
+        [SerializeField] protected float preferTargetDistanceMin = 5;
+        [SerializeField] protected float preferTargetDistanceMax = 10;
         protected Path wayPointPaths = new Path(new AStarNode[0], true);
         protected int currentPathIndex = 0;
 
