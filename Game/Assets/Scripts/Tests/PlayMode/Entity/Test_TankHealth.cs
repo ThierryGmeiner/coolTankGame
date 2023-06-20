@@ -58,7 +58,7 @@ namespace Tests.PlayMode.Entity
             int damage = 10, eventSubscribtion = 0;
             yield return null;
 
-            health.OnDamaged += (int maxHP, int hp, int damage) => eventSubscribtion = damage;
+            health.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventSubscribtion = damage;
             health.GetDamaged(damage);
 
             Assert.AreEqual(damage, eventSubscribtion);

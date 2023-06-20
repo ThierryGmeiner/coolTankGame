@@ -25,7 +25,7 @@ namespace Game.Entity.Tank
             Collider = GetComponent<BoxCollider>();
             Health = GetComponent<TankHealth>();
             Attack = GetComponent<TankAttack>();
-            Health.OnDamaged += (int maxHP, int HP, int damage) => { if (HP <= 0) GetDestroyed(); };
+            Health.OnDamaged += (int maxHP, int HP, int damage, Vector3 direction) => { if (HP <= 0) GetDestroyed(); };
         }
 
         private void Update() { 

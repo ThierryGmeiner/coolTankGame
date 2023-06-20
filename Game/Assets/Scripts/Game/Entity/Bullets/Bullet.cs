@@ -22,7 +22,7 @@ namespace Game.Entity
         [SerializeField] private new BoxCollider collider;
         [SerializeField] private Rigidbody rigidBody;
 
-        public event Action<int, int, int> OnDamaged;
+        public event Action<int, int, int, Vector3> OnDamaged;
         public event Action OnDestruction;
 
         protected virtual void Awake() {
@@ -38,7 +38,7 @@ namespace Game.Entity
         protected virtual void OnCollisionEnter(Collision collision) {
             if (collision.gameObject == ShootingEntity) return;
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
-                collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage);
+                collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage, transform.position);
             }
             GetDestroyed();
         }
@@ -47,12 +47,15 @@ namespace Game.Entity
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
-        public virtual void GetDamaged(int damage) {
-            OnDamaged?.Invoke(MaxHitPoints, HitPoints - damage, damage);
+        public virtual void GetDamaged(int damage) => GetDamaged(damage, transform.position);
+
+        public virtual void GetDamaged(int damage, Vector3 attackDirection) {
+            OnDamaged?.Invoke(MaxHitPoints, HitPoints - damage, damage, attackDirection);
             GetDestroyed();
         }
 
         public virtual void GetDestroyed() {
+            Debug.Log("destroy");
             OnDestruction?.Invoke();
             Destroy(gameObject);
         }

@@ -11,6 +11,8 @@ namespace Magic
 
         public float StartTimeInSeconds { get => startTimeInSeconds; }
 
+        public override void Restart() => timeInSeconds = startTimeInSeconds;
+
         public void SetupTimer(float timeInSeconds, Modes timerMode)
         {
             this.startTimeInSeconds = timeInSeconds;

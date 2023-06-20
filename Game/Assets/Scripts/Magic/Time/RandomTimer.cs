@@ -21,6 +21,8 @@ namespace Magic
 
         private float SetRandomTime() => base.timeInSeconds = UnityEngine.Random.Range(minStartingTime, maxStartingTime);
 
+        public override void Restart() => SetRandomTime();
+
         protected override void RunTimer_DestroyWhenTimeIsUp()
         {
             base.timeInSeconds -= Time.deltaTime;

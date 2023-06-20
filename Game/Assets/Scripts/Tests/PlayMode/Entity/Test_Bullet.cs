@@ -28,7 +28,7 @@ namespace Tests.PlayMode.Entity
             bool eventHasFired = false;
             yield return null;
 
-            bullet.OnDamaged += (int maxHP, int hp, int damage) => eventHasFired = true;
+            bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventHasFired = true;
             bullet.GetDamaged(10);
 
             Assert.IsTrue(eventHasFired);
@@ -43,7 +43,7 @@ namespace Tests.PlayMode.Entity
             int bulletDamage = 10;
             yield return null;
 
-            bullet.OnDamaged += (int maxHP, int hp, int damage) => eventFiredDamage = damage;
+            bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventFiredDamage = damage;
             bullet.GetDamaged(bulletDamage);
 
             Assert.AreEqual(bulletDamage, eventFiredDamage);
@@ -59,7 +59,7 @@ namespace Tests.PlayMode.Entity
             int bulletDamage = 10;
             yield return null;
 
-            bullet.OnDamaged += (int maxHP, int hp, int damage) => eventFiredHP = hp;
+            bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventFiredHP = hp;
             bullet.GetDamaged(bulletDamage);
 
             Assert.AreEqual(bulletHP - bulletDamage, eventFiredHP);
@@ -74,7 +74,7 @@ namespace Tests.PlayMode.Entity
             int bulletDamage = 10;
             yield return null;
 
-            bullet.OnDamaged += (int maxHP, int hp, int damage) => eventFiredHP = maxHP;
+            bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventFiredHP = maxHP;
             bullet.GetDamaged(bulletDamage);
 
             Assert.AreEqual(bullet.MaxHitPoints, eventFiredHP);
@@ -162,7 +162,7 @@ namespace Tests.PlayMode.Entity
             bool eventHasFired = false;
             yield return null;
 
-            bullet.OnDamaged += (int x, int y, int z) => eventHasFired = true;
+            bullet.OnDamaged += (int x, int y, int z, Vector3 w) => eventHasFired = true;
             bullet.GetDamaged(10);
 
             Assert.IsTrue(eventHasFired);

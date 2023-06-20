@@ -8,7 +8,7 @@ namespace Game.AI
         [Header("View")]
         [SerializeField] protected float viewRadius = 6;
         [SerializeField] protected float viewRadiusExtended = 18;
-        [SerializeField] [Range(0, 360)] protected float viewAngle = 80;
+        [SerializeField] [Range(0, 360)] protected float viewAngle = 90;
 
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];

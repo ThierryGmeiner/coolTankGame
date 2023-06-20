@@ -18,7 +18,8 @@ namespace Game.Entity
         public int HitPoints { get; }
 
         public void GetDamaged(int damage);
-        public event Action<int, int, int> OnDamaged; // maxHP, currentHP, damage
+        public void GetDamaged(int damage, Vector3 attackDirection);
+        public event Action<int, int, int, Vector3> OnDamaged; // maxHP, currentHP, damage, damageDirection
     }
 
     public interface IRepairable

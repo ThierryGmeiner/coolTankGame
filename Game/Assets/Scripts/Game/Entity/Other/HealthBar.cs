@@ -44,7 +44,9 @@ namespace Game.Entity
             else if (canvas.enabled) Invoke(nameof(DisableCanves), 1);
         }
 
-        private void UpdateHealthBar(int maxHP, int hp, int damage) {
+        private void UpdateHealthBar(int maxHP, int hp, int damage) => UpdateHealthBar(maxHP, hp, damage, Vector3.zero);
+
+        private void UpdateHealthBar(int maxHP, int hp, int damage, Vector3 direction) {
             targetValue = (float)hp / (float)maxHP;
         }
 

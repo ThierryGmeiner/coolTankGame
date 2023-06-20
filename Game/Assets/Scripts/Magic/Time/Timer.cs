@@ -52,6 +52,7 @@ namespace Magic
         public void StartTimer() => timerIsActive = true;
         public void StopTimer() => timerIsActive = false;
 
+        public abstract void Restart();
         public void SetTime(float time) => this.timeInSeconds = time;
         public void ReduceTime(float reducedTime) => timeInSeconds -= Math.Abs(reducedTime);
         public void IncreaseTime(float increasedTime) => timeInSeconds += increasedTime;

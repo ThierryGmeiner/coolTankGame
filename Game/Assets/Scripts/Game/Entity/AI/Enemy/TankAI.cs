@@ -26,6 +26,8 @@ namespace Game.AI
             headRotationTimer.OnTimerEnds += SetRandomRotationTarget;
             headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
             headRotationTimer.StartTimer();
+
+            GetComponent<TankHealth>().OnDamaged += RotateTowardsDamageSource;
         }
 
         private void Update() {
@@ -98,20 +100,27 @@ namespace Game.AI
 
         public void StateAttackOffensive() {
             movement.HeadRotationTarget = target.transform.position;
-            StateAttack_HandleMovement();
-            StateAttack_HandleAttack();
+            HandleOffensiveMovement();
+            HandOffensiveleAttack();
         }
 
-        public void StateAttack_HandleAttack() {
+        public void HandOffensiveleAttack() {
 
         }
 
-        public void StateAttack_HandleMovement() {
+        public void HandleOffensiveMovement() {
             movingTarget = GetAttackTargetPoss();
             if (movement.grid.GetNodeFromPosition(movingTarget) != movement.aStar.TargetNode) {
                 movement.SetPath(transform.position, movingTarget);
             }
             if (obj != null) obj.transform.position = movement.aStar.TargetNode.Position;
+        }
+
+        private void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction) {
+            if (StateMachine != StateAttackOffensive) {
+                movement.HeadRotationTarget = new Vector3(direction.x, 0, direction.z);
+                headRotationTimer.Restart();
+            }
         }
 
         private Vector3 GetAttackTargetPoss() {
