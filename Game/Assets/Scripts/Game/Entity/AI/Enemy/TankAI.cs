@@ -10,9 +10,11 @@ namespace Game.AI
         private TankMovement movement;
         private PlannedTimer searchTimer;
         private RandomTimer headRotationTimer;
+        protected Vector3 targetPos;
 
         [Header("Object")]
         [SerializeField] private Tank tank;
+        [SerializeField] GameObject obj;
 
         protected override void Start() {
             base.Start();
@@ -32,27 +34,29 @@ namespace Game.AI
         }
 
         private System.Action GetState() {
+            bool canSeeTarget = CanSeeTarget(head: tank.Head.transform);
+
             if (StateMachine == null) {
                 return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
             }
+            // in default: can go to attack
             else if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
-                // can go to attack
-                if (CanSeeTarget(tank.Head.transform)) {
+                if (canSeeTarget) {
                     return StateAttack;
                 }
             }
+            // in searching: can go to attack or default/followPath
             else if (StateMachine == StateSearch) {
-                // can go to attack or default/followPath
-                if (CanSeeTarget(tank.Head.transform)) {
+                if (canSeeTarget) {
                     return StateAttack;
                 }
                 if (searchTimer.timeInSeconds <= 0) {
                     return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
                 }
             }
+            // in attack: can go to search
             else if (StateMachine == StateAttack) {
-                // can go to search
-                if (!CanSeeTarget(tank.Head.transform)) {
+                if (!canSeeTarget) {
                     return StateSearch;
                 }
             }
@@ -82,32 +86,29 @@ namespace Game.AI
 
         public void StateAttack() {
             movement.HeadRotationTarget = target.transform.position;
+            StateAttack_HandleMovement();
+            StateAttack_HandleAttack();
+        }
 
+        public void StateAttack_HandleAttack() {
 
-            Vector3 targetPos;
+        }
 
-            if (Vector3.Distance(transform.position, target.transform.position) > preferTargetDistance) {
-                Debug.Log("to faraway");
-                targetPos = MathM.ClosestPointOfCircle(transform.position, target.transform.position, preferTargetDistance);
-            }
-            else {
-                // watch if nothing is in between the player and enemy
-                // else it is possible the tank gos behind a wall
-                Debug.Log("to close");
-                targetPos = MathM.ClosestPointOfCircle(target.transform.position, transform.position, preferTargetDistance);
-            }
-
+        public void StateAttack_HandleMovement() {
+            targetPos = GetAttackTargetPoss();
             if (movement.grid.GetNodeFromPosition(targetPos) != movement.aStar.TargetNode) {
-                Debug.Log("set path");
-                Vector3 currentPos= transform.position;
-                System.Threading.Thread t = new System.Threading.Thread( () 
-                    => movement.SetPath(currentPos, targetPos));
-                t.Start();
+                movement.SetPath(transform.position, targetPos);
             }
+            if (obj != null) obj.transform.position = movement.aStar.TargetNode.Position;
+        }
+
+        private Vector3 GetAttackTargetPoss() {
+            Vector3 newTargetPos = MathM.ClosestPointOfCircle(transform.position, target.transform.position, preferTargetDistance);
+            return Physics.Linecast(transform.position, targetPos, obstacleLayer) ? targetPos : newTargetPos;
         }
 
         private void SetRandomRotationTarget() {
-            if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
+            if (StateMachine != StateAttack) {
                 movement.HeadRotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
             }
         }

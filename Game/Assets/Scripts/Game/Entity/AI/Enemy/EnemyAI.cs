@@ -12,11 +12,11 @@ namespace Game.AI
 
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
-        [SerializeField] protected float preferTargetDistance = 5;
+        [SerializeField] protected float preferTargetDistance = 10;
         protected Path wayPointPaths = new Path(new AStarNode[0], true);
         protected int currentPathIndex = 0;
 
-        public Action StateMachine;
+        public Action StateMachine { get; protected set; }
         protected GameObject target;
         protected LayerMask obstacleLayer;
         protected Vector3 startPos;
@@ -38,19 +38,19 @@ namespace Game.AI
         public float ViewRadiusExtended { get => viewRadiusExtended; }
 
         protected virtual bool CanSeeTarget(Transform head) {
-            if (!TargetIsInView(head)) {
+            if (!TargetIsInViewFieldd(head)) {
                 return false;
             }
             return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
         }
 
-        protected virtual bool TargetIsInView(Transform head) {
+        protected virtual bool TargetIsInViewFieldd(Transform head) {
             Vector3 directionToTarget = (target.transform.position - head.position).normalized;
             bool targetInAngle = Vector3.Angle(head.forward, directionToTarget) < viewAngle / 2;
-            bool targetOutsideExtendedSight = Vector3.Distance(transform.position, target.transform.position) < viewRadiusExtended;
+            bool targetInExtendedSight = Vector3.Distance(transform.position, target.transform.position) < viewRadiusExtended;
 
             // target is in extendet FOV
-            if (targetOutsideExtendedSight && targetInAngle) return true;
+            if (targetInExtendedSight && targetInAngle) return true;
 
             // target is in inner FOV
             bool targetInSight = Vector3.Distance(transform.position, target.transform.position) < viewRadius;
