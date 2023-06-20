@@ -38,9 +38,7 @@ namespace Game.InputSystem
         }
 
         private void SetNewPath() {
-            Vector3 startPos = transform.position, targetPos = GetMousePosition();
-            Thread pathFindingThread = new Thread(() => movement.SetPath(startPos, targetPos));
-            pathFindingThread.Start();
+            movement.SetPath(transform.position, GetMousePosition());
         }
 
         private Vector3 GetMousePosition() {

@@ -60,12 +60,8 @@ namespace Game.Entity.Tank
 
         public void HandleMovement() {
             RotateHead();
-
             if (Path == null || Path.Nodes.Length == 0) return;
-            // FindOptimizedPath can't bee caled in a second thread, so check manuel for it an cal it when necessary
-            if (!path.IsOptimized) {
-                path = aStar.FindOptimizedPath(Path);
-            }
+
             RotateBody(path.Nodes[pathIndex].Position);
             Move(path.Nodes[pathIndex].Position);
         }
@@ -95,7 +91,7 @@ namespace Game.Entity.Tank
         }
 
         public Path SetPath(Vector3 startPos, Vector3 targetPos) {
-            Path newPath = aStar.FindPath(startPos, targetPos);
+            Path newPath = aStar.FindOptimizedPath(startPos, targetPos);
             if (newPath.Nodes.Length > 0) {
                 Path = newPath;
             } return Path;

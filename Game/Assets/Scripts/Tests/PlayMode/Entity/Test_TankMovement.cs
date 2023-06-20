@@ -158,21 +158,6 @@ namespace Tests.PlayMode.Entity
         }
 
         [UnityTest]
-        public IEnumerator Move_PathIsntOptimized_OptimizePaht() {
-            AStarGrid grid = TestHelper.CreateASTarGrid();
-            Tank tank = TestHelper.CreateTank<Tank>();
-            yield return null;
-
-            // set unoptimized path
-            Path unoptimizedPath = tank.Movement.SetPath(grid.Grid[0, 0].Position, grid.Grid[5, 5].Position);
-            tank.Movement.HandleMovement();
-
-            Assert.AreNotEqual(unoptimizedPath.Nodes.Length, tank.Movement.Path.Nodes.Length);
-
-            TestHelper.DestroyObjects(tank.gameObject, grid.gameObject);
-        }
-
-        [UnityTest]
         public IEnumerator Move_PathIsOptimized_PathStaySame() {
             AStarGrid grid = TestHelper.CreateASTarGrid();
             Tank tank = TestHelper.CreateTank<Tank>();
