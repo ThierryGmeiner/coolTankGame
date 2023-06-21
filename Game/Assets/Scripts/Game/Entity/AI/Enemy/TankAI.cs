@@ -14,7 +14,8 @@ namespace Game.AI
 
         [Header("Object")]
         [SerializeField] private Tank tank;
-        [SerializeField] GameObject obj;
+
+        public Tank Tank { get => tank; }
 
         protected override void Start() {
             base.Start();
@@ -113,7 +114,15 @@ namespace Game.AI
             if (movement.grid.GetNodeFromPosition(movingTarget) != movement.aStar.TargetNode) {
                 movement.SetPath(transform.position, movingTarget);
             }
-            if (obj != null) obj.transform.position = movement.aStar.TargetNode.Position;
+        }
+
+        private Vector3 GetAttackTargetPoss() {
+            float distance = Vector3.Distance(movingTarget, target.transform.position);
+            if (distance > preferTargetDistanceMin && distance < preferTargetDistanceMax) return movingTarget;
+
+            float newTargetDistance = MathM.Mid(preferTargetDistanceMin, preferTargetDistanceMax);
+            Vector3 newTarget = MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
+            return Physics.Linecast(transform.position, movingTarget, obstacleLayer) ? movingTarget : newTarget;
         }
 
         private void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction) {
@@ -121,15 +130,6 @@ namespace Game.AI
                 movement.HeadRotationTarget = new Vector3(direction.x, 0, direction.z);
                 headRotationTimer.Restart();
             }
-        }
-
-        private Vector3 GetAttackTargetPoss() {
-            float distance = Vector3.Distance(movingTarget, target.transform.position);
-            if (distance > preferTargetDistanceMin && distance < preferTargetDistanceMax) return movingTarget;
-
-            float newTargetDistance = Random.Range(preferTargetDistanceMin, preferTargetDistanceMax);
-            Vector3 newTarget = MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
-            return Physics.Linecast(transform.position, movingTarget, obstacleLayer) ? movingTarget : newTarget;
         }
 
         private void SetRandomRotationTarget() {
