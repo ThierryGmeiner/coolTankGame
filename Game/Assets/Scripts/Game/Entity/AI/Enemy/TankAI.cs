@@ -10,12 +10,12 @@ namespace Game.AI
         private TankMovement movement;
         private PlannedTimer searchTimer;
         private RandomTimer headRotationTimer;
-        protected Vector3 movingTarget;
+        private Vector3 movingTarget;
 
         [Header("Object")]
         [SerializeField] private Tank tank;
 
-        public Tank Tank { get => tank; }
+        public Vector3 MovingTarget { get => movingTarget; }
 
         protected override void Start() {
             base.Start();
@@ -112,7 +112,9 @@ namespace Game.AI
         public void HandleOffensiveMovement() {
             movingTarget = GetAttackTargetPoss();
             if (movement.grid.GetNodeFromPosition(movingTarget) != movement.aStar.TargetNode) {
-                movement.SetPath(transform.position, movingTarget);
+                if (!Physics.Linecast(transform.position, movingTarget, obstacleLayer)) {
+                    movement.SetPath(transform.position, movingTarget);
+                }
             }
         }
 
@@ -121,8 +123,7 @@ namespace Game.AI
             if (distance > preferTargetDistanceMin && distance < preferTargetDistanceMax) return movingTarget;
 
             float newTargetDistance = MathM.Mid(preferTargetDistanceMin, preferTargetDistanceMax);
-            Vector3 newTarget = MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
-            return Physics.Linecast(transform.position, movingTarget, obstacleLayer) ? movingTarget : newTarget;
+            return MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
         }
 
         private void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction) {

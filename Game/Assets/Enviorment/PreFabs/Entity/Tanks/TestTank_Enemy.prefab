@@ -95,9 +95,8 @@ MonoBehaviour:
   viewAngle: 90
   wayPoints: []
   preferTargetDistanceMin: 5
-  preferTargetDistanceMax: 10
+  preferTargetDistanceMax: 14
   tank: {fileID: 1033553528807398018}
-  obj: {fileID: 0}
 --- !u!114 &1033553528807398018 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4902868653811906715, guid: e9f3d5b3da8ad8b43b5539dadae0fdee, type: 3}

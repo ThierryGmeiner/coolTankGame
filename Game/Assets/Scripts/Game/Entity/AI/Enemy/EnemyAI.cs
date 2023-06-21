@@ -13,7 +13,7 @@ namespace Game.AI
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
         [SerializeField] protected float preferTargetDistanceMin = 5;
-        [SerializeField] protected float preferTargetDistanceMax = 10;
+        [SerializeField] protected float preferTargetDistanceMax = 14;
         protected Path wayPointPaths = new Path(new AStarNode[0], true);
         protected int currentPathIndex = 0;
 
@@ -37,6 +37,8 @@ namespace Game.AI
         public float ViewAngle { get => viewAngle; }
         public float ViewRadius { get => viewRadius; }
         public float ViewRadiusExtended { get => viewRadiusExtended; }
+        public float PreferTargetDistanceMin { get => preferTargetDistanceMin; }
+        public float PreferTargetDistanceMax { get => preferTargetDistanceMax; }
 
         protected virtual bool CanSeeTarget(Transform head) {
             if (!TargetIsInViewFieldd(head)) {

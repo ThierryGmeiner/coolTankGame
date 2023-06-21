@@ -55,7 +55,6 @@ namespace Game.Entity
         }
 
         public virtual void GetDestroyed() {
-            Debug.Log("destroy");
             OnDestruction?.Invoke();
             Destroy(gameObject);
         }
