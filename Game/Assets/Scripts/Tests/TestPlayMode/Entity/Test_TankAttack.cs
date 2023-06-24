@@ -49,5 +49,19 @@ namespace Tests.PlayMode.Entity
 
             TestHelper.DestroyObjects(tank.gameObject, bullet, newBullet.gameObject);
         }
+
+        [UnityTest]
+        public IEnumerator Shoot_OneShotUntilCooldownLess() {
+            TankAttack tank = TestHelper.CreateTank<TankAttack>();
+            yield return null;
+            GameObject obj = TestHelper.CreateBullet();
+            tank.ChangeBullet(obj);
+
+            Bullet bullet = tank.Shoot(new Vector3(10, 10, 10));
+
+            Assert.AreEqual(tank.MaxShotsUntilCooldown - 1, tank.ShotsUntilCooldown);
+
+            TestHelper.DestroyObjects(tank.gameObject, obj.gameObject, bullet.gameObject); ;
+        }
     }
 }

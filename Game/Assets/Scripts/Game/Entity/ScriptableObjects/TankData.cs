@@ -24,5 +24,6 @@ namespace Game.Entity
         [Space]
         [Header("Attack")]
         public BulletStorage BulletStorage;
+        public int maxShootsUntilCooldown = 5;
     }
 }

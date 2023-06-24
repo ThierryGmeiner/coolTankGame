@@ -131,11 +131,12 @@ namespace Game.AI
             if (StateMachine != StateAttackOffensive) {
                 movement.HeadRotationTarget = new Vector3(direction.x, 0, direction.z);
                 headRotationTimer.Restart();
+                headRotationTimer.IncreaseTime(5);
             }
         }
 
         private void SetRandomRotationTarget() {
-            if (StateMachine != StateAttackOffensive) {
+            if (StateMachine != StateAttackOffensive && StateMachine != StateAttackDefensive) {
                 movement.HeadRotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
             }
         }

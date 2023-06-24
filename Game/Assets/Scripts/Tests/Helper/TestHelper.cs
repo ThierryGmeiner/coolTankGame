@@ -16,10 +16,12 @@ namespace Tests
             tank.tag = Tags.Entity;
             tank.layer = 6;
             tank.AddComponent<BoxCollider>();
-            Tank tankClass = tank.AddComponent<Tank>();
+            var tankClass = tank.AddComponent<Tank>();
             tankClass.Data = ScriptableObject.CreateInstance<TankData>();
-            tank.AddComponent<TankHealth>(); 
-            tank.AddComponent<TankAttack>();
+            var tankHealth = tank.AddComponent<TankHealth>();
+            tankHealth.Data = ScriptableObject.CreateInstance<TankData>();
+            var tankAttack = tank.AddComponent<TankAttack>();
+            tankAttack.Data = ScriptableObject.CreateInstance<TankData>();
             return tank;
         }
 

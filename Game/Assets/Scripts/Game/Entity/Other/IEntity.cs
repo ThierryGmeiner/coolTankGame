@@ -33,11 +33,17 @@ namespace Game.Entity
 
     public interface IRangeAttack
     {
+        public int MaxShotsUntilCooldown { get; }
+        public int ShotsUntilCooldown { get; }
+
         public Bullet Shoot(Quaternion direction);
+        public event Action OnShoot;
+        public event Action OnReload;
     }
 
     public interface IDropMine
     {
         public void DropMine();
+        public event Action OnDropMine;
     }
 }
