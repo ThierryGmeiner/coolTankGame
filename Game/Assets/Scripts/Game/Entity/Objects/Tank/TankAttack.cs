@@ -47,7 +47,7 @@ namespace Game.Entity.Tank
         private void Reload() {
             if (ShotsUntilCooldown < MaxShotsUntilCooldown) {
                 ShotsUntilCooldown++;
-                OnReload?.Invoke(); Debug.Log("reload");
+                OnReload?.Invoke();
             }
         }
 
