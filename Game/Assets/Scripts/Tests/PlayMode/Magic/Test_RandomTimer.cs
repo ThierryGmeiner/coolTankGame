@@ -26,10 +26,11 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
 
-            bool TimeIsInBetween = timer.timeInSeconds > startTimeMin && timer.timeInSeconds < startTimeMax;
+            bool TimeIsInBetween = timer.timeSec > startTimeMin && timer.timeSec < startTimeMax;
             Assert.IsTrue(TimeIsInBetween);
+            TestHelper.DestroyObjects(obj);
         }
-        
+
         [UnityTest]
         public IEnumerator SetupTimer_SetTimeNegaticeMin5_Max6_IsInBetween()
         {
@@ -41,8 +42,9 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
 
-            bool TimeIsInBetween = timer.timeInSeconds > startTimeMin && timer.timeInSeconds < startTimeMax;
+            bool TimeIsInBetween = timer.timeSec > startTimeMin && timer.timeSec < startTimeMax;
             Assert.IsTrue(TimeIsInBetween);
+            TestHelper.DestroyObjects(obj);
         }
 
 
@@ -59,6 +61,7 @@ namespace Tests.PlayMode.Magic
             yield return new WaitForFrames(2);
 
             Assert.IsNull(obj.GetComponent<RandomTimer>());
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -76,6 +79,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsTrue(testBool);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -91,6 +95,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsNotNull(obj.GetComponent<RandomTimer>());
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -108,6 +113,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsTrue(testBool);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -122,7 +128,8 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return null;
 
-            Assert.Greater(startTimeMin, timer.timeInSeconds);
+            Assert.Greater(startTimeMin, timer.timeSec);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -140,6 +147,24 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsTrue(testBool);
+            TestHelper.DestroyObjects(obj);
+        }
+    
+        [UnityTest]
+        public IEnumerator Restest_RestartTimer()
+        {
+            GameObject obj = new GameObject();
+            RandomTimer timer = obj.AddComponent<RandomTimer>();
+            float startTimeMin = 5;
+            float startTimeMax = 6;
+
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.ReduceTime(3);
+            yield return null;
+            timer.Restart();
+
+            Assert.IsTrue(timer.timeSec >= startTimeMin && timer.timeSec <= startTimeMax);
+            TestHelper.DestroyObjects(obj);
         }
     }
 }

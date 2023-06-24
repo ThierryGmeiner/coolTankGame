@@ -26,7 +26,7 @@ namespace Magic
                 EditorGUILayout.FloatField("Min/Max start time", timer.MinSartingTime);
                 EditorGUILayout.FloatField(timer.MaxStartingTime);
             GUILayout.EndHorizontal();
-            EditorGUILayout.FloatField("Remaining time", timer.timeInSeconds);
+            EditorGUILayout.FloatField("Remaining time", timer.timeSec);
             GUI.enabled = true;
         }
     }

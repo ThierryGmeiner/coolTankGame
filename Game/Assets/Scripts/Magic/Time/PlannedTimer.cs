@@ -1,28 +1,27 @@
 using System;
-using System.Threading;
 using UnityEngine;
 
 namespace Magic
 {
     public class PlannedTimer : Timer
     {
-        private float startTimeInSeconds;
+        private float startTimeSec;
         public override event Action OnTimerEnds;
 
-        public float StartTimeInSeconds { get => startTimeInSeconds; }
+        public float StartTimeSec { get => startTimeSec; }
 
-        public override void Restart() => timeInSeconds = startTimeInSeconds;
+        public override void Restart() => timeSec = startTimeSec;
 
         public void SetupTimer(float timeInSeconds, Modes timerMode)
         {
-            this.startTimeInSeconds = timeInSeconds;
-            base.timeInSeconds = timeInSeconds;
+            this.startTimeSec = timeInSeconds;
+            base.timeSec = timeInSeconds;
             SetTimerMode(timerMode);
         }
 
         protected override void RunTimer_DestroyWhenTimeIsUp()
         {
-            base.timeInSeconds -= Time.deltaTime;
+            base.timeSec -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();
                 Destroy(this);
@@ -31,17 +30,17 @@ namespace Magic
 
         protected override void RunTimer_RestartWhenTimeIsUp()
         {
-            timeInSeconds -= Time.deltaTime;
+            timeSec -= Time.deltaTime;
             if (base.TimeIsUp())
             {
                 OnTimerEnds?.Invoke();
-                timeInSeconds = startTimeInSeconds;
+                timeSec = startTimeSec;
             }
         }
 
         protected override void RunTimer_ContinuesWhenTimeIsUp()
         {
-            base.timeInSeconds -= Time.deltaTime;
+            base.timeSec -= Time.deltaTime;
             if (base.TimeIsUp())
                 OnTimerEnds?.Invoke();
         }

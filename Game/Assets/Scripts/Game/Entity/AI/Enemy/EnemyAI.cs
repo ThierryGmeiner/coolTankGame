@@ -19,14 +19,13 @@ namespace Game.AI
 
         public Action StateMachine { get; protected set; }
         protected GameObject target;
-        protected LayerMask obstacleLayer;
+        public LayerMask obstacleLayer;
         protected Vector3 startPos;
         protected AStarNode startPosNode;
 
         protected virtual void Awake() {
             startPos = transform.position;
             obstacleLayer = LayerMask.GetMask("Obstacle");
-            currentPathIndex = 0;
         }
 
         protected virtual void Start() {
@@ -40,7 +39,7 @@ namespace Game.AI
         public float PreferTargetDistanceMin { get => preferTargetDistanceMin; }
         public float PreferTargetDistanceMax { get => preferTargetDistanceMax; }
 
-        protected virtual bool CanSeeTarget(Transform head) {
+        public virtual bool CanSeeTarget(Transform head) {
             if (!TargetIsInViewFieldd(head)) {
                 return false;
             }
@@ -48,16 +47,14 @@ namespace Game.AI
         }
 
         protected virtual bool TargetIsInViewFieldd(Transform head) {
+            // target is in inner FOV
+            if (Vector3.Distance(transform.position, target.transform.position) < viewRadius) return true;
+
+            // target is in extendet FOV
             Vector3 directionToTarget = (target.transform.position - head.position).normalized;
             bool targetInAngle = Vector3.Angle(head.forward, directionToTarget) < viewAngle / 2;
             bool targetInExtendedSight = Vector3.Distance(transform.position, target.transform.position) < viewRadiusExtended;
-
-            // target is in extendet FOV
-            if (targetInExtendedSight && targetInAngle) return true;
-
-            // target is in inner FOV
-            bool targetInSight = Vector3.Distance(transform.position, target.transform.position) < viewRadius;
-            return targetInSight;
+            return targetInExtendedSight && targetInAngle;
         }
 
         public virtual Vector3 ViewDirection(float angleInDegrees, bool angleIsGlobal) {

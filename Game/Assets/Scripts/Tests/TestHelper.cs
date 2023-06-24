@@ -25,6 +25,23 @@ namespace Tests
 
         public static T CreateTank<T>() => CreateTank().GetComponent<T>();
 
+        public static GameObject CreatePlayerTank() {
+            GameObject tank = CreateTank();
+            tank.name = "TestPlayerTank";
+            tank.tag = Tags.Player;
+            return tank;
+        }
+
+        public static T CreatePlayerTank<T>() => CreatePlayerTank().GetComponent<T>();
+
+        public static GameObject CreateEnemyTank() {
+            GameObject tank = CreateTank();
+            tank.AddComponent<TankAI>();
+            return tank;
+        }
+
+        public static T CreateEnemyTank<T>() => CreateEnemyTank().GetComponent<T>();
+
         public static GameObject CreateBullet() {
             GameObject bullet = new GameObject();
             bullet.AddComponent<Rigidbody>();
@@ -49,8 +66,7 @@ namespace Tests
         public static T CreateGround<T>() => CreateGround().GetComponent<T>();
 
         public static GameObject CreateObstacle(Vector3 size) {
-            GameObject obstacle = new GameObject(); Debug.Log("create");
-
+            GameObject obstacle = new GameObject();
             obstacle.transform.localScale = size;
             obstacle.name = "Obstacle";
             obstacle.tag = Tags.Enviorment;

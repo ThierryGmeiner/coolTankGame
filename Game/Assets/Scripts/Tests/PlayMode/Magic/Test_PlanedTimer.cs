@@ -25,9 +25,10 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
             
-            Assert.AreEqual(startTime, timer.timeInSeconds);
+            Assert.AreEqual(startTime, timer.timeSec);
+            TestHelper.DestroyObjects(obj);
         }
- 
+
         [UnityTest]
         public IEnumerator SetupTimer_SetTimeToNegative5_TimeIsNegative5()
         {
@@ -38,7 +39,8 @@ namespace Tests.PlayMode.Magic
             timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
             yield return null;
             
-            Assert.AreEqual(startTime, timer.timeInSeconds);
+            Assert.AreEqual(startTime, timer.timeSec);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -53,6 +55,7 @@ namespace Tests.PlayMode.Magic
             yield return new WaitForFrames(2);
 
             Assert.IsNull(obj.GetComponent<PlannedTimer>());
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -69,6 +72,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsTrue(testBool);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -83,6 +87,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsNotNull(obj.GetComponent<PlannedTimer>());
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -99,6 +104,7 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsTrue(testBool);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -112,7 +118,8 @@ namespace Tests.PlayMode.Magic
             timer.StartTimer();
             yield return null;
 
-            Assert.Greater(startTime, timer.timeInSeconds);
+            Assert.Greater(startTime, timer.timeSec);
+            TestHelper.DestroyObjects(obj);
         }
 
         [UnityTest]
@@ -129,6 +136,23 @@ namespace Tests.PlayMode.Magic
             yield return null;
 
             Assert.IsTrue(testBool);
+            TestHelper.DestroyObjects(obj);
+        }
+
+        [UnityTest]
+        public IEnumerator Restart_ResetTimer()
+        {
+            var obj = new GameObject();
+            var timer = obj.AddComponent<PlannedTimer>();
+            var startTime = 10;
+            
+            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp);
+            timer.ReduceTime(3);
+            yield return null;
+            timer.Restart();
+
+            Assert.AreEqual(startTime, timer.timeSec);
+            TestHelper.DestroyObjects(obj);
         }
     }
 }

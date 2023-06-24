@@ -5,27 +5,27 @@ namespace Magic
 {
     public class RandomTimer : Timer
     {
-        private float minStartingTime, maxStartingTime;
+        private float minStartingTimeSec, maxStartingTimeSec;
         public override event Action OnTimerEnds;
 
         public void SetupTimer(float minStartingTime, float maxStartingTime, Modes timerMode)
         {
-            this.minStartingTime = minStartingTime;
-            this.maxStartingTime = maxStartingTime;
-            base.timeInSeconds = SetRandomTime();
+            this.minStartingTimeSec = minStartingTime;
+            this.maxStartingTimeSec = maxStartingTime;
+            base.timeSec = SetRandomTime();
             base.SetTimerMode(timerMode);
         }
 
-        public float MinSartingTime { get => minStartingTime; }
-        public float MaxStartingTime { get => maxStartingTime; }
+        public float MinSartingTime { get => minStartingTimeSec; }
+        public float MaxStartingTime { get => maxStartingTimeSec; }
 
-        private float SetRandomTime() => base.timeInSeconds = UnityEngine.Random.Range(minStartingTime, maxStartingTime);
+        private float SetRandomTime() => base.timeSec = UnityEngine.Random.Range(minStartingTimeSec, maxStartingTimeSec);
 
         public override void Restart() => SetRandomTime();
 
         protected override void RunTimer_DestroyWhenTimeIsUp()
         {
-            base.timeInSeconds -= Time.deltaTime;
+            base.timeSec -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();
                 Destroy(this);
@@ -34,16 +34,16 @@ namespace Magic
 
         protected override void RunTimer_RestartWhenTimeIsUp()
         {
-            timeInSeconds -= Time.deltaTime;
+            timeSec -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();
-                base.timeInSeconds = SetRandomTime();
+                base.timeSec = SetRandomTime();
             }
         }
 
         protected override void RunTimer_ContinuesWhenTimeIsUp()
         {
-            base.timeInSeconds -= Time.deltaTime;
+            base.timeSec -= Time.deltaTime;
             if (base.TimeIsUp())
                 OnTimerEnds?.Invoke();
         }

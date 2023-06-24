@@ -16,6 +16,7 @@ namespace Game.AI
         [SerializeField] private Tank tank;
 
         public Vector3 MovingTarget { get => movingTarget; }
+        public Tank Tank { get => tank; }
 
         protected override void Start() {
             base.Start();
@@ -53,7 +54,7 @@ namespace Game.AI
                 if (canSeeTarget) {
                     return StateAttackOffensive;
                 }
-                if (searchTimer.timeInSeconds <= 0) {
+                if (searchTimer.timeSec <= 0) {
                     return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
                 }
             }

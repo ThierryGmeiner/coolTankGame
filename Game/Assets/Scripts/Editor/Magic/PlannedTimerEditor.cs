@@ -22,8 +22,8 @@ namespace Magic
             GUILayout.Space(12);
 
             GUI.enabled = false;
-            EditorGUILayout.FloatField("Start time", timer.StartTimeInSeconds);
-            EditorGUILayout.FloatField("Remaining time", timer.timeInSeconds);
+            EditorGUILayout.FloatField("Start time", timer.StartTimeSec);
+            EditorGUILayout.FloatField("Remaining time", timer.timeSec);
             GUI.enabled = true;
         }
     }
