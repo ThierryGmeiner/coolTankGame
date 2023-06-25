@@ -18,13 +18,13 @@ namespace Game.Entity.Tank
             shootingSpot ??= CreateShootingSpot();
             tankHead ??= new GameObject();
             data?.BulletStorage.Awake();
+            Health = GetComponent<TankHealth>();
+            Attack = GetComponent<TankAttack>();
+            RigidBody = GetComponent<Rigidbody>();
+            Collider = GetComponent<BoxCollider>();
         }
 
         private void Start() {
-            RigidBody = GetComponent<Rigidbody>();
-            Collider = GetComponent<BoxCollider>();
-            Health = GetComponent<TankHealth>();
-            Attack = GetComponent<TankAttack>();
             Health.OnDamaged += (int maxHP, int HP, int damage, Vector3 direction) => { if (HP <= 0) GetDestroyed(); };
         }
 

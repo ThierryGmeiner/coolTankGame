@@ -16,6 +16,7 @@ namespace Game.Entity.Tank
         public event Action OnShoot;
         public event Action OnDropMine;
         public event Action OnReload;
+        public event Action OnUpdateShotsUntilCooldown;
 
         public int MaxShotsUntilCooldown { get; private set; } = 5;
         public int ShotsUntilCooldown { get; private set; }
@@ -48,6 +49,7 @@ namespace Game.Entity.Tank
             if (ShotsUntilCooldown < MaxShotsUntilCooldown) {
                 ShotsUntilCooldown++;
                 OnReload?.Invoke();
+                OnUpdateShotsUntilCooldown?.Invoke();
             }
         }
 
@@ -66,6 +68,7 @@ namespace Game.Entity.Tank
             Bullet bullet = InstantiateBullet();
             bullet.Shoot(direction);
             OnShoot?.Invoke();
+            OnUpdateShotsUntilCooldown?.Invoke();
             return bullet;
         }
 

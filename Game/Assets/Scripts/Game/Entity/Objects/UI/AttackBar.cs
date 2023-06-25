@@ -12,8 +12,7 @@ namespace Game.UI
         protected override void Start() {
             base.Start();
             rangeAttack = parent.GetComponent<IRangeAttack>();
-            rangeAttack.OnReload += UpdateAttackBar;
-            rangeAttack.OnShoot += UpdateAttackBar;
+            rangeAttack.OnUpdateShotsUntilCooldown += UpdateAttackBar;
         }
 
         protected override void Update() {

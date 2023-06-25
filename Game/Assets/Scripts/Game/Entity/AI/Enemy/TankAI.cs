@@ -8,9 +8,16 @@ namespace Game.AI
     public class TankAI : EnemyAI
     {
         private TankMovement movement;
+        private TankAttack attack;
         private PlannedTimer searchTimer;
         private RandomTimer headRotationTimer;
         private Vector3 movingTarget;
+
+        [Header("Attack")]
+        [Range(1, 100)] protected int aggressiveness = 50;
+        [Range(1, 100)] protected int anxiety = 50;
+        private int hpInPrecent;
+        private int attackCooldownInPrecent;
 
         [Header("Object")]
         [SerializeField] private Tank tank;
@@ -22,6 +29,7 @@ namespace Game.AI
             base.Start();
             tank ??= GetComponent<Tank>();
             movement = tank.Movement;
+            attack = tank.Attack;
             wayPointPaths = movement.aStar.CnvertWayPointsToPaths(wayPoints);
 
             headRotationTimer = gameObject.AddComponent<RandomTimer>();
@@ -29,12 +37,18 @@ namespace Game.AI
             headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
             headRotationTimer.StartTimer();
 
-            GetComponent<TankHealth>().OnDamaged += RotateTowardsDamageSource;
+            GetHpAttackRatio();
+            attack.OnUpdateShotsUntilCooldown += GetHpAttackRatio;
+            tank.Health.OnDamaged += (int a, int b, int c, Vector3 d) => GetHpAttackRatio();
+            tank.Health.OnRepaired += (int a, int b, int c) => GetHpAttackRatio();
+            tank.Health.OnDamaged += RotateTowardsDamageSource;
         }
 
         private void Update() {
             StateMachine = GetState();
             StateMachine();
+
+            if (Input.GetKeyDown(KeyCode.R)) attack.Shoot(tank.Head.transform.rotation);
         }
 
         private System.Action GetState() {
@@ -45,34 +59,30 @@ namespace Game.AI
             }
             // in default: can go to attack
             else if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
-                if (canSeeTarget) {
-                    return StateAttackOffensive;
-                }
+                if (canSeeTarget) return StateAttackOffensive;
             }
             // in searching: can go to attack or default/followPath
             else if (StateMachine == StateSearch) {
-                if (canSeeTarget) {
-                    return StateAttackOffensive;
-                }
-                if (searchTimer.timeSec <= 0) {
-                    return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
-                }
+                if (canSeeTarget) return StateAttackOffensive;
+                if (searchTimer.timeSec <= 0) return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
             }
             // in attack defensive: can go to attack offensive
             else if (StateMachine == StateAttackDefensive) {
-                // create a score from 1 to 100
-                // 50% of the scor coms from max HP the other 50% from amount of amo the tank can shoot until cooldown
-                // if the score is over 30 change to to offensive
-                return StateAttackOffensive;
+                if (attackCooldownInPrecent > aggressiveness) return StateAttackOffensive;
             }
             // in attack offensive: can go to search or attack defensive
             else if (StateMachine == StateAttackOffensive) {
-                if (!canSeeTarget) {
-                    return StateSearch;
-                }
-                // if attackScore is under 30: return stateAttackDefensive
+                if (!canSeeTarget) return StateSearch;
+                if (attackCooldownInPrecent == 0) return StateAttackDefensive;
+                if (attackCooldownInPrecent + hpInPrecent < anxiety * 2) return StateAttackDefensive;
             }
             return StateMachine;
+        }
+
+        // this value can has a max of 100 (50% from left shots to maxLeftShots ans 50% from hp to maxHp)
+        private void GetHpAttackRatio() {
+            hpInPrecent = 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
+            attackCooldownInPrecent = 100 * attack.ShotsUntilCooldown / attack.MaxShotsUntilCooldown;
         }
 
         public void StateStayAtStart() {
@@ -97,7 +107,7 @@ namespace Game.AI
         }
 
         public void StateAttackDefensive() {
-
+            Debug.Log("defensive");
         }
 
         public void StateAttackOffensive() {
