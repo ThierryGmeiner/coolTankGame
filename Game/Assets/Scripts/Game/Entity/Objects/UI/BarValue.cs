@@ -5,11 +5,11 @@ using Game.Entity;
 
 namespace Game.UI
 {
-    public class UiBar : MonoBehaviour
+    public abstract class BarValue : MonoBehaviour
     {
         [SerializeField] private LoockAt loockAt = LoockAt.Parent;
         [SerializeField] protected Image bar;
-        [SerializeField] protected float reductionSpeed = 1.5f;
+        [SerializeField] protected float speed = 1.5f;
 
         protected GameObject parent;
         protected Canvas canvas;
@@ -26,20 +26,33 @@ namespace Game.UI
             LockFacingDirection = loockAt == LoockAt.Camera ? loockToCamera : loockToParent;
         }
 
+        protected virtual void Update() {
+            ControleCanvasVisibility();
+            if (canvas.enabled) {
+                bar.fillAmount = Mathf.MoveTowards(bar.fillAmount, targetValue, speed * Time.deltaTime);
+                LockFacingDirection();
+            }
+        }
+
         protected void loockToCamera() {
             transform.rotation = cam.transform.rotation;
         }
 
         protected void loockToParent() {
-            Quaternion rot = parent.transform.rotation;
-            transform.rotation = new Quaternion(0 - rot.x, 0 - rot.y, 0 - rot.z, 0);
-        }
-        protected void ControleCanvasVisibility() {
-            if (targetValue < FULL_BAR) EnableCanves();
-            else if (canvas.enabled) Invoke(nameof(DisableCanves), 1);
+            transform.rotation = 
+                new Quaternion(0 - parent.transform.rotation.x, 0 - parent.transform.rotation.y, 0 - parent.transform.rotation.z, 0);
         }
 
-        protected void EnableCanves() => canvas.enabled = true;
+        protected void ControleCanvasVisibility() {
+             if (targetValue < FULL_BAR) {
+                CancelInvoke(nameof(DisableCanves));
+                canvas.enabled = true;
+            }
+            else if (canvas.enabled) {
+                Invoke(nameof(DisableCanves), 1);
+            }
+        }
+
         protected void DisableCanves() => canvas.enabled = false;
 
         private enum LoockAt { Parent, Camera }

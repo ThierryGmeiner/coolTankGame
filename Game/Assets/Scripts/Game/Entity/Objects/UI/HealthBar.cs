@@ -5,7 +5,7 @@ using Game.Entity;
 
 namespace Game.UI
 {
-    public class HealthBar : UiBar
+    public class HealthBar : BarValue
     {
         protected override void Start() {
             base.Start();
@@ -15,16 +15,8 @@ namespace Game.UI
             repairable.OnRepaired += UpdateHealthBar;
         }
 
-        private void Update() {
-            // temporary function
-            if (Input.GetKeyDown(KeyCode.H)) parent.GetComponent<IRepairable>()?.GetRepaired(20);
-
-            ControleCanvasVisibility();
-            // dont do the calculations when the canvas is invisible
-            if (canvas.enabled) {
-                LockFacingDirection();
-                bar.fillAmount = Mathf.MoveTowards(bar.fillAmount, targetValue, reductionSpeed * Time.deltaTime);
-            }
+        protected override void Update() {
+            base.Update();
         }
 
         private void UpdateHealthBar(int maxHP, int hp, int damage) => UpdateHealthBar(maxHP, hp, damage, Vector3.zero);

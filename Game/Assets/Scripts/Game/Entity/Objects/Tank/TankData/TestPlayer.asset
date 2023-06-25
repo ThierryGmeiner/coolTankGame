@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: PlayerTank
   Speed: 5
-  TurboMultiplier: 5
   JumpForce: 3.5
   Health: 100
   ArmorProcent: 5
   BulletStorage: {fileID: 11400000, guid: eda5a25186583524bb3749377ebcb83b, type: 2}
+  maxShootsUntilCooldown: 5
