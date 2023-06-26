@@ -19,13 +19,16 @@ namespace Game.AI
 
         public Action StateMachine { get; protected set; }
         protected GameObject target;
-        public LayerMask obstacleLayer;
+        protected LayerMask targetLayer;
+        protected LayerMask obstacleLayer;
         protected Vector3 startPos;
         protected AStarNode startPosNode;
+
 
         protected virtual void Awake() {
             startPos = transform.position;
             obstacleLayer = LayerMask.GetMask("Obstacle");
+            targetLayer = LayerMask.GetMask("Player");
         }
 
         protected virtual void Start() {
@@ -38,6 +41,11 @@ namespace Game.AI
         public float ViewRadiusExtended { get => viewRadiusExtended; }
         public float PreferTargetDistanceMin { get => preferTargetDistanceMin; }
         public float PreferTargetDistanceMax { get => preferTargetDistanceMax; }
+
+        public virtual bool TargetIsInScope(Transform head, float scopeRadius) {
+            Ray ray = new Ray(head.position, Magic.MathM.ConvertYRotationToVector3(head.rotation.eulerAngles.y));
+            return Physics.SphereCast(ray, scopeRadius, viewRadiusExtended, targetLayer);
+        }
 
         public virtual bool CanSeeTarget(Transform head) {
             if (!TargetIsInViewFieldd(head)) {

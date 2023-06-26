@@ -36,7 +36,7 @@ namespace Game.Entity
         public int MaxShotsUntilCooldown { get; }
         public int ShotsUntilCooldown { get; }
 
-        public Bullet Shoot(Quaternion direction);
+        public Bullet Shoot(Vector3 direction);
         public event Action OnShoot;
         public event Action OnReload;
         public event Action OnUpdateShotsUntilCooldown;

@@ -10,12 +10,13 @@ namespace Game.AI
         private TankMovement movement;
         private TankAttack attack;
         private PlannedTimer searchTimer;
+        private PlannedTimer shootAttackTimer;
         private RandomTimer headRotationTimer;
         private Vector3 movingTarget;
 
         [Header("Attack")]
-        [Range(1, 100)] protected int aggressiveness = 50;
-        [Range(1, 100)] protected int anxiety = 50;
+        [SerializeField] [Range(1, 100)] protected int aggressiveness = 80;
+        [SerializeField] [Range(1, 100)] protected int anxiety = 50;
         private int hpInPrecent;
         private int attackCooldownInPrecent;
 
@@ -28,14 +29,12 @@ namespace Game.AI
         protected override void Start() {
             base.Start();
             tank ??= GetComponent<Tank>();
+            attack ??= GetComponent<TankAttack>();
             movement = tank.Movement;
-            attack = tank.Attack;
             wayPointPaths = movement.aStar.CnvertWayPointsToPaths(wayPoints);
 
-            headRotationTimer = gameObject.AddComponent<RandomTimer>();
-            headRotationTimer.OnTimerEnds += SetRandomRotationTarget;
-            headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
-            headRotationTimer.StartTimer();
+            SetupHeadRotationTimer();
+            SetupShootAttackTimer();
 
             GetHpAttackRatio();
             attack.OnUpdateShotsUntilCooldown += GetHpAttackRatio;
@@ -44,11 +43,22 @@ namespace Game.AI
             tank.Health.OnDamaged += RotateTowardsDamageSource;
         }
 
+        private void SetupShootAttackTimer() {
+            shootAttackTimer = gameObject.AddComponent<PlannedTimer>();
+            shootAttackTimer.SetupTimer(1, Timer.Modes.ConitinuesWhenTimeIsUp);
+            shootAttackTimer.StartTimer();
+        }
+
+        private void SetupHeadRotationTimer() {
+            headRotationTimer = gameObject.AddComponent<RandomTimer>();
+            headRotationTimer.OnTimerEnds += SetRandomRotationTarget;
+            headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
+            headRotationTimer.StartTimer();
+        }
+
         private void Update() {
             StateMachine = GetState();
             StateMachine();
-
-            if (Input.GetKeyDown(KeyCode.R)) attack.Shoot(tank.Head.transform.rotation);
         }
 
         private System.Action GetState() {
@@ -79,7 +89,6 @@ namespace Game.AI
             return StateMachine;
         }
 
-        // this value can has a max of 100 (50% from left shots to maxLeftShots ans 50% from hp to maxHp)
         private void GetHpAttackRatio() {
             hpInPrecent = 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
             attackCooldownInPrecent = 100 * attack.ShotsUntilCooldown / attack.MaxShotsUntilCooldown;
@@ -113,11 +122,14 @@ namespace Game.AI
         public void StateAttackOffensive() {
             movement.HeadRotationTarget = target.transform.position;
             HandleOffensiveMovement();
-            HandOffensiveleAttack();
+            HandleOffensiveAttack();
         }
 
-        public void HandOffensiveleAttack() {
-
+        public void HandleOffensiveAttack() {
+            if (TargetIsInScope(tank.Head.transform, 0.5f) && shootAttackTimer.timeSec <= 0) {
+                attack.Shoot(MathM.ConvertYRotationToVector3(tank.Head.transform.rotation.eulerAngles.y));
+                shootAttackTimer.Restart();
+            }
         }
 
         public void HandleOffensiveMovement() {

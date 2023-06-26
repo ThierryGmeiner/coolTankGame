@@ -22,5 +22,11 @@ namespace Magic
             direction.Normalize();
             return center + direction * radius;
         }
+
+        public static Vector3 ConvertYRotationToVector3(float rotation) {
+            // example: rotation = eulerangle.y
+            // https://answers.unity.com/questions/54495/how-do-i-convert-angle-to-vector3.html
+            return new Vector3(Mathf.Sin(Mathf.Deg2Rad * rotation), 0, Mathf.Cos(Mathf.Deg2Rad * rotation));
+        }
     }
 }

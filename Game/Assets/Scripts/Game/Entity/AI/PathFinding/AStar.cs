@@ -133,7 +133,7 @@ namespace Game.AI
         private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {
             AStarNode newSectionStart = GetNextSection(path, oldSectionStart, Array.IndexOf(path, oldSectionStart) + 1);
 
-            // fixes the problem that the search sometimes gets stuck on a node
+            // fixes the bug when the search sometimes gets stuck on a node
             if (oldSectionStart == newSectionStart) newSectionStart = path[Array.IndexOf(path, newSectionStart) + 1];
             return newSectionStart;
         }
@@ -167,11 +167,11 @@ namespace Game.AI
         public bool NodeIsStraightToNeighbor(AStarNode node, AStarNode updatingNode)
             => node.Position.x == updatingNode.Position.x || node.Position.y == updatingNode.Position.y;
 
-        private static Vector2Int[] SuroundingNodes(Vector2Int olsPos) {
-            Vector2Int[] array = { new Vector2Int(olsPos.x - 1, olsPos.y), new Vector2Int(olsPos.x + 1, olsPos.y),
-                                        new Vector2Int(olsPos.x, olsPos.y - 1), new Vector2Int(olsPos.x, olsPos.y + 1),
-                                        new Vector2Int(olsPos.x - 1, olsPos.y - 1), new Vector2Int(olsPos.x + 1, olsPos.y - 1),
-                                        new Vector2Int(olsPos.x - 1, olsPos.y + 1), new Vector2Int(olsPos.x + 1, olsPos.y + 1), };
+        private static Vector2Int[] SuroundingNodes(Vector2Int oldPos) {
+            Vector2Int[] array = { new Vector2Int(oldPos.x - 1, oldPos.y), new Vector2Int(oldPos.x + 1, oldPos.y),
+                                        new Vector2Int(oldPos.x, oldPos.y - 1), new Vector2Int(oldPos.x, oldPos.y + 1),
+                                        new Vector2Int(oldPos.x - 1, oldPos.y - 1), new Vector2Int(oldPos.x + 1, oldPos.y - 1),
+                                        new Vector2Int(oldPos.x - 1, oldPos.y + 1), new Vector2Int(oldPos.x + 1, oldPos.y + 1), };
             return array;
         }
 

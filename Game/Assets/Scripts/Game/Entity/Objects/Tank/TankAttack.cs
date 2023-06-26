@@ -58,10 +58,6 @@ namespace Game.Entity.Tank
             throw new System.NotImplementedException();
         }
 
-        public Bullet Shoot(Quaternion direction) {
-            return Shoot(GetShootingVector(direction));
-        }
-
         public Bullet Shoot(Vector3 direction) {
             if (ShotsUntilCooldown <= 0) return null;
 
@@ -77,13 +73,6 @@ namespace Game.Entity.Tank
             Bullet bullet = obj.GetComponent<Bullet>();
             bullet.ShootingEntity = tank.gameObject;
             return bullet;
-        }
-
-        private Vector3 GetShootingVector(Quaternion rotation) {
-            // convert the y rotation into an eulerAngle and convert it to an vector3
-            // https://answers.unity.com/questions/54495/how-do-i-convert-angle-to-vector3.html
-            float angle = rotation.eulerAngles.y;
-            return new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0, Mathf.Cos(Mathf.Deg2Rad * angle));
         }
     }
 }

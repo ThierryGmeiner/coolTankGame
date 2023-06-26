@@ -34,7 +34,7 @@ namespace Magic
             if (base.TimeIsUp())
             {
                 OnTimerEnds?.Invoke();
-                timeSec = startTimeSec;
+                Restart();
             }
         }
 

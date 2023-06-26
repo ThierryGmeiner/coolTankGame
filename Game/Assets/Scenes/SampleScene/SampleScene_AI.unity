@@ -446,7 +446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 711309623975226928, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.26
+      value: 1.55
       objectReference: {fileID: 0}
     - target: {fileID: 711309623975226928, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -454,7 +454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 711309623975226928, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.51
+      value: -5.56
       objectReference: {fileID: 0}
     - target: {fileID: 711309623975226928, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -491,6 +491,10 @@ PrefabInstance:
     - target: {fileID: 9002069143745799557, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
       propertyPath: obj
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9002069143745799557, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
+      propertyPath: aggressiveness
+      value: 80
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
@@ -613,7 +617,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.8679245, g: 0.76555496, b: 0.48636523, a: 1}
+  m_Color: {r: 0.7924528, g: 0.64897585, b: 0.25717336, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30

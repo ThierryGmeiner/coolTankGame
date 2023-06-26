@@ -55,7 +55,7 @@ namespace Game.InputSystem
         private void SetupControlsAttack() {
             controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
             controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => { 
-                if (!ClickOnTank()) tank.Attack.Shoot(tank.Head.transform.rotation); 
+                if (!ClickOnTank()) tank.Attack.Shoot(Magic.MathM.ConvertYRotationToVector3(tank.Head.transform.rotation.eulerAngles.y)); 
             };
         }
 

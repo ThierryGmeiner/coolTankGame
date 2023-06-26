@@ -37,7 +37,7 @@ namespace Magic
             timeSec -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();
-                base.timeSec = SetRandomTime();
+                Restart();
             }
         }
 
