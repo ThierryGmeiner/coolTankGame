@@ -161,27 +161,30 @@ namespace Game.AI
             return finalPath;
         }
 
-        public AStarNode GetCoveredField(Vector3 startPos, GameObject enemy, int fillValue) 
+        public AStarNode GetCoveredNode(Vector3 startPos, GameObject enemy, int fillValue) 
             => GetCoveredField(grid.GetNodeFromPosition(startPos), enemy, fillValue);
 
         public AStarNode GetCoveredField(AStarNode startPos, GameObject enemy, int fillValue) {
             List<AStarNode> currentNodes = new List<AStarNode>() { startPos };
+            List<AStarNode> nextNodes;
 
-            while(fillValue > 0) {
+            // loop through iterations
+            while (fillValue > 0) {
+                nextNodes = new List<AStarNode>();
                 fillValue--;
-                List<AStarNode> nextNodes = new List<AStarNode>();
 
+                // loop throu activeNodes and search siutable node
                 foreach (AStarNode node in currentNodes) {
-                    if (IsCovered(node) && Physics.Linecast(node.Position, enemy.transform.position, grid.unwalkableMask)) {
+                    if (IsNextToCover(node) && Physics.Linecast(node.Position, enemy.transform.position, grid.unwalkableMask)) {
                         grid.Clear();
                         return node;
                     }
-
+                    // get new neighbors
                     List<AStarNode> neighborNodes = FloodFillNeighbors(node, fillValue);
                     foreach (AStarNode neighbor in neighborNodes) {
                         nextNodes.Add(neighbor);
                     }
-                }
+                } 
                 currentNodes = nextNodes;
             }
 
@@ -189,7 +192,7 @@ namespace Game.AI
             return startPos;
         }
 
-        private bool IsCovered(AStarNode node) {
+        private bool IsNextToCover(AStarNode node) {
             AStarNode[] neighbors = Get4Neighbors(node).ToArray();
 
             foreach (AStarNode neigbhor in neighbors) {

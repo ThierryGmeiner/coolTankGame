@@ -116,11 +116,11 @@ namespace Game.AI
         }
 
         public void StateAttackDefensive() {
-            // find place to hide
-            AStarNode coveredField = movement.aStar.GetCoveredField(transform.position, target, 10);
-            Debug.DrawLine(transform.position, coveredField.Position, Color.red);
+            AStarNode cover = movement.aStar.GetCoveredNode(transform.position, target, 10);
 
-            // go to place
+            if (movement.aStar.Grid.GetNodeFromPosition(transform.position) != cover && movement.aStar.TargetNode != cover) {
+                movement.SetPath(transform.position, cover.Position);
+            }
         }
 
         public void StateAttackOffensive() {
