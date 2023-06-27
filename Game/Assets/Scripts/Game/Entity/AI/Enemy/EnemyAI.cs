@@ -14,6 +14,7 @@ namespace Game.AI
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
         [SerializeField] protected float preferTargetDistanceMin = 5;
         [SerializeField] protected float preferTargetDistanceMax = 14;
+        protected AStarGrid aStarGrid;
         protected Path wayPointPaths = new Path(new AStarNode[0], true);
         protected int currentPathIndex = 0;
 
@@ -32,7 +33,8 @@ namespace Game.AI
         }
 
         protected virtual void Start() {
-            startPosNode = GameObject.Find("A*")?.GetComponent<AStarGrid>()?.GetNodeFromPosition(startPos);
+            aStarGrid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
+            startPosNode = aStarGrid?.GetNodeFromPosition(startPos);
             target = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
         }
 
@@ -43,7 +45,7 @@ namespace Game.AI
         public float PreferTargetDistanceMax { get => preferTargetDistanceMax; }
 
         public virtual bool TargetIsInScope(Transform head, float scopeRadius) {
-            Ray ray = new Ray(head.position, Magic.MathM.ConvertYRotationToVector3(head.rotation.eulerAngles.y));
+            Ray ray = new Ray(head.position, Magic.MathM.ConvertToVector3(head.rotation.eulerAngles.y));
             return Physics.SphereCast(ray, scopeRadius, viewRadiusExtended, targetLayer);
         }
 
@@ -54,7 +56,7 @@ namespace Game.AI
             return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
         }
 
-        protected virtual bool TargetIsInViewFieldd(Transform head) {
+        public virtual bool TargetIsInViewFieldd(Transform head) {
             // target is in inner FOV
             if (Vector3.Distance(transform.position, target.transform.position) < viewRadius) return true;
 

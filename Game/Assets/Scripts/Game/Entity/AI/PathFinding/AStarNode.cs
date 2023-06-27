@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.AI
@@ -13,6 +11,7 @@ namespace Game.AI
         public Vector2Int ArrayIndex { get; private set; }
         public Vector3 Position { get; private set; }
         public AStarNode LastNodeInPath { get; set; } = null;
+        public float FloodFillValue { get; set; } = 0;
         public bool IsWalkable { get; set; }
         public bool AllNeighborsAreDiscovered { get; set; } = false;
 
@@ -26,14 +25,15 @@ namespace Game.AI
         public void Clear() {
             LastNodeInPath = null;
             AllNeighborsAreDiscovered = false;
+            FloodFillValue = 0;
             gCost = 0;
             hCost = 0;
         }
 
         public bool Equals(AStarNode node) {
             if (ArrayIndex != node.ArrayIndex) return false;
-            if (this.IsWalkable != node.IsWalkable) return false;
-            if (this.Position != node.Position) return false;
+            if (Position != node.Position) return false;
+            if (IsWalkable != node.IsWalkable) return false;
             if (gCost != node.gCost) return false;
             if (hCost != node.hCost) return false;
             return true;

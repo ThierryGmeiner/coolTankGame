@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Game.AI
 {
@@ -72,12 +73,12 @@ namespace Game.AI
         }
 
         public void UpdateNeighbors(AStarNode currentNode) {
-            Vector2Int[] neighborPositions = SuroundingNodes(currentNode.ArrayIndex);
+            AStarNode[] neighbors = Get8Neighbor(currentNode).ToArray();
             currentNode.AllNeighborsAreDiscovered = true;
 
-            foreach (Vector2Int position in neighborPositions) {
-                if (!currentNode.IsWalkable || NodeIsOutsideOfGrid(position, grid)) continue;
-                UpdateNode(grid.Grid[position.x, position.y], currentNode, targetNode);
+            foreach (AStarNode neighbor in neighbors) {
+                if (!currentNode.IsWalkable) continue;
+                UpdateNode(neighbor, currentNode, targetNode);
             }
         }
 
@@ -160,6 +161,58 @@ namespace Game.AI
             return finalPath;
         }
 
+        public AStarNode GetCoveredField(Vector3 startPos, GameObject enemy, int fillValue) 
+            => GetCoveredField(grid.GetNodeFromPosition(startPos), enemy, fillValue);
+
+        public AStarNode GetCoveredField(AStarNode startPos, GameObject enemy, int fillValue) {
+            List<AStarNode> currentNodes = new List<AStarNode>() { startPos };
+
+            while(fillValue > 0) {
+                fillValue--;
+                List<AStarNode> nextNodes = new List<AStarNode>();
+
+                foreach (AStarNode node in currentNodes) {
+                    if (IsCovered(node) && Physics.Linecast(node.Position, enemy.transform.position, grid.unwalkableMask)) {
+                        grid.Clear();
+                        return node;
+                    }
+
+                    List<AStarNode> neighborNodes = FloodFillNeighbors(node, fillValue);
+                    foreach (AStarNode neighbor in neighborNodes) {
+                        nextNodes.Add(neighbor);
+                    }
+                }
+                currentNodes = nextNodes;
+            }
+
+            grid.Clear();
+            return startPos;
+        }
+
+        private bool IsCovered(AStarNode node) {
+            AStarNode[] neighbors = Get4Neighbors(node).ToArray();
+
+            foreach (AStarNode neigbhor in neighbors) {
+                if (!neigbhor.IsWalkable) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private List<AStarNode> FloodFillNeighbors(AStarNode node, int fillValue) {
+            AStarNode[] neighbors = Get4Neighbors(node).ToArray();
+
+            List<AStarNode> confirmedNeighbors = new List<AStarNode>();
+            foreach (AStarNode neighbor in neighbors) {
+                if (neighbor.IsWalkable && neighbor.FloodFillValue == 0) {
+                    neighbor.FloodFillValue = fillValue;
+                    confirmedNeighbors.Add(neighbor);
+                }
+            }
+            return confirmedNeighbors;
+        }
+
         // ####################################################
         // some conditions:
         // ####################################################
@@ -167,12 +220,40 @@ namespace Game.AI
         public bool NodeIsStraightToNeighbor(AStarNode node, AStarNode updatingNode)
             => node.Position.x == updatingNode.Position.x || node.Position.y == updatingNode.Position.y;
 
-        private static Vector2Int[] SuroundingNodes(Vector2Int oldPos) {
-            Vector2Int[] array = { new Vector2Int(oldPos.x - 1, oldPos.y), new Vector2Int(oldPos.x + 1, oldPos.y),
-                                        new Vector2Int(oldPos.x, oldPos.y - 1), new Vector2Int(oldPos.x, oldPos.y + 1),
-                                        new Vector2Int(oldPos.x - 1, oldPos.y - 1), new Vector2Int(oldPos.x + 1, oldPos.y - 1),
-                                        new Vector2Int(oldPos.x - 1, oldPos.y + 1), new Vector2Int(oldPos.x + 1, oldPos.y + 1), };
-            return array;
+        private List<AStarNode> Get4Neighbors(AStarNode node) {
+            Vector2Int[] array = {
+                new Vector2Int(node.ArrayIndex.x - 1, node.ArrayIndex.y),
+                new Vector2Int(node.ArrayIndex.x + 1, node.ArrayIndex.y),
+                new Vector2Int(node.ArrayIndex.x, node.ArrayIndex.y - 1),
+                new Vector2Int(node.ArrayIndex.x, node.ArrayIndex.y + 1),
+            };
+
+            List<AStarNode> nodes = new List<AStarNode>();
+            foreach (var i in array) {
+                if (NodeIsOutsideOfGrid(i, grid)) continue;
+                else nodes.Add(grid.Grid[i.x, i.y]);
+            }
+            return nodes;
+        }
+
+        private List<AStarNode> Get8Neighbor(AStarNode node) {
+            Vector2Int[] array = { 
+                new Vector2Int(node.ArrayIndex.x - 1, node.ArrayIndex.y), 
+                new Vector2Int(node.ArrayIndex.x + 1, node.ArrayIndex.y),
+                new Vector2Int(node.ArrayIndex.x, node.ArrayIndex.y - 1), 
+                new Vector2Int(node.ArrayIndex.x, node.ArrayIndex.y + 1),
+                new Vector2Int(node.ArrayIndex.x - 1, node.ArrayIndex.y - 1), 
+                new Vector2Int(node.ArrayIndex.x + 1, node.ArrayIndex.y - 1),
+                new Vector2Int(node.ArrayIndex.x - 1, node.ArrayIndex.y + 1), 
+                new Vector2Int(node.ArrayIndex.x + 1, node.ArrayIndex.y + 1), 
+            };
+
+            List<AStarNode> nodes = new List<AStarNode>();
+            foreach (var i in array) {
+                if (NodeIsOutsideOfGrid(i, grid)) continue;
+                else nodes.Add(grid.Grid[i.x, i.y]);
+            } 
+            return nodes;
         }
 
         private bool StartOrTargetNodeIsNotValide() => !targetNode.IsWalkable || !startNode.IsWalkable || startNode == targetNode;

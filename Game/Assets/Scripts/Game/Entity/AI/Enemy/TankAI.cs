@@ -116,7 +116,11 @@ namespace Game.AI
         }
 
         public void StateAttackDefensive() {
-            Debug.Log("defensive");
+            // find place to hide
+            AStarNode coveredField = movement.aStar.GetCoveredField(transform.position, target, 10);
+            Debug.DrawLine(transform.position, coveredField.Position, Color.red);
+
+            // go to place
         }
 
         public void StateAttackOffensive() {
@@ -127,7 +131,7 @@ namespace Game.AI
 
         public void HandleOffensiveAttack() {
             if (TargetIsInScope(tank.Head.transform, 0.5f) && shootAttackTimer.timeSec <= 0) {
-                attack.Shoot(MathM.ConvertYRotationToVector3(tank.Head.transform.rotation.eulerAngles.y));
+                attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
                 shootAttackTimer.Restart();
             }
         }
