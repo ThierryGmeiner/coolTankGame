@@ -59,7 +59,7 @@ namespace Tests.PlayMode.Entity
 
             Bullet bullet = tank.Shoot(new Vector3(10, 10, 10));
 
-            Assert.AreEqual(tank.MaxShotsUntilCooldown - 1, tank.ShotsUntilCooldown);
+            Assert.AreEqual(tank.MaxShotsUntilCooldown - 1, tank.remainingShots);
 
             TestHelper.DestroyObjects(tank.gameObject, obj.gameObject, bullet.gameObject); ;
         }

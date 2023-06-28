@@ -10,7 +10,6 @@ namespace Game.AI
         private TankMovement movement;
         private TankAttack attack;
         private PlannedTimer searchTimer;
-        private PlannedTimer shootAttackTimer;
         private RandomTimer headRotationTimer;
         private Vector3 movingTarget;
 
@@ -34,19 +33,12 @@ namespace Game.AI
             wayPointPaths = movement.aStar.CnvertWayPointsToPaths(wayPoints);
 
             SetupHeadRotationTimer();
-            SetupShootAttackTimer();
 
             GetHpAttackRatio();
             attack.OnUpdateShotsUntilCooldown += GetHpAttackRatio;
             tank.Health.OnDamaged += (int a, int b, int c, Vector3 d) => GetHpAttackRatio();
             tank.Health.OnRepaired += (int a, int b, int c) => GetHpAttackRatio();
             tank.Health.OnDamaged += RotateTowardsDamageSource;
-        }
-
-        private void SetupShootAttackTimer() {
-            shootAttackTimer = gameObject.AddComponent<PlannedTimer>();
-            shootAttackTimer.SetupTimer(1, Timer.Modes.ConitinuesWhenTimeIsUp);
-            shootAttackTimer.StartTimer();
         }
 
         private void SetupHeadRotationTimer() {
@@ -91,7 +83,7 @@ namespace Game.AI
 
         private void GetHpAttackRatio() {
             hpInPrecent = 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
-            attackCooldownInPrecent = 100 * attack.ShotsUntilCooldown / attack.MaxShotsUntilCooldown;
+            attackCooldownInPrecent = 100 * attack.remainingShots / attack.MaxShotsUntilCooldown;
         }
 
         public void StateStayAtStart() {
@@ -110,7 +102,7 @@ namespace Game.AI
         public void StateSearch() {
             if (searchTimer == null) {
                 searchTimer = gameObject.AddComponent<PlannedTimer>();
-                searchTimer.SetupTimer(Random.Range(6, 15), Timer.Modes.destroyWhenTimeIsUp);
+                searchTimer.SetupTimer(Random.Range(8, 12), Timer.Modes.destroyWhenTimeIsUp);
                 searchTimer.StartTimer();
             }
         }
@@ -121,9 +113,8 @@ namespace Game.AI
         }
 
         private void HandleDefensiveAttack() {
-            if (TargetIsInScope(tank.Head.transform, 0.2f) && shootAttackTimer.timeSec <= 0) {
+            if (TargetIsInScope(tank.Head.transform, 0.2f)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
-                shootAttackTimer.Restart();
             }
         }
 
@@ -146,9 +137,8 @@ namespace Game.AI
         }
 
         private void HandleOffensiveAttack() {
-            if (TargetIsInScope(tank.Head.transform, 0.5f) && shootAttackTimer.timeSec <= 0) {
+            if (TargetIsInScope(tank.Head.transform, 0.5f)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
-                shootAttackTimer.Restart();
             }
         }
 

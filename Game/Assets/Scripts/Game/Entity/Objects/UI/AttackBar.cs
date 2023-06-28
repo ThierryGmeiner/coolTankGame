@@ -20,7 +20,7 @@ namespace Game.UI
         }
 
         private void UpdateAttackBar() {
-            targetValue = (float)rangeAttack.ShotsUntilCooldown / (float)rangeAttack.MaxShotsUntilCooldown;
+            targetValue = (float)rangeAttack.remainingShots / (float)rangeAttack.MaxShotsUntilCooldown;
         }
     }
 }

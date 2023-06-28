@@ -8,8 +8,10 @@ namespace Game.Entity.Tank
     {
         private Tank tank;
         private BulletStorage bullets;
+        private PlannedTimer reloadTimer;
         private PlannedTimer cooldownTimer;
-        private float timeToReloadOndeBulletInSec = 2;
+        private float reloadOneBulletSeconds = 2;
+        private float cooldownAfterShotSeconds = 1;
 
         [SerializeField] private TankData data;
 
@@ -19,21 +21,26 @@ namespace Game.Entity.Tank
         public event Action OnUpdateShotsUntilCooldown;
 
         public int MaxShotsUntilCooldown { get; private set; } = 5;
-        public int ShotsUntilCooldown { get; private set; }
+        public int remainingShots { get; private set; }
         public TankData Data { get => data; set => data = value; }
 
         private void Awake() {
             data ??= ScriptableObject.CreateInstance<TankData>();
             MaxShotsUntilCooldown = data.maxShootsUntilCooldown;
-            ShotsUntilCooldown = MaxShotsUntilCooldown;
+            remainingShots = MaxShotsUntilCooldown;
+
+            reloadTimer = gameObject.AddComponent<PlannedTimer>();
+            reloadTimer.SetupTimer(reloadOneBulletSeconds, Timer.Modes.restartWhenTimeIsUp);
+            reloadTimer.StartTimer();
 
             cooldownTimer = gameObject.AddComponent<PlannedTimer>();
-            cooldownTimer.SetupTimer(timeToReloadOndeBulletInSec, Timer.Modes.restartWhenTimeIsUp);
-            cooldownTimer.OnTimerEnds += Reload;
+            cooldownTimer.SetupTimer(cooldownAfterShotSeconds, Timer.Modes.ConitinuesWhenTimeIsUp);
             cooldownTimer.StartTimer();
 
-            OnShoot += () => ShotsUntilCooldown--;
+            reloadTimer.OnTimerEnds += Reload;
             OnShoot += () => cooldownTimer.Restart();
+            OnShoot += () => remainingShots--;
+            OnShoot += () => reloadTimer.Restart();
         }
 
         private void Start() {
@@ -46,8 +53,8 @@ namespace Game.Entity.Tank
         }
 
         private void Reload() {
-            if (ShotsUntilCooldown < MaxShotsUntilCooldown) {
-                ShotsUntilCooldown++;
+            if (remainingShots < MaxShotsUntilCooldown) {
+                remainingShots++;
                 OnReload?.Invoke();
                 OnUpdateShotsUntilCooldown?.Invoke();
             }
@@ -59,7 +66,7 @@ namespace Game.Entity.Tank
         }
 
         public Bullet Shoot(Vector3 direction) {
-            if (ShotsUntilCooldown <= 0) return null;
+            if (remainingShots <= 0 || cooldownTimer.timeSec > 0) return null;
 
             Bullet bullet = InstantiateBullet();
             bullet.Shoot(direction);
