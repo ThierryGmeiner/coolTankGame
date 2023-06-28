@@ -116,10 +116,26 @@ namespace Game.AI
         }
 
         public void StateAttackDefensive() {
-            AStarNode cover = movement.aStar.GetCoveredNode(transform.position, target, 10);
+            HandleDefensiveMovement();
+            HandleDefensiveAttack();
+        }
 
-            if (movement.aStar.Grid.GetNodeFromPosition(transform.position) != cover && movement.aStar.TargetNode != cover) {
-                movement.SetPath(transform.position, cover.Position);
+        private void HandleDefensiveAttack() {
+            if (TargetIsInScope(tank.Head.transform, 0.2f) && shootAttackTimer.timeSec <= 0) {
+                attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
+                shootAttackTimer.Restart();
+            }
+        }
+
+        private void HandleDefensiveMovement() {
+            if (!Physics.Linecast(transform.position, target.transform.position, obstacleLayer)) {
+
+                movement.HeadRotationTarget = target.transform.position;
+                AStarNode cover = movement.aStar.GetCoveredNode(transform.position, target, 10);
+
+                if (movement.aStar.Grid.GetNodeFromPosition(transform.position) != cover && movement.aStar.TargetNode != cover) {
+                    movement.SetPath(transform.position, cover.Position);
+                }
             }
         }
 
@@ -129,14 +145,14 @@ namespace Game.AI
             HandleOffensiveAttack();
         }
 
-        public void HandleOffensiveAttack() {
+        private void HandleOffensiveAttack() {
             if (TargetIsInScope(tank.Head.transform, 0.5f) && shootAttackTimer.timeSec <= 0) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
                 shootAttackTimer.Restart();
             }
         }
 
-        public void HandleOffensiveMovement() {
+        private void HandleOffensiveMovement() {
             movingTarget = GetAttackTargetPoss();
             if (movement.grid.GetNodeFromPosition(movingTarget) != movement.aStar.TargetNode) {
                 if (!Physics.Linecast(transform.position, movingTarget, obstacleLayer)) {

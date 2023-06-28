@@ -46,7 +46,11 @@ namespace Game.AI
 
         public virtual bool TargetIsInScope(Transform head, float scopeRadius) {
             Ray ray = new Ray(head.position, Magic.MathM.ConvertToVector3(head.rotation.eulerAngles.y));
-            return Physics.SphereCast(ray, scopeRadius, viewRadiusExtended, targetLayer);
+
+            // do this for optimization: firtst check if target is in scope, then if no obstacle is in betwean
+            if (Physics.SphereCast(ray, scopeRadius, viewRadiusExtended, targetLayer)) {
+                return !Physics.SphereCast(ray, scopeRadius, viewRadiusExtended, obstacleLayer);
+            } return false;
         }
 
         public virtual bool CanSeeTarget(Transform head) {
