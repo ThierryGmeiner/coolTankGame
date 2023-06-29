@@ -175,7 +175,7 @@ namespace Game.AI
 
                 // loop throu activeNodes and search siutable node
                 foreach (AStarNode node in currentNodes) {
-                    if (IsNextToCover(node) && Physics.Linecast(node.Position, enemy.transform.position, grid.unwalkableMask)) {
+                    if (Physics.Linecast(node.Position, enemy.transform.position, grid.unwalkableMask)) {
                         grid.Clear();
                         return node;
                     }
@@ -187,20 +187,8 @@ namespace Game.AI
                 } 
                 currentNodes = nextNodes;
             }
-
             grid.Clear();
             return startPos;
-        }
-
-        private bool IsNextToCover(AStarNode node) {
-            AStarNode[] neighbors = Get4Neighbors(node).ToArray();
-
-            foreach (AStarNode neigbhor in neighbors) {
-                if (!neigbhor.IsWalkable) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private List<AStarNode> FloodFillNeighbors(AStarNode node, int fillValue) {
@@ -212,8 +200,7 @@ namespace Game.AI
                     neighbor.FloodFillValue = fillValue;
                     confirmedNeighbors.Add(neighbor);
                 }
-            }
-            return confirmedNeighbors;
+            } return confirmedNeighbors;
         }
 
         // ####################################################

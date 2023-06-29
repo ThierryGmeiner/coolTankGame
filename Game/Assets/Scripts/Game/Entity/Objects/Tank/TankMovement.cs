@@ -5,6 +5,14 @@ namespace Game.Entity.Tank
 {
     public class TankMovement
     {
+        //------------------------------------------------------------------------------//
+        //------------------------------------------------------------------------------//
+        // pfad mit mehreren positionen erstellen                                       //
+        // min shift punkt setzen (diesen mit shift auch wieder löschen)                //
+        // pfad mit zb partickel anzeigen                                               //
+        //------------------------------------------------------------------------------//
+        //------------------------------------------------------------------------------//
+        
         // data
         private readonly Tank tank;
         private readonly Transform groundCheck;
@@ -22,7 +30,7 @@ namespace Game.Entity.Tank
         private readonly float jumpForce;
         private const float AIR_MULTIPLIER = 0.65f;
         private const float BODY_ROTATION_SPEED = 6;
-        private const float HEAD_ROTATION_SPEED = 5;
+        private const float HEAD_ROTATION_SPEED = 6;
 
         public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;
@@ -35,10 +43,8 @@ namespace Game.Entity.Tank
             aStar = new AStar(grid);
         }
 
-        public Vector3 HeadRotationTarget { set => headRotationTarget = value; }
-
         public float Speed { get => speed; }
-
+        public Vector3 HeadRotationTarget { set => headRotationTarget = value; }
         public Path Path {
             get => path;
             set { pathIndex = 0; path = value; }
@@ -93,14 +99,23 @@ namespace Game.Entity.Tank
         public Path SetPath(Vector3 startPos, Vector3 targetPos) {
             Path newPath = aStar.FindOptimizedPath(startPos, targetPos);
             if (newPath.Nodes.Length > 0) {
+                // set "Path" and not "path" that the index is overwritten
                 Path = newPath;
             } return Path;
         }
 
+        public Path AddPath(Vector3 targerPos) {
+            if (Path != null && Path.Nodes.Length > 0) {
+                // set "path" and not "Path" that the index is not overwritten
+                Path additionalPath = aStar.FindOptimizedPath(Path.Target.Position, targerPos);
+                path = path + additionalPath;
+                return path;
+            } 
+            return SetPath(tank.transform.position, targerPos);
+        }
+
         public bool GroundCheck() => Physics.CheckSphere(groundCheck.position, 0.1f, groundLayer);
-
         private bool ReachInterimTarget() => Vector3.Distance(tank.transform.position, Path.Nodes[pathIndex].Position) < 0.1;
-
-        private bool ReachTarget() => Vector3.Distance(tank.transform.position, Path.Nodes[Path.Nodes.Length - 1].Position) < 0.1; 
+        private bool ReachTarget() => Vector3.Distance(tank.transform.position, Path.Target.Position) < 0.1;
     }
 }

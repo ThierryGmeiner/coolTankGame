@@ -11,7 +11,7 @@ namespace Game.Entity.Tank
         private PlannedTimer reloadTimer;
         private PlannedTimer cooldownTimer;
         private float reloadOneBulletSeconds = 2;
-        private float cooldownAfterShotSeconds = 1;
+        private float cooldownAfterShotSeconds = 0.6f;
 
         [SerializeField] private TankData data;
 

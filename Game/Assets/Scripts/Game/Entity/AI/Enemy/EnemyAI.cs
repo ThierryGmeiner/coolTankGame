@@ -9,6 +9,7 @@ namespace Game.AI
         [SerializeField] protected float viewRadius = 6;
         [SerializeField] protected float viewRadiusExtended = 18;
         [SerializeField] [Range(0, 360)] protected float viewAngle = 90;
+        protected AStarNode lastVisualContact;
 
         [Header("Movement")]
         [SerializeField] protected Transform[] wayPoints = new Transform[0];
@@ -56,8 +57,7 @@ namespace Game.AI
         public virtual bool CanSeeTarget(Transform head) {
             if (!TargetIsInViewFieldd(head)) {
                 return false;
-            }
-            return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
+            } return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
         }
 
         public virtual bool TargetIsInViewFieldd(Transform head) {

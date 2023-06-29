@@ -25,7 +25,7 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Shoot_CreateBullet() {
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
-            yield return null;
+            yield return new WaitForSeconds(0.6f);
             GameObject bullet = TestHelper.CreateBullet();
 
             tank.ChangeBullet(bullet);
@@ -39,7 +39,7 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Shoot_SetShootingEntity() {
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
-            yield return null;
+            yield return new WaitForSeconds(0.6f);
             GameObject bullet = TestHelper.CreateBullet();
 
             tank.ChangeBullet(bullet);
@@ -53,7 +53,7 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Shoot_OneShotUntilCooldownLess() {
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
-            yield return null;
+            yield return new WaitForSeconds(0.6f);
             GameObject obj = TestHelper.CreateBullet();
             tank.ChangeBullet(obj);
 

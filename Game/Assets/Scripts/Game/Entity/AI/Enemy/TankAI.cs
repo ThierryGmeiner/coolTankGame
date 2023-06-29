@@ -49,6 +49,10 @@ namespace Game.AI
         }
 
         private void Update() {
+            if (CanSeeTarget(tank.Head.transform)) {
+                lastVisualContact = movement.aStar.Grid.GetNodeFromPosition(target.transform.position);
+            }
+
             StateMachine = GetState();
             StateMachine();
         }
@@ -105,6 +109,10 @@ namespace Game.AI
                 searchTimer.SetupTimer(Random.Range(8, 12), Timer.Modes.destroyWhenTimeIsUp);
                 searchTimer.StartTimer();
             }
+
+            if (movement.aStar.TargetNode != lastVisualContact) {
+                movement.SetPath(transform.position, lastVisualContact.Position);
+            }
         }
 
         public void StateAttackDefensive() {
@@ -120,13 +128,15 @@ namespace Game.AI
 
         private void HandleDefensiveMovement() {
             if (!Physics.Linecast(transform.position, target.transform.position, obstacleLayer)) {
-
                 movement.HeadRotationTarget = target.transform.position;
-                AStarNode cover = movement.aStar.GetCoveredNode(transform.position, target, 10);
+                GetCover();
+            }
+        }
 
-                if (movement.aStar.Grid.GetNodeFromPosition(transform.position) != cover && movement.aStar.TargetNode != cover) {
-                    movement.SetPath(transform.position, cover.Position);
-                }
+        private void GetCover() {
+            AStarNode cover = movement.aStar.GetCoveredNode(transform.position, target, 10);
+            if (movement.aStar.Grid.GetNodeFromPosition(transform.position) != cover && movement.aStar.TargetNode != cover) {
+                movement.SetPath(transform.position, cover.Position);
             }
         }
 

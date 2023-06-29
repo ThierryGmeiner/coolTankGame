@@ -41,6 +41,10 @@ namespace Game.InputSystem
             movement.SetPath(transform.position, GetMousePosition());
         }
 
+        private void AddNewPath() {
+
+        }
+
         private Vector3 GetMousePosition() {
             float distance;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -50,10 +54,13 @@ namespace Game.InputSystem
 
         private void SetupControlsMovement() {
             controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => movement.Jump();
+            controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => {
+                if (Input.GetKey(KeyCode.LeftShift)) movement.AddPath(GetMousePosition());
+                else movement.SetPath(transform.position, GetMousePosition());
+            };
         }
 
         private void SetupControlsAttack() {
-            controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => SetNewPath();
             controler.TankAttack.ShootAttack.started += (InputAction.CallbackContext c) => { 
                 if (!ClickOnTank()) tank.Attack.Shoot(Magic.MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y)); 
             };
