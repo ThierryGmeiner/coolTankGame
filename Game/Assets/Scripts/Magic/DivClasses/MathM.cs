@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Magic
@@ -27,6 +28,23 @@ namespace Magic
         // https://answers.unity.com/questions/54495/how-do-i-convert-angle-to-vector3.html
         public static Vector3 ConvertToVector3(float rotation) {
             return new Vector3(Mathf.Sin(Mathf.Deg2Rad * rotation), 0, Mathf.Cos(Mathf.Deg2Rad * rotation));
+        }
+
+
+        public static Vector3[] PositionsInDevidedLine(Vector3 startPos, Vector3 endPos, float segmentLength) {
+            float distance = Vector3.Distance(startPos, endPos);
+            int segmentCount = Mathf.RoundToInt(distance / segmentLength);
+            Vector3[] points = new Vector3[segmentCount];
+
+            float segmentLenghtX = (endPos.x - startPos.x) / segmentCount;
+            float segmentLenghtZ = (endPos.z - startPos.z) / segmentCount;
+
+            for (int i = 0; i < segmentCount; i++) {
+                float x = startPos.x + segmentLenghtX * (i + 1);
+                float z = startPos.z + segmentLenghtZ * (i + 1);
+                points[i] = new Vector3(x, 0, z);
+            }
+            return points;
         }
     }
 }

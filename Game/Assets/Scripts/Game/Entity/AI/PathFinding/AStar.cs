@@ -50,13 +50,13 @@ namespace Game.AI
             startNode = start; targetNode = target;
             AStarNode currentNode = startNode;
 
-            if (StartOrTargetNodeIsNotValide()) return new Path(new AStarNode[0], false);
+            if (StartOrTargetNodeIsNotValide()) return new Path(new AStarNode[0]);
             // search every loop the cheapest node and update them
             for (int i = 0; currentNode != targetNode && i < 10000; i++) {
                 UpdateNeighbors(currentNode);
                 currentNode = grid.GetCheapestNode();
             }
-            Path path = new Path(GetPath(startNode, targetNode).ToArray(), false);
+            Path path = new Path(GetPath(startNode, targetNode).ToArray());
             grid.Clear();
             return path;
         }
@@ -121,14 +121,14 @@ namespace Game.AI
             List<AStarNode> optimizedPath = new List<AStarNode>();
             AStarNode currentSectionStart = startNode;
 
-            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes, true);
+            if (unoptimizedPath.Nodes.Length == 0) return new Path(unoptimizedPath.Nodes);
 
             // search in every loop one section
             while (currentSectionStart != targetNode) {
                 currentSectionStart = FindNewSection(unoptimizedPath.Nodes, currentSectionStart);
                 optimizedPath.Add(currentSectionStart);
             }
-            return new Path(optimizedPath.ToArray(), true);
+            return new Path(optimizedPath.ToArray());
         }
 
         private AStarNode FindNewSection(AStarNode[] path, AStarNode oldSectionStart) {
@@ -152,7 +152,7 @@ namespace Game.AI
         // ####################################################
 
         public Path CnvertWayPointsToPaths(Transform[] wayPoints) {
-            Path finalPath = new Path(new AStarNode[0], optimized: true);
+            Path finalPath = new Path(new AStarNode[0]);
             for (int i = 0; i < wayPoints.Length; i++) {
                 Vector3 start = wayPoints[i].position;
                 Vector3 target = i + 1 < wayPoints.Length ? wayPoints[i + 1].position : wayPoints[0].position;

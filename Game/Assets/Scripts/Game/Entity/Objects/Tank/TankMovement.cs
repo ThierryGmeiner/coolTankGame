@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Game.AI;
 
@@ -5,24 +6,17 @@ namespace Game.Entity.Tank
 {
     public class TankMovement
     {
-        //------------------------------------------------------------------------------//
-        //------------------------------------------------------------------------------//
-        // pfad mit mehreren positionen erstellen                                       //
-        // min shift punkt setzen (diesen mit shift auch wieder löschen)                //
-        // pfad mit zb partickel anzeigen                                               //
-        //------------------------------------------------------------------------------//
-        //------------------------------------------------------------------------------//
-        
         // data
         private readonly Tank tank;
         private readonly Transform groundCheck;
         private readonly LayerMask groundLayer;
 
         // pathFinding
-        private Path path = new Path(new AStarNode[0], true);
+        private Path path = new Path(new AStarNode[0]);
         private int pathIndex = 0;
         public readonly AStar aStar;
         public readonly AStarGrid grid;
+        public event Action<Path> OnSetPath;
 
         // movement
         private Vector3 headRotationTarget;
@@ -105,6 +99,7 @@ namespace Game.Entity.Tank
             if (newPath.Nodes.Length > 0) {
                 // set "Path" and not "path" that the index is overwritten
                 Path = newPath;
+                OnSetPath?.Invoke(Path);
             } return Path;
         }
 
@@ -113,6 +108,7 @@ namespace Game.Entity.Tank
                 // set "path" and not "Path" that the index is not overwritten
                 Path additionalPath = aStar.FindOptimizedPath(Path.Target.Position, targerPos);
                 path = path + additionalPath;
+                OnSetPath?.Invoke(Path);
                 return path;
             } 
             return SetPath(tank.transform.position, targerPos);

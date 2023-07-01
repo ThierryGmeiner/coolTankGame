@@ -203,6 +203,5 @@ namespace Game.AI
         public bool NodeIsOutsideOfGrid(AStarNode node) => NodeIsOutsideOfGrid(node.ArrayIndex);
         public bool NodeIsOutsideOfGrid(Vector2Int arrayIndex)
             => arrayIndex.x < 0 || arrayIndex.y < 0 || arrayIndex.x >= Grid.GetLength(0) || arrayIndex.y >= Grid.GetLength(1);
-
     }
 }

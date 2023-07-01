@@ -16,7 +16,7 @@ namespace Game.AI
         [SerializeField] protected float preferTargetDistanceMin = 5;
         [SerializeField] protected float preferTargetDistanceMax = 14;
         protected AStarGrid aStarGrid;
-        protected Path wayPointPaths = new Path(new AStarNode[0], true);
+        protected Path wayPointPaths = new Path(new AStarNode[0]);
         protected int currentPathIndex = 0;
 
         public Action StateMachine { get; protected set; }

@@ -149,7 +149,7 @@ namespace Tests.PlayMode.Entity
             Vector3 oldPos = tank.transform.position;
             yield return null;
 
-            tank.Movement.Path = new Path(new AStarNode[0], true);
+            tank.Movement.Path = new Path(new AStarNode[0]);
             tank.Movement.HandleMovement();
 
             Assert.AreEqual(oldPos.x, tank.transform.position.x, 0.05f);
