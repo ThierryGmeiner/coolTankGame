@@ -510,6 +510,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 986a8e7453894b14bbf8762cd380c742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleObject: {fileID: 8527625191338214309, guid: aed34c931a70cde488c48d1e7ee86660, type: 3}
+  poolObject: {fileID: 2359878231045614940, guid: 2c5e88ca896941547b349a630c46f2ad, type: 3}
   color: {r: 0.6, g: 0.78039217, b: 1, a: 1}
   distance: 1

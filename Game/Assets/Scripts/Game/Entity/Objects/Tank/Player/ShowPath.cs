@@ -8,54 +8,30 @@ namespace Game.Entity.Tank
     [RequireComponent(typeof(Tank))]
     public class ShowPath : MonoBehaviour
     {
-        [SerializeField] private GameObject particleObject;
+        [SerializeField] private ObjectPooling objectPooler;
         [SerializeField] private Color color;
         [SerializeField] private float distance;
 
         TankMovement movement;
-        private ParticleSystem[] particles;
-        private LinkedList<GameObject> pathParticleList;
         private const float SPAWN_HEIGHT = 0.1f;
 
-        private GameObject container;
-        private const string NAME_CONTAINER = "ParticleContainer";
-
         private void Awake() {
-            container = CreateParticleContainer();
             distance = Mathf.Clamp(distance, 0.1f, float.MaxValue);
         }
 
         private void Start() {
             movement = GetComponent<Tank>().Movement;
-            particles = particleObject.GetComponentsInChildren<ParticleSystem>();
-
-            for (int i = 0; i < particles.Length; i++) {
-                particles[i].startColor = color;
-
-            }
-
             movement.OnSetPath += SetParticles;
-        }
-
-        private GameObject CreateParticleContainer() {
-            GameObject cont = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity);
-            cont.name = NAME_CONTAINER;
-            return cont;
         }
 
         private void SetParticles(Path path) {
             if (path.Nodes.Length == 0) return;
 
-            GameObject container = new GameObject();
-            container.name = NAME_CONTAINER;
-            container.transform.position = Vector3.zero;
-
             Vector3[] fullPath = GetPointsInPath(path);
 
-            pathParticleList = new LinkedList<GameObject>();
             foreach (Vector3 pos in fullPath) {
-                GameObject obj = Instantiate(particleObject, new Vector3(pos.x, SPAWN_HEIGHT, pos.z), Quaternion.identity);
-                pathParticleList.AddLast(obj);
+                GameObject particle = objectPooler.RequestActivatedObject();
+                particle.transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
             }
         }
 
