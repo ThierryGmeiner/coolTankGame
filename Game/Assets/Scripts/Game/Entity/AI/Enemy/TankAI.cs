@@ -134,7 +134,7 @@ namespace Game.AI
         }
 
         private void GetCover() {
-            AStarNode cover = movement.aStar.GetCoveredNode(transform.position, target, 10);
+            AStarNode cover = movement.grid.GetCoveredNode(transform.position, target, 10);
             if (movement.aStar.Grid.GetNodeFromPosition(transform.position) != cover && movement.aStar.TargetNode != cover) {
                 movement.SetPath(transform.position, cover.Position);
             }

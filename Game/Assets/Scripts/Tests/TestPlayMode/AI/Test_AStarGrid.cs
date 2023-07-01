@@ -149,5 +149,84 @@ namespace Tests.PlayMode.AI
 
             TestHelper.DestroyObjects(grid.gameObject);
         }
+
+
+        [UnityTest]
+        public IEnumerator NodeIsOutsideOfGrid_DontExistInGrid_True() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, new Vector2(10, 10));
+
+            bool isOutside = grid.NodeIsOutsideOfGrid(node);
+
+            Assert.IsTrue(isOutside);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator NodeIsOutsideOfGrid_XtoLow_True() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(-5, 1));
+
+            bool isOutside = grid.NodeIsOutsideOfGrid(node);
+
+            Assert.IsTrue(isOutside);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator NodeIsOutsideOfGrid_YtoLow_True() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, -5));
+
+            bool isOutside = grid.NodeIsOutsideOfGrid(node);
+
+            Assert.IsTrue(isOutside);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator NodeIsOutsideOfGrid_XToHigh_True() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(+50, 1));
+
+            bool isOutside = grid.NodeIsOutsideOfGrid(node);
+
+            Assert.IsTrue(isOutside);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator NodeIsOutsideOfGrid_YToHigh_True() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, +50));
+
+            bool isOutside = grid.NodeIsOutsideOfGrid(node);
+
+            Assert.IsTrue(isOutside);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator NodeIsOutsideOfGrid_IsInside_False() {
+            AStarGrid grid = TestHelper.CreateASTarGrid();
+            yield return null;
+            AStarNode node = new AStarNode(true, Vector2.zero, new Vector2Int(1, 1));
+
+            bool isOutside = grid.NodeIsOutsideOfGrid(node);
+
+            Assert.IsFalse(isOutside);
+
+            TestHelper.DestroyObjects(grid.gameObject);
+        }
     }
 }
