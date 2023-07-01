@@ -33,7 +33,7 @@ namespace Game.Cam
         }
 
         private void Start() {
-            player ??= GameObject.FindGameObjectWithTag(Magic.Tags.Player);
+            player ??= GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
         }
 
         public void Move(Vector2 direction) {
@@ -52,7 +52,7 @@ namespace Game.Cam
                 MoveTowardsPlayer();
             }
             else if (camIsLocked) {
-                if (camIsMoving) ChangeLockingState();
+                if (camIsMoving) camIsLocked = false;
                 else FollowPlayer();
             }
         }

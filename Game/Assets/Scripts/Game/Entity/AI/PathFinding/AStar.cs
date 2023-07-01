@@ -161,6 +161,32 @@ namespace Game.AI
             return finalPath;
         }
 
+        public AStarNode GetClosestWalkableNeighbor(AStarNode node, Vector3 clickPosition) {
+            List<AStarNode> neighbors = GetWalkableNodes(Get8Neighbor(node));
+
+            if (neighbors.Count == 0) return node;
+
+            AStarNode closestNeighbor = neighbors[0];
+            float distance = Vector3.Distance(closestNeighbor.Position, clickPosition);
+
+            for (int i = 1; i < neighbors.Count; i++) {
+                float currentDistance = Vector3.Distance(neighbors[i].Position, clickPosition);
+                if (currentDistance > distance) {
+                    distance = currentDistance;
+                    closestNeighbor = neighbors[i];
+                }
+            } return closestNeighbor;
+        }
+
+        public List<AStarNode> GetWalkableNodes(List<AStarNode> nodes) {
+            List<AStarNode> walkableNodes = new List<AStarNode>();
+            for (int i = 0; i < nodes.Count; i++) {
+                if (nodes[i].IsWalkable) {
+                    walkableNodes.Add(nodes[i]);
+                }
+            } return walkableNodes;
+        }
+
         public AStarNode GetCoveredNode(Vector3 startPos, GameObject enemy, int fillValue) 
             => GetCoveredField(grid.GetNodeFromPosition(startPos), enemy, fillValue);
 

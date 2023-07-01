@@ -97,7 +97,11 @@ namespace Game.Entity.Tank
         }
 
         public Path SetPath(Vector3 startPos, Vector3 targetPos) {
-            Path newPath = aStar.FindOptimizedPath(startPos, targetPos);
+            AStarNode startNode = grid.GetNodeFromPosition(startPos);
+            AStarNode targetNode = grid.GetNodeFromPosition(targetPos);
+            if (!targetNode.IsWalkable) targetNode = aStar.GetClosestWalkableNeighbor(targetNode, targetPos);
+
+            Path newPath = aStar.FindOptimizedPath(startNode, targetNode);
             if (newPath.Nodes.Length > 0) {
                 // set "Path" and not "path" that the index is overwritten
                 Path = newPath;

@@ -14,12 +14,14 @@ namespace Game.InputSystem
         private Tank tank;
         private TankMovement movement;
         private CameraMovement cam;
+        private LayerMask playerLayer;
 
         private void Awake() {
             controler = new PlayerControler();
             controler.TankDrive.Enable();
             controler.TankAttack.Enable();
             controler.Camera.Enable();
+            playerLayer = LayerMask.GetMask("Player");
         }
 
         private void Start() {
@@ -75,6 +77,6 @@ namespace Game.InputSystem
             };
         }
 
-        private bool ClickOnTank() => Physics.CheckSphere(GetMousePosition(), 0.3f, LayerMask.GetMask("Player"));
+        private bool ClickOnTank() => Physics.CheckSphere(GetMousePosition(), 0.3f, playerLayer);
     }
 }
