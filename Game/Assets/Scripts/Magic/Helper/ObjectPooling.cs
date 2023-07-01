@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,10 +52,23 @@ namespace Magic
             return obj.GameObject;
         }
 
-        public void DeaktivateObject(IPoolable iPoolable) {
-            ActiveObjects.Remove(iPoolable);
-            InactiveObjects.AddLast(iPoolable);
-            iPoolable.SetInactive();
+        public void DeaktivateObject(IPoolable p) {
+            ActiveObjects.Remove(p);
+            InactiveObjects.AddLast(p);
+            p.SetInactive();
+        }
+
+        public IEnumerator DeaktivateOverTime(LinkedList<IPoolable> list, float timeInSec) {
+            LinkedList<IPoolable> waitingList = new LinkedList<IPoolable>();
+            while (list.Count > 0) {
+                waitingList.AddFirst(list.First.Value);
+                list.RemoveFirst();
+            }
+            foreach (IPoolable p in waitingList) {
+                InactiveObjects.AddLast(p);
+                p.SetInactive();
+                yield return new WaitForSeconds(timeInSec);
+            }
         }
     }
 

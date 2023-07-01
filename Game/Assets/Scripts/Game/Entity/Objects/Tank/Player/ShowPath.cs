@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.AI;
@@ -11,6 +12,7 @@ namespace Game.Entity.Tank
         [SerializeField] private ObjectPooling objectPooler;
         [SerializeField] private Color color;
         [SerializeField] private float distance;
+        [SerializeField] private float appearanceTimeInSec = 0.05f;
 
         TankMovement movement;
         private const float SPAWN_HEIGHT = 0.1f;
@@ -21,26 +23,33 @@ namespace Game.Entity.Tank
 
         private void Start() {
             movement = GetComponent<Tank>().Movement;
-            movement.OnSetPath += SetParticles;
+            movement.OnSetPath += (Path path) => {
+                // stop the old functioncal to prevent taht the previous line get drawn further
+                StopCoroutine(nameof(SetParticles));
+                StartCoroutine(SetParticles(path));
+            };
         }
 
-        private void SetParticles(Path path) {
-            if (path.Nodes.Length == 0) return;
+        private IEnumerator SetParticles(Path path) {
+            if (path.Nodes.Length != 0) {
+                Vector3[] fullPath = GetPointsInPath(path);
+                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec));
 
-            Vector3[] fullPath = GetPointsInPath(path);
+                foreach (Vector3 pos in fullPath) {
+                    GameObject particle = objectPooler.RequestActivatedObject();
+                    particle.transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
 
-            foreach (Vector3 pos in fullPath) {
-                GameObject particle = objectPooler.RequestActivatedObject();
-                particle.transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
+                    yield return new WaitForSeconds(appearanceTimeInSec);
+                }
             }
         }
 
         private Vector3[] GetPointsInPath(Path path) {
             List<Vector3> positions = new List<Vector3>();
 
-            positions = AddToList(positions, MathM.PositionsInDevidedLine(transform.position, path.Nodes[0].Position, distance));
+            positions = AddToList(positions, MathM.PositionsInDevidedLine(transform.position, path.Nodes[movement.pathIndex].Position, distance));
             
-            for (int i = 0; i < path.Nodes.Length; i++) {
+            for (int i = movement.pathIndex; i < path.Nodes.Length; i++) {
                 if (path.Nodes[i] == path.Target) break;
                 positions = AddToList(positions, MathM.PositionsInDevidedLine(path.Nodes[i].Position, path.Nodes[i + 1].Position, distance));
             }

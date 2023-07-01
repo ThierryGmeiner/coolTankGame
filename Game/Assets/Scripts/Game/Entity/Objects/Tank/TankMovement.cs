@@ -12,8 +12,8 @@ namespace Game.Entity.Tank
         private readonly LayerMask groundLayer;
 
         // pathFinding
+        public int pathIndex { get; private set; } = 0;
         private Path path = new Path(new AStarNode[0]);
-        private int pathIndex = 0;
         public readonly AStar aStar;
         public readonly AStarGrid grid;
         public event Action<Path> OnSetPath;

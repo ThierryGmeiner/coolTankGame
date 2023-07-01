@@ -41,7 +41,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5080016891510739288}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 0.05
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -9661,7 +9661,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.15
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3800302573181477881
 MonoBehaviour:
@@ -9676,3 +9676,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliedr: {fileID: 5060213870410302994}
+  stayingParticle: {fileID: 5337402776825939100}
+  flyingParticle: {fileID: 5080016891510739287}

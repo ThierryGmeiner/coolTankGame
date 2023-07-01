@@ -7,6 +7,8 @@ namespace Game.Entity.Particle
     public class ParticleShowPath : MonoBehaviour, IPoolable
     {
         [SerializeField] private Collider colliedr;
+        [SerializeField] private ParticleSystem stayingParticle;
+        [SerializeField] private ParticleSystem flyingParticle;
         private IPoolable iPoolable;
 
         public GameObject GameObject { get => gameObject; }
@@ -20,15 +22,24 @@ namespace Game.Entity.Particle
 
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.tag == Tags.Player) {
-                Debug.Log("tag");
+                SetInactive();
+            }
+            if (other.gameObject.name == gameObject.name) {
+                SetInactive();
             }
         }
 
         public void SetActive() {
+            flyingParticle.Emit(1);
+            stayingParticle.Emit(1);
+            flyingParticle.Play();
+            stayingParticle.Play();
             colliedr.enabled = true;
         }
 
         public void SetInactive() {
+            flyingParticle.Stop();
+            stayingParticle.Stop();
             transform.position = new Vector3(-200, -200, -200);
             colliedr.enabled = false;
         }
