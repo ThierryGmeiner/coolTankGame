@@ -15,8 +15,6 @@ namespace Game.Entity.Tank
         public event Action OnDestruction;
 
         private void Awake() {
-            InstantiateData();
-            groundCheck ??= CreateGroundCheck();
             shootingSpot ??= CreateShootingSpot();
             tankHead ??= new GameObject();
             data?.Attack?.BulletStorage.Awake();
@@ -25,6 +23,7 @@ namespace Game.Entity.Tank
             Attack = GetComponent<TankAttack>() ?? gameObject.AddComponent<TankAttack>();
             RigidBody = GetComponent<Rigidbody>() ?? gameObject.AddComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>() ?? gameObject.AddComponent<BoxCollider>();
+            InstantiateData();
         }
 
         private void Start() {
@@ -32,7 +31,6 @@ namespace Game.Entity.Tank
         }
 
         private void Update() { 
-            IsGrounded = Movement.GroundCheck();
             Movement.HandleMovement();
         }
 
@@ -51,18 +49,10 @@ namespace Game.Entity.Tank
         public TankAttack Attack { get; private set; } = null;
         public DataTank Data { get => data; set { data = value; InstantiateData(); } }
         public Transform ShootingSpot { get => shootingSpot; }
-        public bool IsGrounded { get; private set; }
 
         private void InstantiateData() {
             data ??= ScriptableObject.CreateInstance<DataTank>();
             Movement = new TankMovement(this, groundCheck);
-        }
-
-        private Transform CreateGroundCheck() {
-            Transform obj = Instantiate(new GameObject()).transform;
-            obj.position = new Vector3(transform.position.x, transform.position.y - (transform.localScale.z / 2), transform.position.z);
-            obj.parent = gameObject.transform;
-            return obj.transform;
         }
 
         private Transform CreateShootingSpot() {

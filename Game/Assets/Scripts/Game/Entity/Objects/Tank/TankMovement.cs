@@ -20,17 +20,17 @@ namespace Game.Entity.Tank
 
         // movement
         private Vector3 headRotationTarget;
-        private readonly float speed;
-        private readonly float jumpForce;
-        private const float AIR_MULTIPLIER = 0.65f;
-        private const float BODY_ROTATION_SPEED = 6;
-        private const float HEAD_ROTATION_SPEED = 6;
+        private readonly float speed = 6;
+        private readonly float bodyRotationSpeed = 6;
+        private readonly float headRotationSpeed = 6;
 
         public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;
             this.groundCheck = groundCheck;
+            
             speed = tank.Data.Movement.Speed;
-            jumpForce = tank.Data.Movement.JumpForce;
+            bodyRotationSpeed = tank.Data.Movement.BodyRotationSpeed;
+            headRotationSpeed = tank.Data.Movement.HeadRotationSpeed;
 
             groundLayer = LayerMask.GetMask("Ground");
             grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
@@ -45,8 +45,7 @@ namespace Game.Entity.Tank
         }
 
         public void Move(Vector3 target) {
-            float moveSpeed = tank.IsGrounded ? speed * Time.deltaTime : speed * AIR_MULTIPLIER * Time.deltaTime;
-            tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, moveSpeed);
+            tank.transform.position = Vector3.MoveTowards(tank.transform.position, target, speed * Time.deltaTime);
 
             if (ReachTarget()) {
                 aStar.StartNode = new AStarNode(true, Vector3.zero);
@@ -66,18 +65,12 @@ namespace Game.Entity.Tank
             Move(path.Nodes[pathIndex].Position);
         }
 
-        public void Jump() {
-            if (tank.IsGrounded) {
-                tank.RigidBody.AddForce(new Vector3(tank.RigidBody.velocity.x, jumpForce, tank.RigidBody.velocity.z), ForceMode.Impulse);
-            }
-        }
-
         public void RotateHead() {
-            Rotate(tank.Head, headRotationTarget, HEAD_ROTATION_SPEED);
+            Rotate(tank.Head, headRotationTarget, headRotationSpeed);
         }
 
         public void RotateBody(Vector3 target) {
-            Rotate(tank.gameObject, target, BODY_ROTATION_SPEED);
+            Rotate(tank.gameObject, target, bodyRotationSpeed);
         }
 
         private void Rotate(GameObject obj, Vector3 target, float rotationSpeed) {
@@ -114,7 +107,6 @@ namespace Game.Entity.Tank
             return SetPath(tank.transform.position, targerPos);
         }
 
-        public bool GroundCheck() => Physics.CheckSphere(groundCheck.position, 0.1f, groundLayer);
         private bool ReachInterimTarget() => Vector3.Distance(tank.transform.position, Path.Nodes[pathIndex].Position) < 0.1;
         private bool ReachTarget() => Vector3.Distance(tank.transform.position, Path.Target.Position) < 0.1;
     }

@@ -49,7 +49,7 @@ namespace Game.Entity
 
         protected virtual void OnCollisionEnter(Collision collision) {
             if (collision.gameObject == ShootingEntity) { return; }
-            Debug.Log("collide");
+
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
                 collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage, transform.position);
             }

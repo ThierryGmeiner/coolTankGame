@@ -43,64 +43,6 @@ namespace Tests.PlayMode.Entity
         }
 
         [UnityTest]
-        public IEnumerator GroundCheck_IsNotGrounded_False() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-            yield return null;
-
-            bool isGrounded = tank.Movement.GroundCheck();
-
-            Assert.IsFalse(isGrounded);
-
-            TestHelper.DestroyObjects(tank.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator GroundCheck_IsGrounded_True() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-            Transform ground = TestHelper.CreateGround<Transform>();
-            tank.transform.position = new Vector3(ground.position.x, ground.position.y + (tank.transform.localScale.y / 2), ground.position.z);
-
-            yield return new WaitForFrames(5);
-            bool isGrounded = tank.Movement.GroundCheck();
-
-            Assert.IsTrue(isGrounded);
-
-            TestHelper.DestroyObjects(tank.gameObject, ground.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator Jump_IsGrounded_IncreasHeight() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-            Transform ground = TestHelper.CreateGround<Transform>();
-            yield return null;
-            tank.transform.position = new Vector3(ground.position.x, ground.position.y + (tank.transform.localScale.y / 2), ground.position.z);
-            while (tank.IsGrounded == false) yield return null;
-
-            float oldHeight = tank.transform.position.y;
-            tank.Movement.Jump();
-            yield return new WaitForFrames(20);
-
-            Assert.Greater(tank.transform.position.y, oldHeight);
-
-            TestHelper.DestroyObjects(tank.gameObject, ground.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator Jump_IsNotGrounded_StaySameHeight() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-            yield return null;
-            tank.RigidBody.useGravity = false;
-
-            float oldHeight = tank.transform.position.y;
-            tank.Movement.Jump();
-            yield return new WaitForFrames(20);
-
-            Assert.AreEqual(oldHeight, tank.transform.position.y, 0.05);
-
-            TestHelper.DestroyObjects(tank.gameObject);
-        }
-
-        [UnityTest]
         public IEnumerator SetPath_SetNewPath() {
             AStarGrid grid = TestHelper.CreateASTarGrid();
             Tank tank = TestHelper.CreateTank<Tank>();

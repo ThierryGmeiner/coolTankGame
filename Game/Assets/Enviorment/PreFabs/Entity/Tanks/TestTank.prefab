@@ -320,7 +320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loockAt: 1
   bar: {fileID: 2999429550389339858}
-  reductionSpeed: 1
+  speed: 1.5
 --- !u!1 &2867120354105027225
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7dbc05e01b38c046b712b180aed7369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 2d70530ab62e5d4469a94891a9fe9837, type: 2}
+  data: {fileID: 11400000, guid: 49695f3732d67aa42ac60fe2be56e7a8, type: 2}
   tankHead: {fileID: 178150196904012783}
   groundCheck: {fileID: 4864593693566337504}
   shootingSpot: {fileID: 4478861191213471276}
@@ -532,7 +532,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d6cd68097f462469669eef806d6e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 2d70530ab62e5d4469a94891a9fe9837, type: 2}
 --- !u!114 &1251385326127198655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -545,7 +544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffccdc0dd0e50940a58c4c5e3349648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 2d70530ab62e5d4469a94891a9fe9837, type: 2}
+  bulletContainer: {fileID: 0}
 --- !u!1 &4864593693566337535
 GameObject:
   m_ObjectHideFlags: 0

@@ -60,7 +60,6 @@ namespace Game.InputSystem
         }
 
         private void SetupControlsMovement() {
-            controler.TankDrive.Jump.started += (InputAction.CallbackContext c) => movement.Jump();
             controler.TankDrive.SetPath.started += (InputAction.CallbackContext c) => {
                 if (Input.GetKey(KeyCode.LeftShift)) movement.AddPath(GetMousePosition());
                 else movement.SetPath(transform.position, GetMousePosition());

@@ -42,10 +42,10 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator GetName_GetsName() {
             Tank tank = TestHelper.CreateTank<Tank>();
-            TankData data = ScriptableObject.CreateInstance<TankData>();
+            DataTank data = ScriptableObject.CreateInstance<DataTank>();
             yield return null;
 
-            Assert.AreEqual(data.Name, tank.Name);
+            Assert.AreEqual(data.Entity.Name, tank.Name);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }
@@ -53,10 +53,10 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator GetSpeed_GetsSpeed() {
             Tank tank = TestHelper.CreateTank<Tank>();
-            TankData data = ScriptableObject.CreateInstance<TankData>();
+            DataTank data = ScriptableObject.CreateInstance<DataTank>();
             yield return null;
 
-            Assert.AreEqual(data.Speed, tank.Movement.Speed);
+            Assert.AreEqual(data.Movement.Speed, tank.Movement.Speed);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }
@@ -64,10 +64,10 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator GetHealth_GetsHealth() {
             Tank tank = TestHelper.CreateTank<Tank>();
-            TankData data = ScriptableObject.CreateInstance<TankData>();
+            DataTank data = ScriptableObject.CreateInstance<DataTank>();
             yield return null;
 
-            Assert.AreEqual(data.Health, tank.Health.HitPoints);
+            Assert.AreEqual(data.Health.HitPoints, tank.Health.HitPoints);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }
@@ -88,32 +88,6 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             Assert.IsNotNull(tank.Collider);
-
-            TestHelper.DestroyObjects(tank.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator IsGrounded_IsGrounded_True() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-            Transform ground = TestHelper.CreateGround<Transform>();
-            tank.transform.position = new Vector3(ground.position.x, ground.position.y + (tank.transform.localScale.y / 2), ground.position.z);
-
-            for (int i = 0; i < 5; i++) yield return null;
-            bool isGrounded = tank.IsGrounded;
-
-            Assert.IsTrue(isGrounded);
-
-            TestHelper.DestroyObjects(tank.gameObject, ground.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator IsGrounded_IsNotGrounded_False() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-
-            yield return null;
-            bool isGrounded = tank.IsGrounded;
-
-            Assert.IsFalse(isGrounded);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }
