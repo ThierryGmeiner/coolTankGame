@@ -4,11 +4,11 @@ using Magic;
 namespace Game.Entity.Particle
 {
     [RequireComponent(typeof(Collider))]
-    public class ParticleShowPath : MonoBehaviour, IPoolable
+    public class ShowPathParticle : MonoBehaviour, IPoolable
     {
         [SerializeField] private Collider colliedr;
-        [SerializeField] private ParticleSystem stayingParticle;
-        [SerializeField] private ParticleSystem flyingParticle;
+        [SerializeField] public ParticleSystem stayingParticle;
+        [SerializeField] public ParticleSystem flyingParticle;
         private IPoolable iPoolable;
 
         public GameObject GameObject { get => gameObject; }

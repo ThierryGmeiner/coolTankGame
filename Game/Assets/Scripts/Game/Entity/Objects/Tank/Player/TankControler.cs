@@ -30,7 +30,7 @@ namespace Game.InputSystem
             tank = GetComponent<Tank>();
             movement = tank.Movement;
             cam = Camera.main.GetComponent<CameraMovement>();
-            
+
             SetupControlsMovement();
             SetupControlsAttack();
             SetupControlsCameraMovement();
@@ -43,7 +43,7 @@ namespace Game.InputSystem
 
         private void SetHeadRotationTarget() {
             Vector3 mousePos = GetMousePosition();
-            Collider[] targetedEntity = Physics.OverlapSphere(mousePos, 1, entityLayer);
+            Collider[] targetedEntity = Physics.OverlapSphere(mousePos, 1f, entityLayer);
 
             if (targetedEntity.Length > 0) {
                 movement.HeadRotationTarget = targetedEntity[0].transform.position;

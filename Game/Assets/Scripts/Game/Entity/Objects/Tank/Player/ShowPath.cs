@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.AI;
+using Game.Entity.Particle;
 using Magic;
 
 namespace Game.Entity.Tank
@@ -24,11 +25,10 @@ namespace Game.Entity.Tank
         private void Start() {
             movement = GetComponent<Tank>().Movement;
             
-            foreach (IPoolable p in objectPooler.InactiveObjects) {
-                var particleSystems = p.GameObject.transform.GetComponentsInChildren<ParticleSystem>();
-                foreach (ParticleSystem ps in particleSystems) {
-                    ps.startColor = color;
-                }
+            foreach (IPoolable pooler in objectPooler.InactiveObjects) {
+                var particle = pooler.GameObject.transform.GetComponent<ShowPathParticle>();
+                particle.flyingParticle.startColor = color;
+                particle.stayingParticle.startColor = color;
             }
 
             movement.OnSetPath += (Path path) => {

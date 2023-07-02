@@ -6167,7 +6167,7 @@ ParticleSystem:
   UVModule:
     serializedVersion: 2
     enabled: 0
-    mode: 0
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -9672,9 +9672,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8527625191338214309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c9ea1930eb18994a9e7cc51da7b4a7e, type: 3}
+  m_Script: {fileID: 11500000, guid: cf5d0702f6a246d47af0be3b2b97353a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   colliedr: {fileID: 5060213870410302994}
-  stayingParticle: {fileID: 5337402776825939100}
-  flyingParticle: {fileID: 5080016891510739287}
+  stayingParticle: {fileID: 5080016891510739287}
+  flyingParticle: {fileID: 5337402776825939100}
