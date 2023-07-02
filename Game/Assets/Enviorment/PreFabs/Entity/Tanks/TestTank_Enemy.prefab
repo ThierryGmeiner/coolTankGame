@@ -90,23 +90,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a1e8439f08ef584c87cf7e44d087e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 6
-  viewRadiusExtended: 18
-  viewAngle: 90
-  wayPoints: []
-  preferTargetDistanceMin: 5
-  preferTargetDistanceMax: 14
-  aggressiveness: 60
-  anxiety: 25
-  tank: {fileID: 1033553528807398018}
---- !u!114 &1033553528807398018 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4902868653811906715, guid: e9f3d5b3da8ad8b43b5539dadae0fdee, type: 3}
-  m_PrefabInstance: {fileID: 5358604493085843993}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 711309623975226941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7dbc05e01b38c046b712b180aed7369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 00102d2f3e216c84eaeeac7bf1b3ef4e, type: 2}

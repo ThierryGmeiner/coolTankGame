@@ -40,7 +40,6 @@ namespace Game.Entity
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             timer = gameObject.AddComponent<PlannedTimer>();
-            ObjectPooler ??= new GameObject().AddComponent<ObjectPooling>();
         }
 
         private void Start() {

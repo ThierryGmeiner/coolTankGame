@@ -12,8 +12,6 @@ namespace Game.Entity.Tank
         private BulletStorage bullets;
         private PlannedTimer reloadTimer;
         private PlannedTimer cooldownTimer;
-        private float reloadOneBulletSeconds = 2;
-        private float cooldownAfterShotSeconds = 0.6f;
 
         [SerializeField] private GameObject bulletContainer;
 
@@ -29,13 +27,7 @@ namespace Game.Entity.Tank
 
         private void Awake() {
             reloadTimer = gameObject.AddComponent<PlannedTimer>();
-            reloadTimer.SetupTimer(reloadOneBulletSeconds, Timer.Modes.restartWhenTimeIsUp);
-            reloadTimer.StartTimer();
-
             cooldownTimer = gameObject.AddComponent<PlannedTimer>();
-            cooldownTimer.SetupTimer(cooldownAfterShotSeconds, Timer.Modes.ConitinuesWhenTimeIsUp);
-            cooldownTimer.StartTimer();
-            cooldownTimer.ReduceTime(cooldownAfterShotSeconds);
 
             reloadTimer.OnTimerEnds += Reload;
             OnShoot += () => cooldownTimer.Restart();
@@ -48,8 +40,11 @@ namespace Game.Entity.Tank
             MaxShotsUntilCooldown = data.Attack.maxShootsUntilCooldown;
             remainingShots = MaxShotsUntilCooldown;
 
-            tank = GetComponent<Tank>();
-            bullets = data.Attack.BulletStorage ?? ScriptableObject.CreateInstance<BulletStorage>();
+            reloadTimer.SetupTimer(tank.Data.Attack.reloadOneBulletSeconds, Timer.Modes.restartWhenTimeIsUp);
+            cooldownTimer.SetupTimer(tank.Data.Attack.cooldownAfterShotSeconds, Timer.Modes.ConitinuesWhenTimeIsUp);
+            reloadTimer.StartTimer();
+            cooldownTimer.StartTimer();
+            cooldownTimer.ReduceTime(tank.Data.Attack.cooldownAfterShotSeconds);
 
             bulletContainer ??= new GameObject();
             BulletPooler = bulletContainer.GetComponent<ObjectPooling>() ?? bulletContainer.AddComponent<ObjectPooling>();

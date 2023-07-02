@@ -7,6 +7,8 @@ namespace Game.Data
     {
         public BulletStorage BulletStorage;
         public int maxShootsUntilCooldown = 5;
+        public float reloadOneBulletSeconds = 2;
+        public float cooldownAfterShotSeconds = 0.6f;
 
         private void Awake() {
             BulletStorage ??= CreateInstance<BulletStorage>();

@@ -40,7 +40,7 @@ namespace Game.Entity.Tank
 
         private IEnumerator SetParticles(Path path) {
             if (path.Nodes.Length != 0) {
-                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec));
+                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec / 2));
                 Vector3[] fullPath = GetPointsInPath(path);
 
                 foreach (Vector3 pos in fullPath) {

@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using Magic;
+using Game.Entity.Tank;
 using Game.AI;
 
 namespace MEditor
@@ -9,12 +10,14 @@ namespace MEditor
     public class TankAIEditor : Editor
     {
         private TankAI ai;
+        private GameObject head;
         private float rayResolution = 0.5f;
         private LayerMask obstacleLayer;
         private LayerMask playerLayer;
 
         private void OnEnable() {
             ai = (TankAI)target;
+            head = ai.GetComponent<Tank>().Head;
             obstacleLayer = LayerMask.GetMask("Obstacle");
             playerLayer = LayerMask.GetMask("Player");
         }
@@ -56,13 +59,12 @@ namespace MEditor
                 Handles.color = Color.red;
                 Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.PreferTargetDistanceMin);
                 Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.PreferTargetDistanceMax);
-                Handles.DrawSolidDisc(ai.MovingTarget, Vector3.up, 0.3f);
             }
         }
 
         private void DrawFOVRay(float angle) {
             RaycastHit rayInfo;
-            Ray ray = new Ray(ai.transform.position, ai.ViewDirection(angle, false));
+            Ray ray = new Ray(ai.transform.position, ai.ViewDirection(head.transform, angle, false));
             Physics.Raycast(ray, out rayInfo, ai.ViewRadiusExtended, obstacleLayer);
             float length = rayInfo.collider == null ? ai.ViewRadiusExtended : rayInfo.distance;
 
@@ -73,7 +75,7 @@ namespace MEditor
             }
             else Handles.color = Color.white;
             
-            Handles.DrawLine(ai.transform.position, ai.transform.position + ai.ViewDirection(angle, false) * length);
+            Handles.DrawLine(ai.transform.position, ai.transform.position + ai.ViewDirection(head.transform, angle, false) * length);
         }
     }
 }

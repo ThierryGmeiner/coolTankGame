@@ -7,9 +7,8 @@ namespace Game.Entity.Tank
     public class Tank : MonoBehaviour, IEntity
     {
         [SerializeField] private DataTank data;
-
+        [Space]
         [SerializeField] private GameObject tankHead;
-        [SerializeField] private Transform groundCheck;
         [SerializeField] private Transform shootingSpot;
 
         public event Action OnDestruction;
@@ -17,7 +16,6 @@ namespace Game.Entity.Tank
         private void Awake() {
             shootingSpot ??= CreateShootingSpot();
             tankHead ??= new GameObject();
-            data?.Attack?.BulletStorage.Awake();
 
             Health = GetComponent<TankHealth>() ?? gameObject.AddComponent<TankHealth>();
             Attack = GetComponent<TankAttack>() ?? gameObject.AddComponent<TankAttack>();
@@ -52,7 +50,7 @@ namespace Game.Entity.Tank
 
         private void InstantiateData() {
             data ??= ScriptableObject.CreateInstance<DataTank>();
-            Movement = new TankMovement(this, groundCheck);
+            Movement = new TankMovement(this);
         }
 
         private Transform CreateShootingSpot() {

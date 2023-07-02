@@ -8,8 +8,6 @@ namespace Game.Entity.Tank
     {
         // data
         private readonly Tank tank;
-        private readonly Transform groundCheck;
-        private readonly LayerMask groundLayer;
 
         // pathFinding
         public int pathIndex { get; private set; } = 0;
@@ -24,15 +22,13 @@ namespace Game.Entity.Tank
         private readonly float bodyRotationSpeed = 6;
         private readonly float headRotationSpeed = 6;
 
-        public TankMovement(Tank tank, Transform groundCheck) {
+        public TankMovement(Tank tank) {
             this.tank = tank;
-            this.groundCheck = groundCheck;
             
             speed = tank.Data.Movement.Speed;
             bodyRotationSpeed = tank.Data.Movement.BodyRotationSpeed;
             headRotationSpeed = tank.Data.Movement.HeadRotationSpeed;
 
-            groundLayer = LayerMask.GetMask("Ground");
             grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
             aStar = new AStar(grid);
         }

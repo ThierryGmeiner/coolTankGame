@@ -1,5 +1,6 @@
 using UnityEngine;
 using Game.Entity.Tank;
+using Game.Data;
 using Magic;
 
 namespace Game.AI
@@ -7,30 +8,24 @@ namespace Game.AI
     [RequireComponent(typeof(Tank))]
     public class TankAI : EnemyAI
     {
+        private Tank tank;
         private TankMovement movement;
         private TankAttack attack;
         private PlannedTimer searchTimer;
         private RandomTimer headRotationTimer;
         private Vector3 movingTarget;
 
-        [Header("Attack")]
-        [SerializeField] [Range(1, 90)] protected int aggressiveness = 80;
-        [SerializeField] [Range(1, 90)] protected int anxiety = 50;
         private int hpInPrecent = 100;
         private int attackCooldownInPrecent = 100;
 
-        [Header("Object")]
-        [SerializeField] private Tank tank;
-
-        public Vector3 MovingTarget { get => movingTarget; }
         public Tank Tank { get => tank; }
 
         protected override void Start() {
             base.Start();
-            tank ??= GetComponent<Tank>();
+            tank = GetComponent<Tank>();
             attack = tank.Attack;
             movement = tank.Movement;
-            wayPointPaths = movement.aStar.CnvertWayPointsToPaths(wayPoints);
+            wayPointPaths = movement.aStar.CnvertWayPointsToPaths(data.wayPoints);
 
             SetupHeadRotationTimer();
             attack.OnUpdateShotsUntilCooldown += GetHpAttackRatio;
@@ -58,7 +53,7 @@ namespace Game.AI
             bool canSeeTarget = CanSeeTarget(head: tank.Head.transform);
 
             if (StateMachine == null) {
-                return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+                return data.wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
             }
             // in default: can go to attack
             else if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
@@ -67,17 +62,17 @@ namespace Game.AI
             // in searching: can go to attack or default/followPath
             else if (StateMachine == StateSearch) {
                 if (canSeeTarget) return StateAttackOffensive;
-                if (searchTimer.timeSec <= 0) return wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
+                if (searchTimer.timeSec <= 0) return data.wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
             }
             // in attack defensive: can go to attack offensive
             else if (StateMachine == StateAttackDefensive) {
-                if (attackCooldownInPrecent >= aggressiveness) return StateAttackOffensive;
+                if (attackCooldownInPrecent >= data.aggressiveness) return StateAttackOffensive;
             }
             // in attack offensive: can go to search or attack defensive
             else if (StateMachine == StateAttackOffensive) {
                 if (!canSeeTarget) return StateSearch;
                 if (attackCooldownInPrecent == 0) return StateAttackDefensive;
-                if (attackCooldownInPrecent + hpInPrecent < anxiety * 2) return StateAttackDefensive;
+                if (attackCooldownInPrecent + hpInPrecent < data.anxiety * 2) return StateAttackDefensive;
             }
             return StateMachine;
         }
@@ -160,9 +155,9 @@ namespace Game.AI
 
         private Vector3 GetAttackTargetPoss() {
             float distance = Vector3.Distance(movingTarget, target.transform.position);
-            if (distance > preferTargetDistanceMin && distance < preferTargetDistanceMax) return movingTarget;
+            if (distance > data.preferTargetDistanceMin && distance < data.preferTargetDistanceMax) return movingTarget;
 
-            float newTargetDistance = MathM.Mid(preferTargetDistanceMin, preferTargetDistanceMax);
+            float newTargetDistance = MathM.Mid(data.preferTargetDistanceMin, data.preferTargetDistanceMax);
             return MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
         }
 
@@ -178,13 +173,6 @@ namespace Game.AI
             if (StateMachine != StateAttackOffensive && StateMachine != StateAttackDefensive) {
                 movement.HeadRotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
             }
-        }
-
-        public override Vector3 ViewDirection(float angleInDegrees, bool angleIsGlobal) {
-            if (!angleIsGlobal) {
-                angleInDegrees += tank.Head.transform.eulerAngles.y;
-            }
-            return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
     }
 }

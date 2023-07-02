@@ -36,7 +36,8 @@ namespace Tests
 
         public static GameObject CreateEnemyTank() {
             GameObject tank = CreateTank();
-            tank.AddComponent<TankAI>();
+            var ai = tank.AddComponent<TankAI>();
+            ai.Data = ScriptableObject.CreateInstance<DataEnemyAI>();
             return tank;
         }
 
