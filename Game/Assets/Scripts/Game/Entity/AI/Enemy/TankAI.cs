@@ -16,8 +16,8 @@ namespace Game.AI
         [Header("Attack")]
         [SerializeField] [Range(1, 90)] protected int aggressiveness = 80;
         [SerializeField] [Range(1, 90)] protected int anxiety = 50;
-        private int hpInPrecent;
-        private int attackCooldownInPrecent;
+        private int hpInPrecent = 100;
+        private int attackCooldownInPrecent = 100;
 
         [Header("Object")]
         [SerializeField] private Tank tank;
@@ -28,13 +28,11 @@ namespace Game.AI
         protected override void Start() {
             base.Start();
             tank ??= GetComponent<Tank>();
-            attack ??= GetComponent<TankAttack>();
+            attack = tank.Attack;
             movement = tank.Movement;
             wayPointPaths = movement.aStar.CnvertWayPointsToPaths(wayPoints);
 
             SetupHeadRotationTimer();
-
-            GetHpAttackRatio();
             attack.OnUpdateShotsUntilCooldown += GetHpAttackRatio;
             tank.Health.OnDamaged += (int a, int b, int c, Vector3 d) => GetHpAttackRatio();
             tank.Health.OnRepaired += (int a, int b, int c) => GetHpAttackRatio();
@@ -52,7 +50,6 @@ namespace Game.AI
             if (CanSeeTarget(tank.Head.transform)) {
                 lastVisualContact = movement.aStar.Grid.GetNodeFromPosition(target.transform.position);
             }
-
             StateMachine = GetState();
             StateMachine();
         }

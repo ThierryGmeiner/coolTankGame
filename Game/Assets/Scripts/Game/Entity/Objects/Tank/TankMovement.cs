@@ -29,8 +29,8 @@ namespace Game.Entity.Tank
         public TankMovement(Tank tank, Transform groundCheck) {
             this.tank = tank;
             this.groundCheck = groundCheck;
-            speed = tank.Data.Speed;
-            jumpForce = tank.Data.JumpForce;
+            speed = tank.Data.Movement.Speed;
+            jumpForce = tank.Data.Movement.JumpForce;
 
             groundLayer = LayerMask.GetMask("Ground");
             grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();

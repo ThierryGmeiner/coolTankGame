@@ -13,7 +13,7 @@ namespace Game.Entity.Particle
 
         public GameObject GameObject { get => gameObject; }
         public IPoolable IPoolable { get => iPoolable; }
-        public ObjectPooling Container { get; set; }
+        public ObjectPooling ObjectPooler { get; set; }
 
         private void Awake() {
             colliedr ??= GetComponent<Collider>();

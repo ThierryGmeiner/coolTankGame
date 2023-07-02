@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Entity
+namespace Game.Data
 {
     [CreateAssetMenu(fileName = "ScriptableObject Tank", menuName = "ScriptableObject Tank")]
     public class TankData : ScriptableObject

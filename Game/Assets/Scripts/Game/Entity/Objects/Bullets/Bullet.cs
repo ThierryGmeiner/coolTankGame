@@ -20,10 +20,27 @@ namespace Game.Entity
         public event Action<int, int, int, Vector3> OnDamaged;
         public event Action OnDestruction;
 
+        public string Name { get => name; }
+        public GameObject GameObject { get => gameObject; }
+        public ObjectPooling ObjectPooler { get; set; }
+        public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
+        public Rigidbody RigidBody { get; set; }
+        public Collider Collider { get; set; }
+        public int MaxHitPoints { get; } = 0;
+        public int HitPoints { get; } = 0;
+        public float LifeTime {
+            get => lifeTime;
+            set {
+                lifeTime = value;
+                InitializeTimer();
+            }
+        }
+
         protected virtual void Awake() {
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             timer = gameObject.AddComponent<PlannedTimer>();
+            ObjectPooler ??= new GameObject().AddComponent<ObjectPooling>();
         }
 
         private void Start() {
@@ -31,7 +48,8 @@ namespace Game.Entity
         }   
 
         protected virtual void OnCollisionEnter(Collision collision) {
-            if (collision.gameObject == ShootingEntity) return;
+            if (collision.gameObject == ShootingEntity) { return; }
+            Debug.Log("collide");
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
                 collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage, transform.position);
             }
@@ -74,22 +92,6 @@ namespace Game.Entity
 
         private void OnDestroy() {
             // play sound and particles
-        }
-
-        public string Name { get => name; }
-        public GameObject GameObject { get => gameObject; }
-        public ObjectPooling Container { get; set; }
-        public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
-        public Rigidbody RigidBody { get; set; }
-        public Collider Collider { get; set; }
-        public int MaxHitPoints { get; } = 0;
-        public int HitPoints { get; } = 0;
-        public float LifeTime {
-            get => lifeTime;
-            set {
-                lifeTime = value;
-                InitializeTimer();
-            }
         }
     }
 }

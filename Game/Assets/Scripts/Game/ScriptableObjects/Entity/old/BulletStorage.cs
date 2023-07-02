@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Entity
+namespace Game.Data
 {
     [CreateAssetMenu(fileName = "BulletStorage", menuName = "BulletStorage")]
     public class BulletStorage : ScriptableObject

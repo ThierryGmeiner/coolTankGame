@@ -6,23 +6,16 @@ namespace Magic
 {
     public class ObjectPooling : MonoBehaviour
     {        
-        [SerializeField] private string objectName;
-        [SerializeField] private int spawnAmount;
+        [SerializeField] private string objectName = " ";
+        [SerializeField] private int spawnAmount = 10;
         [SerializeField] private GameObject pooledObject;
 
         public LinkedList<IPoolable> InactiveObjects { get; private set; } = new LinkedList<IPoolable>();
         public LinkedList<IPoolable> ActiveObjects { get; private set; } = new LinkedList<IPoolable>();
 
         private void Awake() {
-            if (pooledObject == null) {
-                Debug.LogError($"{nameof(gameObject.name)}.{nameof(ObjectPooling)}.{nameof(pooledObject)} is null");
-                return;
-            }
-            IPoolable iPoolable = pooledObject.GetComponent<IPoolable>();
-            if (iPoolable == null) {
-                Debug.LogError($"{nameof(gameObject.name)}.{nameof(ObjectPooling)}.{nameof(pooledObject)} has no {nameof(IPoolable)} atatched");
-                return;
-            }
+            IPoolable iPoolable = pooledObject?.GetComponent<IPoolable>();
+            if (iPoolable == null) { return; }
 
             for (int i = 0; i < spawnAmount; i++) {
                 InstantiatePooledObject(i);
@@ -30,21 +23,21 @@ namespace Magic
         }
 
         private void InstantiatePooledObject(int num) {
+            if (pooledObject == null) { return; }
             GameObject obj = Instantiate(pooledObject);
             IPoolable iPoolable = obj.GetComponent<IPoolable>();
 
-            iPoolable.Container = this;
+            iPoolable.SetInactive();
+            iPoolable.ObjectPooler = this;
             obj.transform.parent = transform;
             obj.name = objectName + " " + System.Convert.ToString(num);
             InactiveObjects.AddFirst(iPoolable);
-            iPoolable.SetInactive();
         }
 
         public GameObject RequestObject() {
             if (InactiveObjects.Count == 0) {
                 InstantiatePooledObject(InactiveObjects.Count + ActiveObjects.Count);
             }
-
             IPoolable obj = InactiveObjects.First.Value;
             InactiveObjects.RemoveFirst();
             ActiveObjects.AddFirst(obj);
@@ -70,12 +63,20 @@ namespace Magic
                 yield return new WaitForSeconds(timeInSec);
             }
         }
+
+        public GameObject PooledObject {
+            get => pooledObject;
+            set {
+                pooledObject = value;
+                Awake();
+            }
+        }
     }
 
     public interface IPoolable
     {
         public GameObject GameObject { get; }
-        public ObjectPooling Container { get; set; }
+        public ObjectPooling ObjectPooler { get; set; }
         public void SetActive();
         public void SetInactive();
     }

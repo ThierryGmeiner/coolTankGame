@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Game.Entity;
 using Game.Entity.Tank;
+using Game.Data;
 using Game.AI;
 using Magic;
 
@@ -16,12 +17,9 @@ namespace Tests
             tank.tag = Tags.Entity;
             tank.layer = 6;
             tank.AddComponent<BoxCollider>();
+            tank.AddComponent<Rigidbody>();
             var tankClass = tank.AddComponent<Tank>();
-            tankClass.Data = ScriptableObject.CreateInstance<TankData>();
-            var tankHealth = tank.AddComponent<TankHealth>();
-            tankHealth.Data = ScriptableObject.CreateInstance<TankData>();
-            var tankAttack = tank.AddComponent<TankAttack>();
-            tankAttack.Data = ScriptableObject.CreateInstance<TankData>();
+            tankClass.Data = ScriptableObject.CreateInstance<DataTank>();
             return tank;
         }
 

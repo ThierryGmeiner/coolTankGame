@@ -13,7 +13,7 @@ namespace Game.Entity.Tank
         [SerializeField] private ObjectPooling objectPooler;
         [SerializeField] private Color color;
         [SerializeField] private float distance;
-        [SerializeField] private float appearanceTimeInSec = 0.1f;
+        [SerializeField] private float appearanceTimeInSec = 0.075f;
 
         TankMovement movement;
         private const float SPAWN_HEIGHT = 0.1f;
@@ -40,7 +40,7 @@ namespace Game.Entity.Tank
 
         private IEnumerator SetParticles(Path path) {
             if (path.Nodes.Length != 0) {
-                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec / 2));
+                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec));
                 Vector3[] fullPath = GetPointsInPath(path);
 
                 foreach (Vector3 pos in fullPath) {

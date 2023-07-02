@@ -276,7 +276,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1745175457}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &605867427
 MonoBehaviour:
@@ -587,7 +587,7 @@ Transform:
   - {fileID: 691495544}
   - {fileID: 1920221291}
   m_Father: {fileID: 1745175457}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1328104999 stripped
 MonoBehaviour:
@@ -787,9 +787,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 605867426}
-  - {fileID: 2047409990}
   - {fileID: 1022932560}
+  - {fileID: 2047409990}
+  - {fileID: 605867426}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

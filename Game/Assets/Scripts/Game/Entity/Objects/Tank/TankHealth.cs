@@ -1,29 +1,27 @@
 using System;
 using UnityEngine;
+using Game.Data;
 
 namespace Game.Entity.Tank
 {
     [RequireComponent(typeof(Tank))]
     public class TankHealth : MonoBehaviour, IDamagable, IRepairable
-    {        
+    {
+        private Tank tank;
+
         public event Action<int, int, int, Vector3> OnDamaged;
         public event Action<int, int, int> OnRepaired;
 
-        [SerializeField] private TankData data;
-
-        private void Awake() {
-            data ??= ScriptableObject.CreateInstance<TankData>();
-            MaxHitPoints = data.Health;
+        private void Start() {
+            tank = GetComponent<Tank>();
+            tank.Data ??= ScriptableObject.CreateInstance<DataTank>();
+            MaxHitPoints = data.Health.HitPoints;
             HitPoints = MaxHitPoints;
         }
 
+        private DataTank data => tank.Data;
         public int MaxHitPoints { get; set; }
         public int HitPoints { get; private set; }
-        public TankData Data {
-            get { return data; }
-            set { data = value; }
-        }
-
 
         public void GetDamaged(int damage) {
             GetDamaged(damage, transform.position);

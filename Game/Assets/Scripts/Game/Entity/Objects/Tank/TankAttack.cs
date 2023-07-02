@@ -1,36 +1,33 @@
 using System;
 using UnityEngine;
 using Magic;
+using Game.Data;
 
 namespace Game.Entity.Tank
 {
     public class TankAttack : MonoBehaviour, IRangeAttack, IDropMine
     {
         private Tank tank;
+
         private BulletStorage bullets;
         private PlannedTimer reloadTimer;
         private PlannedTimer cooldownTimer;
         private float reloadOneBulletSeconds = 2;
         private float cooldownAfterShotSeconds = 0.6f;
 
-        [SerializeField] private TankData data;
         [SerializeField] private GameObject bulletContainer;
-        private ObjectPooling bulletPooler;
 
         public event Action OnShoot;
         public event Action OnDropMine;
         public event Action OnReload;
         public event Action OnUpdateShotsUntilCooldown;
 
+        public ObjectPooling BulletPooler { get; private set; }
+        private DataTank data => tank.Data;
         public int MaxShotsUntilCooldown { get; private set; } = 5;
         public int remainingShots { get; private set; }
-        public TankData Data { get => data; set => data = value; }
 
         private void Awake() {
-            data ??= ScriptableObject.CreateInstance<TankData>();
-            MaxShotsUntilCooldown = data.maxShootsUntilCooldown;
-            remainingShots = MaxShotsUntilCooldown;
-
             reloadTimer = gameObject.AddComponent<PlannedTimer>();
             reloadTimer.SetupTimer(reloadOneBulletSeconds, Timer.Modes.restartWhenTimeIsUp);
             reloadTimer.StartTimer();
@@ -38,6 +35,7 @@ namespace Game.Entity.Tank
             cooldownTimer = gameObject.AddComponent<PlannedTimer>();
             cooldownTimer.SetupTimer(cooldownAfterShotSeconds, Timer.Modes.ConitinuesWhenTimeIsUp);
             cooldownTimer.StartTimer();
+            cooldownTimer.ReduceTime(cooldownAfterShotSeconds);
 
             reloadTimer.OnTimerEnds += Reload;
             OnShoot += () => cooldownTimer.Restart();
@@ -47,8 +45,14 @@ namespace Game.Entity.Tank
 
         private void Start() {
             tank = GetComponent<Tank>();
-            bullets = data.BulletStorage ?? ScriptableObject.CreateInstance<BulletStorage>();
-            bulletPooler = bulletContainer.GetComponent<ObjectPooling>();
+            MaxShotsUntilCooldown = data.Attack.maxShootsUntilCooldown;
+            remainingShots = MaxShotsUntilCooldown;
+
+            tank = GetComponent<Tank>();
+            bullets = data.Attack.BulletStorage ?? ScriptableObject.CreateInstance<BulletStorage>();
+
+            bulletContainer ??= new GameObject();
+            BulletPooler = bulletContainer.GetComponent<ObjectPooling>() ?? bulletContainer.AddComponent<ObjectPooling>();
         }
 
         public void ChangeBullet(GameObject bullet) {
@@ -79,7 +83,7 @@ namespace Game.Entity.Tank
         }
 
         private Bullet InstantiateBullet() {
-            GameObject obj = bulletPooler.RequestObject();
+            GameObject obj = BulletPooler.RequestObject();
             obj.transform.position = tank.ShootingSpot.position;
             obj.transform.rotation = tank.ShootingSpot.rotation;
             Bullet bullet = obj.GetComponent<Bullet>();

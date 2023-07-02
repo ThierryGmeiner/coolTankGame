@@ -25,43 +25,43 @@ namespace Tests.PlayMode.Entity
         [UnityTest]
         public IEnumerator Shoot_CreateBullet() {
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
-            yield return new WaitForSeconds(0.6f);
-            GameObject bullet = TestHelper.CreateBullet();
-
-            tank.ChangeBullet(bullet);
+            Bullet bullet = TestHelper.CreateBullet<Bullet>();
+            yield return null;
+            
+            tank.BulletPooler.PooledObject = bullet.gameObject;
             Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.IsNotNull(newBullet);
 
-            TestHelper.DestroyObjects(tank.gameObject, bullet, newBullet.gameObject);
+            TestHelper.DestroyObjects(tank.gameObject, bullet.gameObject, newBullet.gameObject);
         }
 
         [UnityTest]
         public IEnumerator Shoot_SetShootingEntity() {
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
-            yield return new WaitForSeconds(0.6f);
-            GameObject bullet = TestHelper.CreateBullet();
+            Bullet bullet = TestHelper.CreateBullet<Bullet>();
+            yield return null;
 
-            tank.ChangeBullet(bullet);
+            tank.BulletPooler.PooledObject = bullet.gameObject;
             Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.AreEqual(tank.gameObject, newBullet.ShootingEntity);
 
-            TestHelper.DestroyObjects(tank.gameObject, bullet, newBullet.gameObject);
+            TestHelper.DestroyObjects(tank.gameObject, bullet.gameObject, newBullet.gameObject);
         }
 
         [UnityTest]
         public IEnumerator Shoot_OneShotUntilCooldownLess() {
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
-            yield return new WaitForSeconds(0.6f);
-            GameObject obj = TestHelper.CreateBullet();
-            tank.ChangeBullet(obj);
+            Bullet bullet = TestHelper.CreateBullet<Bullet>();
+            yield return null;
 
-            Bullet bullet = tank.Shoot(new Vector3(10, 10, 10));
+            tank.BulletPooler.PooledObject = bullet.gameObject;
+            Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.AreEqual(tank.MaxShotsUntilCooldown - 1, tank.remainingShots);
 
-            TestHelper.DestroyObjects(tank.gameObject, obj.gameObject, bullet.gameObject); ;
+            TestHelper.DestroyObjects(tank.gameObject, bullet.gameObject, newBullet.gameObject); ;
         }
     }
 }

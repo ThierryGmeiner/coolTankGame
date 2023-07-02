@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Game.Entity;
 using Game.Entity.Tank;
+using Game.Data;
 
 namespace Tests.PlayMode.Entity
 {
@@ -28,8 +29,8 @@ namespace Tests.PlayMode.Entity
             string newName = "TestName";
             yield return null;
 
-            TankData newData = ScriptableObject.CreateInstance<TankData>();
-            newData.Name = newName;
+            DataTank newData = ScriptableObject.CreateInstance<DataTank>();
+            newData.Entity.Name = newName;
             tank.Data = newData;
 
             yield return null;
@@ -67,17 +68,6 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             Assert.AreEqual(data.Health, tank.Health.HitPoints);
-
-            TestHelper.DestroyObjects(tank.gameObject);
-        }
-
-        [UnityTest]
-        public IEnumerator GetArmor_GetsArmor() {
-            Tank tank = TestHelper.CreateTank<Tank>();
-            TankData data = ScriptableObject.CreateInstance<TankData>();
-            yield return null;
-
-            Assert.AreEqual(data.ArmorProcent, tank.Armor.ArmorProcent);
 
             TestHelper.DestroyObjects(tank.gameObject);
         }

@@ -8,7 +8,7 @@
         "Magic",
         "Game",
         "GamePlayer",
-        "Game_AI"
+        "GameScriptableObject"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
