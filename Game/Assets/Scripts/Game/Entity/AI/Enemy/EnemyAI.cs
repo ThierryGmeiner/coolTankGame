@@ -44,6 +44,7 @@ namespace Game.AI
         public float ViewRadiusExtended { get => viewRadiusExtended; }
         public float PreferTargetDistanceMin { get => preferTargetDistanceMin; }
         public float PreferTargetDistanceMax { get => preferTargetDistanceMax; }
+        protected abstract void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction);
 
         public virtual bool TargetIsInScope(Transform head, float scopeRadius) {
             Ray ray = new Ray(head.position, Magic.MathM.ConvertToVector3(head.rotation.eulerAngles.y));

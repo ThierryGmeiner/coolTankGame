@@ -15,6 +15,7 @@ namespace Game.InputSystem
         private TankMovement movement;
         private CameraMovement cam;
         private LayerMask playerLayer;
+        private LayerMask entityLayer;
 
         private void Awake() {
             controler = new PlayerControler();
@@ -22,6 +23,7 @@ namespace Game.InputSystem
             controler.TankAttack.Enable();
             controler.Camera.Enable();
             playerLayer = LayerMask.GetMask("Player");
+            entityLayer = LayerMask.GetMask("Entity");
         }
 
         private void Start() {
@@ -35,16 +37,19 @@ namespace Game.InputSystem
         }
 
         private void Update() {
-            movement.HeadRotationTarget = GetMousePosition();
+            SetHeadRotationTarget();
             cam.Move(controler.Camera.Move.ReadValue<Vector2>());
         }
 
-        private void SetNewPath() {
-            movement.SetPath(transform.position, GetMousePosition());
-        }
+        private void SetHeadRotationTarget() {
+            Vector3 mousePos = GetMousePosition();
+            Collider[] targetedEntity = Physics.OverlapSphere(mousePos, 1, entityLayer);
 
-        private void AddNewPath() {
-
+            if (targetedEntity.Length > 0) {
+                movement.HeadRotationTarget = targetedEntity[0].transform.position;
+                return;
+            }
+            movement.HeadRotationTarget = mousePos;
         }
 
         private Vector3 GetMousePosition() {

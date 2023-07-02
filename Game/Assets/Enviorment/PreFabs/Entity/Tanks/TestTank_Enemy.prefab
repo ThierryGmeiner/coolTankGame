@@ -96,6 +96,8 @@ MonoBehaviour:
   wayPoints: []
   preferTargetDistanceMin: 5
   preferTargetDistanceMax: 14
+  aggressiveness: 60
+  anxiety: 25
   tank: {fileID: 1033553528807398018}
 --- !u!114 &1033553528807398018 stripped
 MonoBehaviour:

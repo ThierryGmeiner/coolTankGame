@@ -24,9 +24,6 @@ namespace Game.Entity.Particle
             if (other.gameObject.tag == Tags.Player) {
                 SetInactive();
             }
-            if (other.gameObject.name == gameObject.name) {
-                SetInactive();
-            }
         }
 
         public void SetActive() {

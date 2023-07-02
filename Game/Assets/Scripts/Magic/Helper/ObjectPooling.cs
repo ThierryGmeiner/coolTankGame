@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Magic
 {
     public class ObjectPooling : MonoBehaviour
-    {
+    {        
         [SerializeField] private string objectName;
         [SerializeField] private int spawnAmount;
         [SerializeField] private GameObject pooledObject;

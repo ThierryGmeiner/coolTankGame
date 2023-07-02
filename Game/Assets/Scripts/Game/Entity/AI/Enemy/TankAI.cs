@@ -14,8 +14,8 @@ namespace Game.AI
         private Vector3 movingTarget;
 
         [Header("Attack")]
-        [SerializeField] [Range(1, 100)] protected int aggressiveness = 80;
-        [SerializeField] [Range(1, 100)] protected int anxiety = 50;
+        [SerializeField] [Range(1, 90)] protected int aggressiveness = 80;
+        [SerializeField] [Range(1, 90)] protected int anxiety = 50;
         private int hpInPrecent;
         private int attackCooldownInPrecent;
 
@@ -74,7 +74,7 @@ namespace Game.AI
             }
             // in attack defensive: can go to attack offensive
             else if (StateMachine == StateAttackDefensive) {
-                if (attackCooldownInPrecent > aggressiveness) return StateAttackOffensive;
+                if (attackCooldownInPrecent >= aggressiveness) return StateAttackOffensive;
             }
             // in attack offensive: can go to search or attack defensive
             else if (StateMachine == StateAttackOffensive) {
@@ -169,7 +169,7 @@ namespace Game.AI
             return MathM.ClosestPointOfCircle(transform.position, target.transform.position, newTargetDistance);
         }
 
-        private void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction) {
+        protected override void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction) {
             if (StateMachine != StateAttackOffensive) {
                 movement.HeadRotationTarget = new Vector3(direction.x, 0, direction.z);
                 headRotationTimer.Restart();

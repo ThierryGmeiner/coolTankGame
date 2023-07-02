@@ -12,7 +12,7 @@ namespace Game.Entity.Tank
         [SerializeField] private ObjectPooling objectPooler;
         [SerializeField] private Color color;
         [SerializeField] private float distance;
-        [SerializeField] private float appearanceTimeInSec = 0.05f;
+        [SerializeField] private float appearanceTimeInSec = 0.1f;
 
         TankMovement movement;
         private const float SPAWN_HEIGHT = 0.1f;
@@ -23,6 +23,14 @@ namespace Game.Entity.Tank
 
         private void Start() {
             movement = GetComponent<Tank>().Movement;
+            
+            foreach (IPoolable p in objectPooler.InactiveObjects) {
+                var particleSystems = p.GameObject.transform.GetComponentsInChildren<ParticleSystem>();
+                foreach (ParticleSystem ps in particleSystems) {
+                    ps.startColor = color;
+                }
+            }
+
             movement.OnSetPath += (Path path) => {
                 // stop the old functioncal to prevent taht the previous line get drawn further
                 StopCoroutine(nameof(SetParticles));
@@ -32,13 +40,12 @@ namespace Game.Entity.Tank
 
         private IEnumerator SetParticles(Path path) {
             if (path.Nodes.Length != 0) {
+                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec / 2));
                 Vector3[] fullPath = GetPointsInPath(path);
-                StartCoroutine(objectPooler.DeaktivateOverTime(objectPooler.ActiveObjects, appearanceTimeInSec));
 
                 foreach (Vector3 pos in fullPath) {
                     GameObject particle = objectPooler.RequestActivatedObject();
                     particle.transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
-
                     yield return new WaitForSeconds(appearanceTimeInSec);
                 }
             }
