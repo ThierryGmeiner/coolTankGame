@@ -44,7 +44,7 @@ namespace Game.Entity.Tank
                 Vector3[] fullPath = GetPointsInPath(path);
 
                 foreach (Vector3 pos in fullPath) {
-                    GameObject particle = objectPooler.RequestActivatedObject();
+                    GameObject particle = objectPooler.RequestObject();
                     particle.transform.position = new Vector3(pos.x, SPAWN_HEIGHT, pos.z);
                     yield return new WaitForSeconds(appearanceTimeInSec);
                 }

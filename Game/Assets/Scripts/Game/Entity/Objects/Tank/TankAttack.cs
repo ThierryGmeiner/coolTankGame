@@ -14,6 +14,8 @@ namespace Game.Entity.Tank
         private float cooldownAfterShotSeconds = 0.6f;
 
         [SerializeField] private TankData data;
+        [SerializeField] private GameObject bulletContainer;
+        private ObjectPooling bulletPooler;
 
         public event Action OnShoot;
         public event Action OnDropMine;
@@ -46,6 +48,7 @@ namespace Game.Entity.Tank
         private void Start() {
             tank = GetComponent<Tank>();
             bullets = data.BulletStorage ?? ScriptableObject.CreateInstance<BulletStorage>();
+            bulletPooler = bulletContainer.GetComponent<ObjectPooling>();
         }
 
         public void ChangeBullet(GameObject bullet) {
@@ -76,7 +79,9 @@ namespace Game.Entity.Tank
         }
 
         private Bullet InstantiateBullet() {
-            GameObject obj = GameObject.Instantiate(bullets.Current, tank.ShootingSpot.position, tank.ShootingSpot.rotation);
+            GameObject obj = bulletPooler.RequestObject();
+            obj.transform.position = tank.ShootingSpot.position;
+            obj.transform.rotation = tank.ShootingSpot.rotation;
             Bullet bullet = obj.GetComponent<Bullet>();
             bullet.ShootingEntity = tank.gameObject;
             return bullet;

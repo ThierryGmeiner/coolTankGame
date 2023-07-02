@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEditor;
+using Magic;
 
-namespace Magic
+namespace MEditor
 {
     [CustomEditor(typeof(RandomTimer))]
     public class RandomTimerEditor : Editor

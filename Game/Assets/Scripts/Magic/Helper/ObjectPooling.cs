@@ -10,8 +10,8 @@ namespace Magic
         [SerializeField] private int spawnAmount;
         [SerializeField] private GameObject pooledObject;
 
-        public LinkedList<IPoolable> InactiveObjects { get; set; } = new LinkedList<IPoolable>();
-        public LinkedList<IPoolable> ActiveObjects { get; set; } = new LinkedList<IPoolable>();
+        public LinkedList<IPoolable> InactiveObjects { get; private set; } = new LinkedList<IPoolable>();
+        public LinkedList<IPoolable> ActiveObjects { get; private set; } = new LinkedList<IPoolable>();
 
         private void Awake() {
             if (pooledObject == null) {
@@ -25,24 +25,24 @@ namespace Magic
             }
 
             for (int i = 0; i < spawnAmount; i++) {
-                InstantiatePooledObject();
+                InstantiatePooledObject(i);
             }
         }
 
-        private void InstantiatePooledObject() {
+        private void InstantiatePooledObject(int num) {
             GameObject obj = Instantiate(pooledObject);
             IPoolable iPoolable = obj.GetComponent<IPoolable>();
 
             iPoolable.Container = this;
             obj.transform.parent = transform;
-            obj.name = objectName;
+            obj.name = objectName + " " + System.Convert.ToString(num);
             InactiveObjects.AddFirst(iPoolable);
             iPoolable.SetInactive();
         }
 
-        public GameObject RequestActivatedObject() {
+        public GameObject RequestObject() {
             if (InactiveObjects.Count == 0) {
-                InstantiatePooledObject();
+                InstantiatePooledObject(InactiveObjects.Count + ActiveObjects.Count);
             }
 
             IPoolable obj = InactiveObjects.First.Value;

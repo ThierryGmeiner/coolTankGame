@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEditor;
 using Game.AI;
+using Game.Entity.Tank;
 
-namespace Game.Entity.Tank
+namespace MEditor
 {
     [CustomEditor(typeof(Tank))]
     public class TankEditor : Editor

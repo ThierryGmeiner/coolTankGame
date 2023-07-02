@@ -1,8 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 using Magic;
+using Game.AI;
 
-namespace Game.AI
+namespace MEditor
 {
     [CustomEditor(typeof(TankAI))]
     public class TankAIEditor : Editor

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enviorment
   - Entity
+  - ObjectPool
   layers:
   - Default
   - TransparentFX
