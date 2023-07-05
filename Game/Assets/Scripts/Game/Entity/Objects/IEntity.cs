@@ -34,7 +34,7 @@ namespace Game.Entity
     public interface IRangeAttack
     {
         public int MaxShotsUntilCooldown { get; }
-        public int remainingShots { get; }
+        public int RemainingShots { get; }
 
         public Bullet Shoot(Vector3 direction);
         public event Action OnShoot;

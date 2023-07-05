@@ -663,6 +663,10 @@ PrefabInstance:
       propertyPath: objectPooler
       value: 
       objectReference: {fileID: 1328104999}
+    - target: {fileID: 8318416626589373469, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
+      propertyPath: appearanceTimeInSec
+      value: 0.075
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
 --- !u!1 &1456219235

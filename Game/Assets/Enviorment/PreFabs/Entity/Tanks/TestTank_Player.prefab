@@ -498,7 +498,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36d593f0db9c2d47a7259e741de6e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 0}
 --- !u!114 &8318416626589373469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,4 +513,4 @@ MonoBehaviour:
   objectPooler: {fileID: 0}
   color: {r: 0.6, g: 0.78039217, b: 1, a: 1}
   distance: 1
-  appearanceTimeInSec: 0.1
+  appearanceTimeInSec: 0.05

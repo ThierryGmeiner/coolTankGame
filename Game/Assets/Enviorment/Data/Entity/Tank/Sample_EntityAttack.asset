@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a923b7eb9622f4f965fe815519f1b9, type: 3}
   m_Name: Sample_EntityAttack
   m_EditorClassIdentifier: 
-  BulletStorage: {fileID: 0}
+  BulletStorage: {fileID: 11400000, guid: bc522d03b57f1514fb6944e7bfd6588a, type: 2}
   maxShootsUntilCooldown: 5
+  reloadOneBulletSeconds: 1
+  cooldownAfterShotSeconds: 0.6

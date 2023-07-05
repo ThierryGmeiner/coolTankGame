@@ -79,7 +79,7 @@ namespace Game.AI
 
         private void GetHpAttackRatio() {
             hpInPrecent = 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
-            attackCooldownInPrecent = 100 * attack.remainingShots / attack.MaxShotsUntilCooldown;
+            attackCooldownInPrecent = 100 * attack.RemainingShots / attack.MaxShotsUntilCooldown;
         }
 
         public void StateStayAtStart() {
@@ -113,7 +113,7 @@ namespace Game.AI
         }
 
         private void HandleDefensiveAttack() {
-            if (TargetIsInScope(tank.Head.transform, 0.2f)) {
+            if (TargetIsInScope(tank.Head.transform, 1)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
             }
         }
@@ -139,7 +139,7 @@ namespace Game.AI
         }
 
         private void HandleOffensiveAttack() {
-            if (TargetIsInScope(tank.Head.transform, 0.5f)) {
+            if (TargetIsInScope(tank.Head.transform, 1)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
             }
         }
