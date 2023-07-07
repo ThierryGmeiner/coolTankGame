@@ -39,7 +39,6 @@ namespace Game.Entity
         public Bullet Shoot(Vector3 direction);
         public event Action OnShoot;
         public event Action OnReload;
-        public event Action OnUpdateShotsUntilCooldown;
     }
 
     public interface IDropMine

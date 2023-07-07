@@ -16,7 +16,7 @@ namespace Game.Data
         public float preferTargetDistanceMax = 14;
 
         [Header("Behavior")]
-        [Range(1, 90)] public int aggressiveness = 80;
-        [Range(1, 90)] public int anxiety = 35;
+        [Range(1, 99)] public int aggressiveness = 80;
+        [Range(1, 100)] public int changeToDefenseMode = 30;
     }
 }

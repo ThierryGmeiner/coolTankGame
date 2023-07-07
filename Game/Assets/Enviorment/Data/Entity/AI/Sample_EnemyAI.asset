@@ -18,5 +18,5 @@ MonoBehaviour:
   wayPoints: []
   preferTargetDistanceMin: 5
   preferTargetDistanceMax: 14
-  aggressiveness: 60
-  anxiety: 35
+  aggressiveness: 70
+  changeToDefenseMode: 30

@@ -30,8 +30,8 @@ namespace MEditor
             if (ai.StateMachine == ai.StateStayAtStart) EditorGUILayout.TextField($"State:  {nameof(ai.StateStayAtStart)}");
             else if (ai.StateMachine == ai.StateFollowPath) EditorGUILayout.TextField($"State:  {nameof(ai.StateFollowPath)}");
             else if (ai.StateMachine == ai.StateSearch) EditorGUILayout.TextField($"State:  {nameof(ai.StateSearch)}");
-            else if (ai.StateMachine == ai.StateAttackOffensive) EditorGUILayout.TextField($"State:  {nameof(ai.StateAttackOffensive)}");
-            else if (ai.StateMachine == ai.StateAttackDefensive) EditorGUILayout.TextField($"State:  {nameof(ai.StateAttackDefensive)}");
+            else if (ai.StateMachine == ai.StateAttack) EditorGUILayout.TextField($"State:  {nameof(ai.StateAttack)}");
+            else if (ai.StateMachine == ai.StateTakeCover) EditorGUILayout.TextField($"State:  {nameof(ai.StateTakeCover)}");
             else EditorGUILayout.TextField($"State:  null");
             GUI.enabled = true;
         }
@@ -40,7 +40,7 @@ namespace MEditor
             // draw FOV-Radius
             Handles.color = Color.white;
             Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.ViewRadiusExtended);
-            if (ai.StateMachine != ai.StateAttackDefensive && ai.StateMachine != ai.StateAttackOffensive) {
+            if (ai.StateMachine != ai.StateTakeCover && ai.StateMachine != ai.StateAttack) {
                 Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.ViewRadius);
             }
 
@@ -55,7 +55,7 @@ namespace MEditor
             }
 
             // draw attackpossition range
-            if (ai.StateMachine == ai.StateAttackDefensive || ai.StateMachine == ai.StateAttackOffensive) {
+            if (ai.StateMachine == ai.StateTakeCover || ai.StateMachine == ai.StateAttack) {
                 Handles.color = Color.red;
                 Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.PreferTargetDistanceMin);
                 Handles.DrawWireArc(ai.transform.position, Vector3.up, Vector3.forward, 360, ai.PreferTargetDistanceMax);

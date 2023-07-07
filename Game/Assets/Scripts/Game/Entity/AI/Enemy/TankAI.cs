@@ -15,9 +15,6 @@ namespace Game.AI
         private RandomTimer headRotationTimer;
         private Vector3 movingTarget;
 
-        private int hpInPrecent = 100;
-        private int attackCooldownInPrecent = 100;
-
         public Tank Tank { get => tank; }
 
         protected override void Start() {
@@ -28,9 +25,6 @@ namespace Game.AI
             wayPointPaths = movement.aStar.CnvertWayPointsToPaths(data.wayPoints);
 
             SetupHeadRotationTimer();
-            attack.OnUpdateShotsUntilCooldown += GetHpAttackRatio;
-            tank.Health.OnDamaged += (int a, int b, int c, Vector3 d) => GetHpAttackRatio();
-            tank.Health.OnRepaired += (int a, int b, int c) => GetHpAttackRatio();
             tank.Health.OnDamaged += RotateTowardsDamageSource;
         }
 
@@ -57,30 +51,33 @@ namespace Game.AI
             }
             // in default: can go to attack
             else if (StateMachine == StateStayAtStart || StateMachine == StateFollowPath) {
-                if (canSeeTarget) return StateAttackOffensive;
+                if (canSeeTarget) return StateAttack;
             }
             // in searching: can go to attack or default/followPath
             else if (StateMachine == StateSearch) {
-                if (canSeeTarget) return StateAttackOffensive;
+                if (canSeeTarget) return StateAttack;
                 if (searchTimer.timeSec <= 0) return data.wayPoints.Length == 0 ? StateStayAtStart : StateFollowPath;
             }
-            // in attack defensive: can go to attack offensive
-            else if (StateMachine == StateAttackDefensive) {
-                if (attackCooldownInPrecent >= data.aggressiveness) return StateAttackOffensive;
+            // in take cover: can go to attack
+            else if (StateMachine == StateTakeCover) {
+                if (isDefensive) {
+                    if (leftShotsInPrecent >= 100) return StateAttack;
+                }
+                else {
+                    if (leftShotsInPrecent >= 100 - data.aggressiveness) return StateAttack;
+                }
             }
-            // in attack offensive: can go to search or attack defensive
-            else if (StateMachine == StateAttackOffensive) {
+            // in attack: can go to search or take cover
+            else if (StateMachine == StateAttack) {
                 if (!canSeeTarget) return StateSearch;
-                if (attackCooldownInPrecent == 0) return StateAttackDefensive;
-                if (attackCooldownInPrecent + hpInPrecent < data.anxiety * 2) return StateAttackDefensive;
+                if (attack.RemainingShots <= 0) return StateTakeCover;
             }
             return StateMachine;
         }
 
-        private void GetHpAttackRatio() {
-            hpInPrecent = 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
-            attackCooldownInPrecent = 100 * attack.RemainingShots / attack.MaxShotsUntilCooldown;
-        }
+        private bool isDefensive => hpInPrecent < data.changeToDefenseMode;
+        private int hpInPrecent => 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
+        private int leftShotsInPrecent => 100 * attack.RemainingShots / attack.MaxShotsUntilCooldown;
 
         public void StateStayAtStart() {
             AStarNode currentPosNode = movement.grid.GetNodeFromPosition(transform.position);
@@ -107,18 +104,18 @@ namespace Game.AI
             }
         }
 
-        public void StateAttackDefensive() {
-            HandleDefensiveMovement();
-            HandleDefensiveAttack();
+        public void StateTakeCover() {
+            HandleTakeCover_Movement();
+            HandleTakeCover_Attack();
         }
 
-        private void HandleDefensiveAttack() {
+        private void HandleTakeCover_Attack() {
             if (TargetIsInScope(tank.Head.transform, 1)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
             }
         }
 
-        private void HandleDefensiveMovement() {
+        private void HandleTakeCover_Movement() {
             if (!Physics.Linecast(transform.position, target.transform.position, obstacleLayer)) {
                 movement.HeadRotationTarget = target.transform.position;
                 GetCover();
@@ -132,19 +129,19 @@ namespace Game.AI
             }
         }
 
-        public void StateAttackOffensive() {
+        public void StateAttack() {
             movement.HeadRotationTarget = target.transform.position;
-            HandleOffensiveMovement();
-            HandleOffensiveAttack();
+            HandleAttack_Movement();
+            HandleAttack_Attack();
         }
 
-        private void HandleOffensiveAttack() {
+        private void HandleAttack_Attack() {
             if (TargetIsInScope(tank.Head.transform, 1)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
             }
         }
 
-        private void HandleOffensiveMovement() {
+        private void HandleAttack_Movement() {
             movingTarget = GetAttackTargetPoss();
             if (movement.grid.GetNodeFromPosition(movingTarget) != movement.aStar.TargetNode) {
                 if (!Physics.Linecast(transform.position, movingTarget, obstacleLayer)) {
@@ -162,7 +159,7 @@ namespace Game.AI
         }
 
         protected override void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction) {
-            if (StateMachine != StateAttackOffensive) {
+            if (StateMachine != StateAttack) {
                 movement.HeadRotationTarget = new Vector3(direction.x, 0, direction.z);
                 headRotationTimer.Restart();
                 headRotationTimer.IncreaseTime(5);
@@ -170,7 +167,7 @@ namespace Game.AI
         }
 
         private void SetRandomRotationTarget() {
-            if (StateMachine != StateAttackOffensive && StateMachine != StateAttackDefensive) {
+            if (StateMachine != StateAttack && StateMachine != StateTakeCover) {
                 movement.HeadRotationTarget = new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50));
             }
         }

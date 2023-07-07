@@ -17,7 +17,6 @@ namespace Game.Entity.Tank
         public event Action OnShoot;
         public event Action OnDropMine;
         public event Action OnReload;
-        public event Action OnUpdateShotsUntilCooldown;
 
         public ObjectPooling BulletPooler { get; private set; }
         private DataTank data => tank.Data;
@@ -61,8 +60,7 @@ namespace Game.Entity.Tank
             if (RemainingShots < MaxShotsUntilCooldown) {
                 RemainingShots++;
                 OnReload?.Invoke();
-                OnUpdateShotsUntilCooldown?.Invoke();
-            }
+            } 
             else {
                 reloadTimer.StopTimer();
             }
@@ -79,7 +77,6 @@ namespace Game.Entity.Tank
             Bullet bullet = InstantiateBullet();
             bullet.Shoot(direction);
             OnShoot?.Invoke();
-            OnUpdateShotsUntilCooldown?.Invoke();
             return bullet;
         }
 
