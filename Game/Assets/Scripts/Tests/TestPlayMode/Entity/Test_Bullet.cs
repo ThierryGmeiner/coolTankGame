@@ -29,7 +29,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventHasFired = true;
-            bullet.GetDamaged(10);
+            bullet.GetDamaged(10, Health.DamageType.non);
 
             Assert.IsTrue(eventHasFired);
 
@@ -44,7 +44,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventFiredDamage = damage;
-            bullet.GetDamaged(bulletDamage);
+            bullet.GetDamaged(bulletDamage, Health.DamageType.non);
 
             Assert.AreEqual(bulletDamage, eventFiredDamage);
 
@@ -60,7 +60,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventFiredHP = hp;
-            bullet.GetDamaged(bulletDamage);
+            bullet.GetDamaged(bulletDamage, Health.DamageType.non);
 
             Assert.AreEqual(bulletHP - bulletDamage, eventFiredHP);
 
@@ -75,7 +75,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             bullet.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventFiredHP = maxHP;
-            bullet.GetDamaged(bulletDamage);
+            bullet.GetDamaged(bulletDamage, Health.DamageType.non);
 
             Assert.AreEqual(bullet.MaxHitPoints, eventFiredHP);
 
@@ -163,7 +163,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             bullet.OnDamaged += (int x, int y, int z, Vector3 w) => eventHasFired = true;
-            bullet.GetDamaged(10);
+            bullet.GetDamaged(10, Health.DamageType.non);
 
             Assert.IsTrue(eventHasFired);
 

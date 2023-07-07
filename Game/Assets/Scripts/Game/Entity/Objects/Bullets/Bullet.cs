@@ -50,7 +50,7 @@ namespace Game.Entity
             if (collision.gameObject == ShootingEntity) { return; }
 
             if (collision.gameObject.tag == Tags.Entity || collision.gameObject.tag == Tags.Player) {
-                collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage, transform.position);
+                collision.gameObject.GetComponent<IDamagable>()?.GetDamaged(damage, Health.DamageType.Shot, transform.position);
             }
             GetDestroyed();
         }
@@ -59,9 +59,9 @@ namespace Game.Entity
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
-        public virtual void GetDamaged(int damage) => GetDamaged(damage, transform.position);
+        public virtual void GetDamaged(int damage, Health.DamageType damageType) => GetDamaged(damage, damageType, transform.position);
 
-        public virtual void GetDamaged(int damage, Vector3 attackDirection) {
+        public virtual void GetDamaged(int damage, Health.DamageType damageType, Vector3 attackDirection) {
             OnDamaged?.Invoke(MaxHitPoints, HitPoints - damage, damage, attackDirection);
             GetDestroyed();
         }

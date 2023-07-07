@@ -17,8 +17,9 @@ namespace Game.Entity
         public int MaxHitPoints { get; }
         public int HitPoints { get; }
 
-        public void GetDamaged(int damage);
-        public void GetDamaged(int damage, Vector3 attackDirection);
+        public void GetDamaged(int damage, Health.DamageType damageType);
+        public void GetDamaged(int damage, Health.DamageType damageType, Vector3 attackDirection);
+
         public event Action<int, int, int, Vector3> OnDamaged; // maxHP, currentHP, damage, damageDirection
     }
 

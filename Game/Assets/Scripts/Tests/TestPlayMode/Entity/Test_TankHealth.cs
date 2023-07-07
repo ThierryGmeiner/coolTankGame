@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Game.Entity;
 using Game.Entity.Tank;
 
 namespace Tests.PlayMode.Entity
@@ -47,7 +48,7 @@ namespace Tests.PlayMode.Entity
             int damage = 10;
             yield return null;
 
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
 
             Assert.AreEqual(health.MaxHitPoints - damage, health.HitPoints);
         }
@@ -59,7 +60,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             health.OnDamaged += (int maxHP, int hp, int damage, Vector3 direction) => eventSubscribtion = damage;
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
 
             Assert.AreEqual(damage, eventSubscribtion);
         }
@@ -70,7 +71,7 @@ namespace Tests.PlayMode.Entity
             int damage = 200;
             yield return null;
 
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
 
             Assert.AreEqual(health.MaxHitPoints - damage, health.HitPoints);
         }
@@ -81,7 +82,7 @@ namespace Tests.PlayMode.Entity
             int damage = -10;
             yield return null;
 
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
 
             Assert.AreEqual(health.MaxHitPoints - Mathf.Abs(damage), health.HitPoints);
         }
@@ -92,7 +93,7 @@ namespace Tests.PlayMode.Entity
             int damage = 50, repair = 20;
             yield return null;
 
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
             health.GetRepaired(repair);
 
             Assert.AreEqual(health.MaxHitPoints - damage + repair, health.HitPoints);
@@ -106,7 +107,7 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             health.OnRepaired += (int maxHP, int hp, int repair) => eventHasFiered = repair;
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
             health.GetRepaired(repair);
 
             Assert.AreEqual(damage, eventHasFiered);
@@ -118,7 +119,7 @@ namespace Tests.PlayMode.Entity
             int damage = 50, repair = -30;
             yield return null;
 
-            health.GetDamaged(damage);
+            health.GetDamaged(damage, Health.DamageType.non);
             health.GetRepaired(repair);
 
             Assert.AreEqual(health.MaxHitPoints - damage + System.Math.Abs(repair), health.HitPoints);

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Game.Entity;
 using Game.Entity.Tank;
+using Game.Entity.Interactable;
 using Game.Data;
 using Game.AI;
 using Magic;
@@ -50,6 +51,18 @@ namespace Tests
             bullet.AddComponent<DefaultBullet>();
             bullet.AddComponent<PlannedTimer>();
             return bullet;
+        }
+
+        public static T CreateRepairBox<T>() => CreateRepairBox().GetComponent<T>();
+
+        public static GameObject CreateRepairBox() {
+            GameObject box = new GameObject();
+            var rb = box.AddComponent<Rigidbody>();
+            rb.isKinematic = true;
+            box.AddComponent<BoxCollider>();
+            box.AddComponent<RepaiBox>();
+            box.AddComponent<InteractableHealth>();
+            return box;
         }
 
         public static T CreateBullet<T>() => CreateBullet().GetComponent<T>();

@@ -5,7 +5,7 @@ using Game.Data;
 namespace Game.Entity.Tank
 {
     [RequireComponent(typeof(Tank))]
-    public class TankHealth : MonoBehaviour, IDamagable, IRepairable
+    public class TankHealth : Health, IDamagable, IRepairable
     {
         private Tank tank;
 
@@ -15,19 +15,16 @@ namespace Game.Entity.Tank
         private void Start() {
             tank = GetComponent<Tank>();
             tank.Data ??= ScriptableObject.CreateInstance<DataTank>();
-            MaxHitPoints = data.Health.HitPoints;
-            HitPoints = MaxHitPoints;
+            SetupHitPoints(data.Health.HitPoints);
         }
 
         private DataTank data => tank.Data;
-        public int MaxHitPoints { get; set; }
-        public int HitPoints { get; private set; }
 
-        public void GetDamaged(int damage) {
-            GetDamaged(damage, transform.position);
+        public void GetDamaged(int damage, DamageType damageType) {
+            GetDamaged(damage, damageType, transform.position);
         }
 
-        public void GetDamaged(int damage, Vector3 attackDirection) {
+        public void GetDamaged(int damage, DamageType damageType, Vector3 attackDirection) {
             HitPoints -= Math.Abs(damage);
             OnDamaged?.Invoke(MaxHitPoints, HitPoints, damage, attackDirection);
         }
