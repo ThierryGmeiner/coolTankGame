@@ -12,6 +12,10 @@ namespace Magic
 
         public static float Mid(float x, float y) => (x + y) / 2;
 
+        public static float Difference(float x, float y) {
+            return Math.Max(x, y) - Math.Min(x, y);
+        }
+
         public static Vector2 ClosestPointOfCircle(Vector2 pos, Vector2 center, float radius) {
             Vector2 direction = pos - center;
             direction.Normalize();
