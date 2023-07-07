@@ -10,5 +10,7 @@ namespace Magic
         public static readonly string GameController = "GameController";
         public static readonly string Enviorment = "Enviorment";
         public static readonly string Entity = "Entity";
+        public static readonly string ObjectPool = "ObjectPool";
+        public static readonly string Interactable = "Interactable";
     }
 }

@@ -1,20 +1,17 @@
 using System;
 using UnityEngine;
+using Game.Data;
 
 namespace Game.Entity.Interactable
 {
     public class InteractableHealth : Health, IDamagable
     {
-        [SerializeField] private int requiredHits = 3;
         private IEntity entity;
 
         public event Action<int, int, int, Vector3> OnDamaged;
 
-        private void Awake() {
-            SetupHitPoints(requiredHits);
-        }
-
         private void Start() {
+            SetupHitPoints(GetComponent<RepaiBox>().Data.hitPoints);
             entity = GetComponent<IEntity>();
         }
 

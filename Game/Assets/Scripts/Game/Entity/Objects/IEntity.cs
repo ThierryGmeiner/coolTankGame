@@ -16,7 +16,7 @@ namespace Game.Entity
     {
         public int MaxHitPoints { get; }
         public int HitPoints { get; }
-
+        public bool HasFullHP { get; }
         public void GetDamaged(int damage, Health.DamageType damageType);
         public void GetDamaged(int damage, Health.DamageType damageType, Vector3 attackDirection);
 
@@ -27,9 +27,15 @@ namespace Game.Entity
     {
         public int MaxHitPoints { get; }
         public int HitPoints { get; }
+        public bool HasFullHP { get; }
 
         public void GetRepaired(int healing);
         public event Action<int, int, int> OnRepaired; // maxHP, currentHP, healing
+    }
+
+    public interface IDamaging
+    {
+        public Health.DamageType DamageType { get; }
     }
 
     public interface IRangeAttack

@@ -57,11 +57,11 @@ namespace Tests
 
         public static GameObject CreateRepairBox() {
             GameObject box = new GameObject();
-            var rb = box.AddComponent<Rigidbody>();
-            rb.isKinematic = true;
-            box.AddComponent<BoxCollider>();
-            box.AddComponent<RepaiBox>();
+            var col = box.AddComponent<BoxCollider>();
+            var rep = box.AddComponent<RepaiBox>();
             box.AddComponent<InteractableHealth>();
+            col.isTrigger = true;
+            rep.Data = ScriptableObject.CreateInstance<DataInteractable>();
             return box;
         }
 

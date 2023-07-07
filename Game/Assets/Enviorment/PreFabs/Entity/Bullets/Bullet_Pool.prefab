@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Bullets
-  spawnAmount: 30
+  spawnAmount: 25
   pooledObject: {fileID: 7136877454970224427, guid: e917bc672817cb74ab8959cc45ad1b75, type: 3}

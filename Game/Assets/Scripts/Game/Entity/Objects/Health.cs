@@ -8,6 +8,8 @@ namespace Game.Entity
         public int MaxHitPoints { get; protected set; }
         public int HitPoints { get; protected set; }
 
+        public bool HasFullHP => HitPoints >= MaxHitPoints;
+
         public void SetupHitPoints(int maxHP) {
             MaxHitPoints = maxHP;
             HitPoints = maxHP;

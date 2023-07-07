@@ -8,6 +8,12 @@ namespace Game.AI
     [RequireComponent(typeof(Tank))]
     public class TankAI : EnemyAI
     {
+        // ------------------------------------------------------------------
+        // ------------------------------------------------------------------
+        // shoud go to repairBox
+        // ------------------------------------------------------------------
+        // ------------------------------------------------------------------
+
         private Tank tank;
         private TankMovement movement;
         private TankAttack attack;

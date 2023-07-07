@@ -5,7 +5,7 @@ using System;
 namespace Game.Entity
 {
     [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(PlannedTimer))]
-    public abstract class Bullet : MonoBehaviour, IEntity, IDamagable, IPoolable
+    public abstract class Bullet : MonoBehaviour, IEntity, IDamagable, IPoolable, IDamaging
     {
         [Header("Attack")]
         [SerializeField] protected new string name = "Bullet";
@@ -26,8 +26,10 @@ namespace Game.Entity
         public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
         public Rigidbody RigidBody { get; set; }
         public Collider Collider { get; set; }
+        public Health.DamageType DamageType { get => Health.DamageType.Shot; }
         public int MaxHitPoints { get; } = 0;
         public int HitPoints { get; } = 0;
+        public bool HasFullHP => HitPoints >= MaxHitPoints;
         public float LifeTime {
             get => lifeTime;
             set {

@@ -545,6 +545,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestTank_Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3513107829800456022, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6557318262823261094, guid: c7dcc29a4cf639445af6b7196cb25f9f, type: 3}
       propertyPath: bulletContainer
       value: 
@@ -997,63 +1001,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047409989}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &268031931513683048
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.3872375
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.4720066
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1949863625047780136, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7445502568037426198, guid: 874ba886326448b4e9d38c8840062063, type: 3}
-      propertyPath: m_Name
-      value: RepairBox
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 874ba886326448b4e9d38c8840062063, type: 3}
 --- !u!1001 &391407367509342318
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1111,3 +1058,77 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7d975edf73823142b8052c7c4e1baaa, type: 3}
+--- !u!1001 &7797173766898200652
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454229962271821766, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5727427814600306825, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225902654556384832, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225902654556384832, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225902654556384832, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8289108127683057213, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+      propertyPath: m_Name
+      value: RepairBox
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7225902654556384832, guid: 874ba886326448b4e9d38c8840062063, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 874ba886326448b4e9d38c8840062063, type: 3}
