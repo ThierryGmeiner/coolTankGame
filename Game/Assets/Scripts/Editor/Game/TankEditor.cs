@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEditor;
 using Game.AI;
 using Game.Entity.Tank;
+using UnityEngine.UIElements;
 
 namespace MEditor
 {
@@ -12,6 +14,16 @@ namespace MEditor
 
         private void OnEnable() {
             tank = (Tank)target;
+        }
+
+        public override void OnInspectorGUI() {
+            base.OnInspectorGUI();
+
+            EditorGUILayout.Space();
+            GUI.enabled = false;
+            if (tank.Health != null) EditorGUILayout.TextField($"Health: {tank.Health.HitPoints} / {tank.Health.MaxHitPoints}");
+            if (tank.Attack != null) EditorGUILayout.TextField($"Shots: {tank.Attack.RemainingShots} / {tank.Attack.MaxShotsUntilCooldown}");
+            GUI.enabled = true;
         }
 
         private void OnSceneGUI() {
