@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Magic
 {
+    public enum ShiftMode { non, xAxis, yAxis, zAxis, xzAxis, random }
+    public enum ShiftAxis { xAxis, yAxis, zAxis }
+
     public class MovementOnAxis : MonoBehaviour {
         public Vector3 startPos { get; private set; }
         public Vector3[] targetX { get; private set; } = new Vector3[2];
@@ -24,13 +27,26 @@ namespace Magic
         [HideInInspector] public AnimationCurve CurveX;
         [HideInInspector] public AnimationCurve CurveY;
         [HideInInspector] public AnimationCurve CurveZ;
+        [HideInInspector] public AnimationCurve startShiftCurve;
 
-        public void Awake() {
+        [HideInInspector] public ShiftMode ShiftedStart = ShiftMode.non;
+        [HideInInspector] public ShiftAxis ShiftedAxis = ShiftAxis.yAxis;
+
+        public void DoReset() {
             DistanceX = Mathf.Abs(DistanceX);
             DistanceY = Mathf.Abs(DistanceY);
             DistanceZ = Mathf.Abs(DistanceZ);
             startPos = transform.position;
             CalculateTargets();
+        }
+
+        private void Awake() {
+            DistanceX = Mathf.Abs(DistanceX);
+            DistanceY = Mathf.Abs(DistanceY);
+            DistanceZ = Mathf.Abs(DistanceZ);
+            startPos = transform.position;
+            CalculateTargets();
+            SetStartShift();
         }
 
         private void Update() {
@@ -50,8 +66,8 @@ namespace Magic
                 if (ReachTarget(pos.z, startPos.z, DistanceZ)) indexZ = SwichIndex(pos.z, startPos.z);
             }
 
-            if (MoveX || MoveY || MoveZ) {
-                transform.position = Vector3.MoveTowards(pos, target, speed * Time.deltaTime);
+            if (MoveY || MoveX || MoveZ) {
+                transform.position = Vector3.MoveTowards(pos, target, speed / 512);
             }
         }
 
@@ -67,7 +83,46 @@ namespace Magic
         private int SwichIndex(float pos, float startPos) {
             // 1 is the negative position
             return pos > startPos ? 1 : 0;
-        } 
+        }
+
+        private void SetStartShift() {
+            float shift = 0;
+
+            switch (ShiftedStart) {
+                case ShiftMode.non:
+                    return;
+                case ShiftMode.xAxis:
+                    shift = startShiftCurve.Evaluate(transform.position.x);
+                    break;
+                case ShiftMode.yAxis:
+                    shift = startShiftCurve.Evaluate(transform.position.y);
+                    break;
+                case ShiftMode.zAxis:
+                    shift = startShiftCurve.Evaluate(transform.position.z);
+                    break;
+                case ShiftMode.xzAxis:
+                    shift = startShiftCurve.Evaluate(transform.position.z + transform.position.x);
+                    break;
+                case ShiftMode.random:
+                    shift = startShiftCurve.Evaluate(Random.Range(10000f, 10000f));
+                    break;
+            }
+            Vector3 newPos = transform.position;
+            Debug.Log(shift);
+
+            switch (ShiftedAxis) {
+                case ShiftAxis.xAxis:
+                    newPos = new Vector3(startPos.x + shift, startPos.y, startPos.z);
+                    break;
+                case ShiftAxis.yAxis:
+                    newPos = new Vector3(startPos.x, startPos.y + shift, startPos.z);
+                    break;
+                case ShiftAxis.zAxis:
+                    newPos = new Vector3(startPos.x, startPos.y, startPos.z + shift);
+                    break;
+            }
+            transform.position = newPos;
+        }
 
         public void CalculateTargets() {
             targetX[0] = new Vector3(startPos.x + DistanceX, startPos.y, startPos.z);
