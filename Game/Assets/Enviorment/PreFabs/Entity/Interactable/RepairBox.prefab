@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612d9903e9beb0d4b9deb0b12ec24d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.8
+  speed: 7
   DistanceX: 1
   DistanceY: 0.15
   DistanceZ: 1
@@ -259,7 +259,7 @@ MonoBehaviour:
     m_PreInfinity: 0
     m_PostInfinity: 0
     m_RotationOrder: 4
-  ShiftedStart: 5
+  ShiftedStart: 4
   ShiftedAxis: 1
 --- !u!114 &8223845941346232678
 MonoBehaviour:
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bfeec47c9c31014393f160b97be4eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 15
   RotateX: 0
   RotateY: 1
   RotateZ: 0

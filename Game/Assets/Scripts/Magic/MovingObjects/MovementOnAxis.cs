@@ -67,7 +67,7 @@ namespace Magic
             }
 
             if (MoveY || MoveX || MoveZ) {
-                transform.position = Vector3.MoveTowards(pos, target, speed / 512);
+                transform.position = Vector3.MoveTowards(pos, target, speed / 4096);
             }
         }
 
@@ -104,11 +104,10 @@ namespace Magic
                     shift = startShiftCurve.Evaluate(transform.position.z + transform.position.x);
                     break;
                 case ShiftMode.random:
-                    shift = startShiftCurve.Evaluate(Random.Range(10000f, 10000f));
+                    shift = startShiftCurve.Evaluate(Random.Range(-10000f, 10000f));
                     break;
             }
             Vector3 newPos = transform.position;
-            Debug.Log(shift);
 
             switch (ShiftedAxis) {
                 case ShiftAxis.xAxis:
