@@ -21,14 +21,14 @@ namespace Game.AI
         protected LayerMask obstacleLayer;
         protected Vector3 startPos;
         protected AStarNode startPosNode;
-        protected AStarNode lastVisualContact;
 
         // enviorment
-        protected GameObject[] repairBoxes;
+        protected GameObject repairBoxesContainer;
         protected EnemyAI[] otherEnemys;
 
         public Action StateMachine { get; protected set; }
         public DataEnemyAI Data { set => data = value; }
+        public AStarNode lastVisualContact { get; set; }
 
         protected virtual void Awake() {
             startPos = transform.position;
@@ -39,31 +39,10 @@ namespace Game.AI
         protected virtual void Start() {
             aStarGrid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
             startPosNode = aStarGrid?.GetNodeFromPosition(startPos);
-            target = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
-            GetEnviorment();
-            Debug.Log(repairBoxes.Length);
-            Debug.Log(otherEnemys.Length);
-        }
+            target = GameObject.FindGameObjectWithTag(Magic.Tags.Player);
 
-        private void GetEnviorment() {
-            GameObject[] interactable = GameObject.FindGameObjectsWithTag(Magic.Tags.Interactable);
-            GameObject[] entitys = GameObject.FindGameObjectsWithTag(Magic.Tags.Entity);
-
-            List<GameObject> repairBoxes = new List<GameObject>();
-            foreach (GameObject obj in interactable) {
-                if (obj.GetComponent<RepaiBox>() != null) {
-                    repairBoxes.Add(obj);
-                }
-            }
-            List<EnemyAI> otherEnemys = new List<EnemyAI>();
-            foreach (GameObject obj in entitys) {
-                EnemyAI ai = obj.GetComponent<EnemyAI>();
-                if (ai != null && ai != this) {
-                    otherEnemys.Add(ai);
-                }
-            }
-            this.repairBoxes = repairBoxes.ToArray();
-            this.otherEnemys = otherEnemys.ToArray();
+            repairBoxesContainer = GameObject.Find("RepairBoxes");
+            otherEnemys = Magic.SceneHelper.GetObjectsFromRoot<EnemyAI>(GameObject.Find("Entitys"), this);
         }
 
         public float ViewAngle { get => data.viewAngle; }

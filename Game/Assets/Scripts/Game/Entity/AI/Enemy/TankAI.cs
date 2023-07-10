@@ -8,13 +8,6 @@ namespace Game.AI
     [RequireComponent(typeof(Tank))]
     public class TankAI : EnemyAI
     {
-        // ------------------------------------------------------------------
-        // ------------------------------------------------------------------
-        // shoud go to repairBox
-        // shoud shot at repairBox if the player is in ner
-        // ------------------------------------------------------------------
-        // ------------------------------------------------------------------
-
         private Tank tank;
         private TankMovement movement;
         private TankAttack attack;
@@ -44,7 +37,9 @@ namespace Game.AI
 
         private void Update() {
             if (CanSeeTarget(tank.Head.transform)) {
-                lastVisualContact = movement.aStar.Grid.GetNodeFromPosition(target.transform.position);
+                AStarNode playerNode = movement.aStar.Grid.GetNodeFromPosition(target.transform.position);
+                foreach (EnemyAI others in otherEnemys) { others.lastVisualContact = playerNode; }
+                lastVisualContact = playerNode;
             }
             StateMachine = GetState();
             StateMachine();
@@ -68,7 +63,7 @@ namespace Game.AI
             // in take cover: can go to attack
             else if (StateMachine == StateTakeCover) {
                 if (!attack.IsReloading) return StateAttack;
-                if (isDefensive) {
+                if (IsDefensive) {
                     if (leftShotsInPrecent >= 100) return StateAttack;
                 }
                 else {
@@ -83,7 +78,7 @@ namespace Game.AI
             return StateMachine;
         }
 
-        private bool isDefensive => hpInPrecent < data.changeToDefenseMode;
+        public bool IsDefensive => hpInPrecent < data.changeToDefenseMode;
         private int hpInPrecent => 100 * tank.Health.HitPoints / tank.Health.MaxHitPoints;
         private int leftShotsInPrecent => 100 * attack.RemainingShots / attack.MaxShotsUntilCooldown;
 
@@ -124,11 +119,44 @@ namespace Game.AI
         }
 
         private void HandleTakeCover_Movement() {
+            if (hpInPrecent < data.changeToDefenseMode * 1.7f) {
+                Transform closestRepairBox = GetClosestRepairbox();
+                if (InteracableIsCloseEnough(closestRepairBox)) {
+                    movement.SetPath(transform.position, closestRepairBox.position);
+                    return;
+                }
+            }
             if (!Physics.Linecast(transform.position, target.transform.position, obstacleLayer)) {
                 movement.HeadRotationTarget = target.transform.position;
                 GetCover();
             }
         }
+
+        private bool InteracableIsCloseEnough(Transform interactable) {
+            if (interactable == null) { return false; }
+            
+            float range = IsDefensive ? ViewRadiusExtended * 0.75f : ViewRadiusExtended / 2;
+            return Vector3.Distance(transform.position, interactable.position) < range;
+        }
+
+        private Transform GetClosestRepairbox() {
+            float distance = float.MaxValue;
+            Transform closest = null;
+
+            for (int i = 0; i < repairBoxesContainer.transform.childCount; i++) {
+                Transform current = repairBoxesContainer.transform.GetChild(i);
+                float currentDistance = Vector3.Distance(transform.position, current.position);
+                
+                if (currentDistance < distance && !Physics.Linecast(transform.position, current.position, obstacleLayer)) {
+                    closest = current;
+                    distance = currentDistance;
+                }
+            } 
+            return closest;
+        }
+
+        private bool IsInReach(Vector3 pos, float maxDistance)
+            => Vector3.Distance(transform.position, pos) < maxDistance / 2 && !Physics.Linecast(transform.position, pos, obstacleLayer);
 
         private void GetCover() {
             AStarNode cover = movement.grid.GetCoveredNode(transform.position, target, 10);

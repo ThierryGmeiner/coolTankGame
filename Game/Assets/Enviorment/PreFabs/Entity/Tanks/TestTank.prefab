@@ -321,6 +321,7 @@ MonoBehaviour:
   loockAt: 1
   bar: {fileID: 2999429550389339858}
   speed: 1.5
+  parent: {fileID: 4864593692875131940}
 --- !u!1 &2867120354105027225
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,8 @@ namespace Game.UI
         [SerializeField] private LoockAt loockAt = LoockAt.Parent;
         [SerializeField] protected Image bar;
         [SerializeField] protected float speed = 1.5f;
+        [SerializeField] protected GameObject parent;
 
-        protected GameObject parent;
         protected Canvas canvas;
         protected Camera cam;
         protected Action LockFacingDirection;
@@ -20,7 +20,6 @@ namespace Game.UI
         protected float targetValue = 1;
 
         protected virtual void Start() {
-            parent = transform.root.gameObject;
             canvas = GetComponent<Canvas>();
             cam = Camera.main;
             LockFacingDirection = loockAt == LoockAt.Camera ? loockToCamera : loockToParent;

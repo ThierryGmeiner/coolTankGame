@@ -17,6 +17,6 @@ namespace Game.Data
 
         [Header("Behavior")]
         [Range(1, 99)] public int aggressiveness = 80;
-        [Range(1, 100)] public int changeToDefenseMode = 30;
+        [Range(1, 50)] public int changeToDefenseMode = 30;
     }
 }

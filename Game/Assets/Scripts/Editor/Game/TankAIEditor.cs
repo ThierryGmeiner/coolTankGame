@@ -27,7 +27,8 @@ namespace MEditor
 
             GUILayout.Space(12);
             GUI.enabled = false;
-            EditorGUILayout.TextField($"See Player:  {ai.CanSeeTarget(ai.Tank.Head.transform)}");
+            if (ai.Tank != null) EditorGUILayout.TextField($"See Player:  {ai.CanSeeTarget(ai.Tank.Head.transform)}");
+            if (ai.Tank != null) EditorGUILayout.TextField($"Is Defensife:  {ai.IsDefensive}");
 
             if (ai.StateMachine == ai.StateStayAtStart) EditorGUILayout.TextField($"State:  {nameof(ai.StateStayAtStart)}");
             else if (ai.StateMachine == ai.StateFollowPath) EditorGUILayout.TextField($"State:  {nameof(ai.StateFollowPath)}");
