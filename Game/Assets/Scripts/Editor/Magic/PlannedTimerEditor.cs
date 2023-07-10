@@ -14,6 +14,12 @@ namespace MEditor
         }
 
         public override void OnInspectorGUI() {
+            GUI.enabled = false;
+            EditorGUILayout.TextField(timer.Name);
+            GUI.enabled = true;
+
+            GUILayout.Space(8);
+            
             GUILayout.BeginHorizontal();
                 if (GUILayout.Button("Stop")) timer.StopTimer();
                 if (GUILayout.Button("Start")) timer.StartTimer();

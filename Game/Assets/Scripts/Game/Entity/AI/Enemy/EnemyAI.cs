@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Game.Entity.Interactable;
 using Game.Data;
 
 namespace Game.AI
@@ -8,16 +10,22 @@ namespace Game.AI
     {
         [SerializeField] protected DataEnemyAI data;
 
+        // movement
         protected AStarGrid aStarGrid;
         protected Path wayPointPaths = new Path(new AStarNode[0]);
         protected int currentPathIndex = 0;
 
+        // other
         protected GameObject target;
         protected LayerMask targetLayer;
         protected LayerMask obstacleLayer;
         protected Vector3 startPos;
         protected AStarNode startPosNode;
         protected AStarNode lastVisualContact;
+
+        // enviorment
+        protected GameObject[] repairBoxes;
+        protected EnemyAI[] otherEnemys;
 
         public Action StateMachine { get; protected set; }
         public DataEnemyAI Data { set => data = value; }
@@ -32,6 +40,30 @@ namespace Game.AI
             aStarGrid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
             startPosNode = aStarGrid?.GetNodeFromPosition(startPos);
             target = GameObject.FindGameObjectWithTag(Magic.Tags.Player).transform.root.gameObject;
+            GetEnviorment();
+            Debug.Log(repairBoxes.Length);
+            Debug.Log(otherEnemys.Length);
+        }
+
+        private void GetEnviorment() {
+            GameObject[] interactable = GameObject.FindGameObjectsWithTag(Magic.Tags.Interactable);
+            GameObject[] entitys = GameObject.FindGameObjectsWithTag(Magic.Tags.Entity);
+
+            List<GameObject> repairBoxes = new List<GameObject>();
+            foreach (GameObject obj in interactable) {
+                if (obj.GetComponent<RepaiBox>() != null) {
+                    repairBoxes.Add(obj);
+                }
+            }
+            List<EnemyAI> otherEnemys = new List<EnemyAI>();
+            foreach (GameObject obj in entitys) {
+                EnemyAI ai = obj.GetComponent<EnemyAI>();
+                if (ai != null && ai != this) {
+                    otherEnemys.Add(ai);
+                }
+            }
+            this.repairBoxes = repairBoxes.ToArray();
+            this.otherEnemys = otherEnemys.ToArray();
         }
 
         public float ViewAngle { get => data.viewAngle; }
@@ -39,6 +71,7 @@ namespace Game.AI
         public float ViewRadiusExtended { get => data.viewRadiusExtended; }
         public float PreferTargetDistanceMin { get => data.preferTargetDistanceMin; }
         public float PreferTargetDistanceMax { get => data.preferTargetDistanceMax; }
+
         protected abstract void RotateTowardsDamageSource(int maxHP, int hp, int damage, Vector3 direction);
 
         public virtual bool TargetIsInScope(Transform head, float scopeRadius) {

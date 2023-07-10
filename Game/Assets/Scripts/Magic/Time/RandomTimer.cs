@@ -8,11 +8,11 @@ namespace Magic
         private float minStartingTimeSec, maxStartingTimeSec;
         public override event Action OnTimerEnds;
 
-        public void SetupTimer(float minStartingTime, float maxStartingTime, Modes timerMode)
-        {
+        public void SetupTimer(float minStartingTime, float maxStartingTime, Modes timerMode, string name) {
             this.minStartingTimeSec = minStartingTime;
             this.maxStartingTimeSec = maxStartingTime;
             base.timeSec = SetRandomTime();
+            base.Name = name;
             base.SetTimerMode(timerMode);
         }
 

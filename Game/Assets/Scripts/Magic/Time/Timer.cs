@@ -8,6 +8,7 @@ namespace Magic
         protected bool timerIsActive = false;
         protected Action RunTimer;
 
+        public string Name { get; protected set; }
         public float timeSec { get; protected set; }
         public Modes timerMode { get; protected set; }
 

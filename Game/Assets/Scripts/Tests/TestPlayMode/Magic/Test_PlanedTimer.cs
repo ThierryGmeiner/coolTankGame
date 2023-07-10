@@ -22,7 +22,7 @@ namespace Tests.PlayMode.Magic
             var timer = obj.AddComponent<PlannedTimer>();
             var startTime = 5;
             
-            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp, "Test");
             yield return null;
             
             Assert.AreEqual(startTime, timer.timeSec);
@@ -36,7 +36,7 @@ namespace Tests.PlayMode.Magic
             var timer = obj.AddComponent<PlannedTimer>();
             var startTime = -5;
             
-            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp, "Test");
             yield return null;
             
             Assert.AreEqual(startTime, timer.timeSec);
@@ -50,7 +50,7 @@ namespace Tests.PlayMode.Magic
             var timer = obj.AddComponent<PlannedTimer>();
             var startTime = -5;
             
-            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.StartTimer();
             yield return new WaitForFrames(2);
 
@@ -66,7 +66,7 @@ namespace Tests.PlayMode.Magic
             var startTime = -5;
             bool testBool = false;
             
-            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.OnTimerEnds += () => testBool = true;
             timer.StartTimer();
             yield return null;
@@ -82,7 +82,7 @@ namespace Tests.PlayMode.Magic
             var timer = obj.AddComponent<PlannedTimer>();
             var startTime = -5;
             
-            timer.SetupTimer(startTime, Timer.Modes.restartWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.restartWhenTimeIsUp, "Test");
             timer.StartTimer();
             yield return null;
 
@@ -98,7 +98,7 @@ namespace Tests.PlayMode.Magic
             var startTime = -5;
             bool testBool = false;
             
-            timer.SetupTimer(startTime, Timer.Modes.restartWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.restartWhenTimeIsUp, "Test");
             timer.OnTimerEnds += () => testBool = true;
             timer.StartTimer();
             yield return null;
@@ -114,7 +114,7 @@ namespace Tests.PlayMode.Magic
             var timer = obj.AddComponent<PlannedTimer>();
             var startTime = -5;
             
-            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp, "Test");
             timer.StartTimer();
             yield return null;
 
@@ -130,7 +130,7 @@ namespace Tests.PlayMode.Magic
             var startTime = -5;
             bool testBool = false;
             
-            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp, "Test");
             timer.OnTimerEnds += () => testBool = true;
             timer.StartTimer();
             yield return null;
@@ -146,7 +146,7 @@ namespace Tests.PlayMode.Magic
             var timer = obj.AddComponent<PlannedTimer>();
             var startTime = 10;
             
-            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp);
+            timer.SetupTimer(startTime, Timer.Modes.ConitinuesWhenTimeIsUp, "Test");
             timer.ReduceTime(3);
             yield return null;
             timer.Restart();

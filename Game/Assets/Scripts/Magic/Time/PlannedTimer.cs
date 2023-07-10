@@ -12,15 +12,14 @@ namespace Magic
 
         public override void Restart() => timeSec = startTimeSec;
 
-        public void SetupTimer(float timeInSeconds, Modes timerMode)
-        {
+        public void SetupTimer(float timeInSeconds, Modes timerMode, string name) {
             this.startTimeSec = timeInSeconds;
             base.timeSec = timeInSeconds;
+            base.Name = name;
             SetTimerMode(timerMode);
         }
 
-        protected override void RunTimer_DestroyWhenTimeIsUp()
-        {
+        protected override void RunTimer_DestroyWhenTimeIsUp() {
             base.timeSec -= Time.deltaTime;
             if (base.TimeIsUp()) {
                 OnTimerEnds?.Invoke();

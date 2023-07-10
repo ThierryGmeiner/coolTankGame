@@ -23,6 +23,7 @@ namespace MEditor
             GUI.enabled = false;
             if (tank.Health != null) EditorGUILayout.TextField($"Health: {tank.Health.HitPoints} / {tank.Health.MaxHitPoints}");
             if (tank.Attack != null) EditorGUILayout.TextField($"Shots: {tank.Attack.RemainingShots} / {tank.Attack.MaxShotsUntilCooldown}");
+            if (tank.Attack != null) EditorGUILayout.TextField($"IsReloading: {tank.Attack.IsReloading}");
             GUI.enabled = true;
         }
 

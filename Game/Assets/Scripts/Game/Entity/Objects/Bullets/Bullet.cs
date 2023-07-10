@@ -75,7 +75,7 @@ namespace Game.Entity
 
         private void InitializeTimer() {
             timer.OnTimerEnds += () => GetDestroyed();
-            timer.SetupTimer(lifeTime, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(lifeTime, Timer.Modes.destroyWhenTimeIsUp, "LifeTime");
             timer.StartTimer();
         }
 

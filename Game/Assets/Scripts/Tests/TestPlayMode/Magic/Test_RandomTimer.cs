@@ -23,7 +23,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMin = 5;
             float startTimeMax = 6;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp, "Test");
             yield return null;
 
             bool TimeIsInBetween = timer.timeSec > startTimeMin && timer.timeSec < startTimeMax;
@@ -39,7 +39,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMin = -6;
             float startTimeMax = -5;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp, "Test");
             yield return null;
 
             bool TimeIsInBetween = timer.timeSec > startTimeMin && timer.timeSec < startTimeMax;
@@ -56,7 +56,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMin = -6;
             float startTimeMax = -5;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.StartTimer();
             yield return new WaitForFrames(2);
 
@@ -73,7 +73,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMax = -5;
             bool testBool = false;
 
-            timer.SetupTimer(startTimeMin, startTimeMax,Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax,Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.OnTimerEnds += () => testBool = true;
             timer.StartTimer();
             yield return null;
@@ -90,7 +90,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMin = -6;
             float startTimeMax = -5;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.restartWhenTimeIsUp); 
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.restartWhenTimeIsUp, "Test"); 
             timer.StartTimer();
             yield return null;
 
@@ -107,7 +107,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMax = -5;
             bool testBool = false;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.restartWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.restartWhenTimeIsUp, "Test");
             timer.OnTimerEnds += () => testBool = true;
             timer.StartTimer();
             yield return null;
@@ -124,7 +124,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMin = -6;
             float startTimeMax = -6;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.StartTimer();
             yield return null;
 
@@ -141,7 +141,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMax = -5;
             bool testBool = false;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.OnTimerEnds += () => testBool = true;
             timer.StartTimer();
             yield return null;
@@ -158,7 +158,7 @@ namespace Tests.PlayMode.Magic
             float startTimeMin = 5;
             float startTimeMax = 6;
 
-            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp);
+            timer.SetupTimer(startTimeMin, startTimeMax, Timer.Modes.destroyWhenTimeIsUp, "Test");
             timer.ReduceTime(3);
             yield return null;
             timer.Restart();

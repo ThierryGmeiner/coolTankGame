@@ -13,10 +13,6 @@ namespace MEditor
             rotate = (RotatOnAxis)target;
         }
 
-        private void OnSceneGUI() {
-
-        }
-
         public override void OnInspectorGUI() {
             ShowButtons_MovableAxis();
             EditorGUILayout.Space(7);

@@ -11,6 +11,7 @@ namespace Game.AI
         // ------------------------------------------------------------------
         // ------------------------------------------------------------------
         // shoud go to repairBox
+        // shoud shot at repairBox if the player is in ner
         // ------------------------------------------------------------------
         // ------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ namespace Game.AI
         private void SetupHeadRotationTimer() {
             headRotationTimer = gameObject.AddComponent<RandomTimer>();
             headRotationTimer.OnTimerEnds += SetRandomRotationTarget;
-            headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp);
+            headRotationTimer.SetupTimer(2f, 3.5f, Timer.Modes.restartWhenTimeIsUp, "RandomHeadRotation");
             headRotationTimer.StartTimer();
         }
 
@@ -66,6 +67,7 @@ namespace Game.AI
             }
             // in take cover: can go to attack
             else if (StateMachine == StateTakeCover) {
+                if (!attack.IsReloading) return StateAttack;
                 if (isDefensive) {
                     if (leftShotsInPrecent >= 100) return StateAttack;
                 }
@@ -101,7 +103,7 @@ namespace Game.AI
         public void StateSearch() {
             if (searchTimer == null) {
                 searchTimer = gameObject.AddComponent<PlannedTimer>();
-                searchTimer.SetupTimer(Random.Range(8, 12), Timer.Modes.destroyWhenTimeIsUp);
+                searchTimer.SetupTimer(Random.Range(8, 12), Timer.Modes.destroyWhenTimeIsUp, "SearchTimer");
                 searchTimer.StartTimer();
             }
 

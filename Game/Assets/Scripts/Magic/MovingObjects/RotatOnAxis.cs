@@ -72,7 +72,7 @@ namespace Magic
                     shift = startShiftCurve.Evaluate(transform.position.z + transform.position.x);
                     break;
                 case ShiftMode.random:
-                    shift = startShiftCurve.Evaluate(Random.Range(float.MinValue, float.MaxValue));
+                    shift = startShiftCurve.Evaluate(Random.Range(-10000f, 10000f));
                     break;
             }
             Vector3 newRotation = Vector3.zero;
