@@ -8,6 +8,7 @@ namespace Game.Entity.Tank
     {
         // data
         private readonly Tank tank;
+        private readonly LayerMask groundLayer;
 
         // pathFinding
         public int pathIndex { get; private set; } = 0;
@@ -29,7 +30,8 @@ namespace Game.Entity.Tank
             bodyRotationSpeed = tank.Data.Movement.BodyRotationSpeed;
             headRotationSpeed = tank.Data.Movement.HeadRotationSpeed;
 
-            grid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
+            groundLayer = LayerMask.GetMask("Ground");
+            grid = tank.SceneData.AStarGrid;
             aStar = new AStar(grid);
         }
 

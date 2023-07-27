@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Game.Entity.Interactable;
 using Game.Data;
 
 namespace Game.AI
@@ -11,7 +9,6 @@ namespace Game.AI
         [SerializeField] protected DataEnemyAI data;
 
         // movement
-        protected AStarGrid aStarGrid;
         protected Path wayPointPaths = new Path(new AStarNode[0]);
         protected int currentPathIndex = 0;
 
@@ -21,10 +18,7 @@ namespace Game.AI
         protected LayerMask obstacleLayer;
         protected Vector3 startPos;
         protected AStarNode startPosNode;
-
-        // enviorment
-        protected GameObject repairBoxesContainer;
-        protected EnemyAI[] otherEnemys;
+        protected SceneData sceneData;
 
         public Action StateMachine { get; protected set; }
         public DataEnemyAI Data { set => data = value; }
@@ -34,15 +28,12 @@ namespace Game.AI
             startPos = transform.position;
             obstacleLayer = LayerMask.GetMask("Obstacle");
             targetLayer = LayerMask.GetMask("Player");
+            sceneData = GameObject.Find("SceneData").GetComponent<SceneData>();
         }
 
         protected virtual void Start() {
-            aStarGrid = GameObject.Find("A*")?.GetComponent<AStarGrid>();
-            startPosNode = aStarGrid?.GetNodeFromPosition(startPos);
+            startPosNode = sceneData.AStarGrid?.GetNodeFromPosition(startPos);
             target = GameObject.FindGameObjectWithTag(Magic.Tags.Player);
-
-            repairBoxesContainer = GameObject.Find("RepairBoxes");
-            otherEnemys = Magic.SceneHelper.GetObjectsFromRoot<EnemyAI>(GameObject.Find("Entitys"), this);
         }
 
         public float ViewAngle { get => data.viewAngle; }

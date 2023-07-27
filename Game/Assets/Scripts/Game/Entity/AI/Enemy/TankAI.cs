@@ -38,7 +38,7 @@ namespace Game.AI
         private void Update() {
             if (CanSeeTarget(tank.Head.transform)) {
                 AStarNode playerNode = movement.aStar.Grid.GetNodeFromPosition(target.transform.position);
-                foreach (EnemyAI others in otherEnemys) { others.lastVisualContact = playerNode; }
+                foreach (EnemyAI others in sceneData.Enemys) { others.lastVisualContact = playerNode; }
                 lastVisualContact = playerNode;
             }
             StateMachine = GetState();
@@ -113,19 +113,21 @@ namespace Game.AI
         }
 
         private void HandleTakeCover_Attack() {
-            if (TargetIsInScope(tank.Head.transform, 1)) {
+            if (TargetIsInScope(tank.Head.transform, scopeRadius: 1)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
             }
         }
 
         private void HandleTakeCover_Movement() {
-            if (hpInPrecent < data.changeToDefenseMode * 1.7f) {
+            const float additionalFactor = 1.7f;
+            bool hpIsBelwoThreshold = hpInPrecent < data.changeToDefenseMode * additionalFactor;
+            if (hpIsBelwoThreshold) {
                 Transform closestRepairBox = GetClosestRepairbox();
                 if (InteracableIsCloseEnough(closestRepairBox)) {
                     movement.SetPath(transform.position, closestRepairBox.position);
                     return;
                 }
-            }
+            } 
             if (!Physics.Linecast(transform.position, target.transform.position, obstacleLayer)) {
                 movement.HeadRotationTarget = target.transform.position;
                 GetCover();
@@ -143,16 +145,15 @@ namespace Game.AI
             float distance = float.MaxValue;
             Transform closest = null;
 
-            for (int i = 0; i < repairBoxesContainer.transform.childCount; i++) {
-                Transform current = repairBoxesContainer.transform.GetChild(i);
+            for (int i = 0; i < sceneData.RepairBoxes.Length; i++) {
+                Transform current = sceneData.RepairBoxes[i].transform;
                 float currentDistance = Vector3.Distance(transform.position, current.position);
-                
+
                 if (currentDistance < distance && !Physics.Linecast(transform.position, current.position, obstacleLayer)) {
                     closest = current;
                     distance = currentDistance;
                 }
-            } 
-            return closest;
+            } return closest;
         }
 
         private bool IsInReach(Vector3 pos, float maxDistance)
@@ -172,7 +173,7 @@ namespace Game.AI
         }
 
         private void HandleAttack_Attack() {
-            if (TargetIsInScope(tank.Head.transform, 1)) {
+            if (TargetIsInScope(tank.Head.transform, scopeRadius: 1)) {
                 attack.Shoot(MathM.ConvertToVector3(tank.Head.transform.rotation.eulerAngles.y));
             }
         }

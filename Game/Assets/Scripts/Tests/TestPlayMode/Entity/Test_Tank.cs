@@ -25,6 +25,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator SetData_SetNewValues() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             string newName = "TestName";
             yield return null;
@@ -41,6 +42,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator GetName_GetsName() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             DataTank data = ScriptableObject.CreateInstance<DataTank>();
             yield return null;
@@ -52,6 +54,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator GetSpeed_GetsSpeed() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             DataTank data = ScriptableObject.CreateInstance<DataTank>();
             yield return null;
@@ -63,6 +66,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator GetHealth_GetsHealth() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             DataTank data = ScriptableObject.CreateInstance<DataTank>();
             yield return null;
@@ -74,6 +78,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator GetRigidBody_GetsRigidBody() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             yield return null;
 
@@ -84,6 +89,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator GetCollider_GetsCollider() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             yield return null;
 
@@ -94,6 +100,7 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator OnDestruction_EventFires() {
+            TestHelper.CreateSceneData();
             Tank tank = TestHelper.CreateTank<Tank>();
             bool eventHasFired = false;
             yield return null;

@@ -11,6 +11,13 @@ namespace Tests
 {
     public static class TestHelper
     {
+        public static void CreateSceneData() {
+            var obj = CreateTank();
+            var data = obj.AddComponent<SceneData>();
+            data.Awake();
+            obj.tag = Tags.Data;
+        }
+
         public static GameObject CreateTank() {
             if (GameObject.Find("A*") == null) CreateASTarGrid();
             GameObject tank = new GameObject();

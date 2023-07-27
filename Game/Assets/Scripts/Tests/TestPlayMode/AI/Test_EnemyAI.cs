@@ -23,6 +23,7 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CanSeeTarget_InRange_True() {
+            TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
             yield return null;
@@ -37,6 +38,7 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CanSeeTarget_InExtendedRange_True() {
+            TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
             yield return null;
@@ -51,6 +53,7 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CanSeeTarget_InExtendedRangeButBehinde_False() {
+            TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
             yield return null;
@@ -65,6 +68,7 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CanSeeTarget_OutOfRange_False() {
+            TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
             yield return null;

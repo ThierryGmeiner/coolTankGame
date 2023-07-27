@@ -46,10 +46,12 @@ namespace Game.Entity.Tank
         public TankMovement Movement { get; private set; } = null;
         public TankAttack Attack { get; private set; } = null;
         public DataTank Data { get => data; set { data = value; InstantiateData(); } }
+        public SceneData SceneData { get; private set; }
         public Transform ShootingSpot { get => shootingSpot; }
 
         private void InstantiateData() {
             data ??= ScriptableObject.CreateInstance<DataTank>();
+            SceneData = GameObject.Find("SceneData")?.GetComponent<SceneData>() ?? Instantiate(new GameObject()).AddComponent<SceneData>();
             Movement = new TankMovement(this);
         }
 

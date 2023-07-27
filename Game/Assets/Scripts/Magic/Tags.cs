@@ -12,5 +12,6 @@ namespace Magic
         public static readonly string Entity = "Entity";
         public static readonly string ObjectPool = "ObjectPool";
         public static readonly string Interactable = "Interactable";
+        public static readonly string Data = "Data";
     }
 }

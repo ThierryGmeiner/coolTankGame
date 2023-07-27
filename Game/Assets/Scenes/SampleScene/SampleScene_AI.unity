@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 605867426}
   - component: {fileID: 605867427}
   m_Layer: 3
-  m_Name: A*
+  m_Name: AStarGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -660,6 +660,55 @@ Transform:
   m_Father: {fileID: 1745175457}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1247919271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247919272}
+  - component: {fileID: 1247919273}
+  m_Layer: 0
+  m_Name: SceneData
+  m_TagString: Data
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1247919272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247919271}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.1323833, y: -2.2470407, z: 0.7459412}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247919273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247919271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1be4f8f2eca7f94fa84059f06f8cf70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityCotainer: {fileID: 0}
+  enemyContainer: {fileID: 0}
+  bulletContainer: {fileID: 0}
+  interactableContainer: {fileID: 0}
+  repairBoxContainer: {fileID: 0}
 --- !u!114 &1328104999 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2359878231045614942, guid: 2c5e88ca896941547b349a630c46f2ad, type: 3}
