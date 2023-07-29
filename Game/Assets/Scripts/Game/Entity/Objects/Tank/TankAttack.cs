@@ -50,9 +50,10 @@ namespace Game.Entity.Tank
             attackCooldown.StartTimer();
             attackCooldown.ReduceTime(tank.Data.Attack.cooldownAfterShotSeconds);
 
-            BulletPooler = 
-                tank.SceneData.BulletCotainer?.GetComponent<ObjectPooling>() 
-                ?? tank.SceneData.BulletCotainer?.AddComponent<ObjectPooling>();
+            BulletPooler =
+                tank.SceneData.BulletCotainer?.GetComponent<ObjectPooling>()
+                ?? tank.SceneData.BulletCotainer?.AddComponent<ObjectPooling>() 
+                ?? new GameObject().AddComponent<ObjectPooling>();
         }
 
         public void ChangeBullet(GameObject bullet) {
@@ -63,8 +64,7 @@ namespace Game.Entity.Tank
             if (RemainingShots < MaxShotsUntilCooldown) {
                 RemainingShots++;
                 OnReload?.Invoke();
-            } 
-            else {
+            } else {
                 reloadTimer.StopTimer();
             }
         }

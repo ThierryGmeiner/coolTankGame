@@ -27,7 +27,7 @@ namespace Tests.PlayMode.Entity
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
             yield return null;
-            
+            Debug.Log(tank.BulletPooler == null);
             tank.BulletPooler.PooledObject = bullet.gameObject;
             Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
@@ -57,11 +57,11 @@ namespace Tests.PlayMode.Entity
             yield return null;
 
             tank.BulletPooler.PooledObject = bullet.gameObject;
-            Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
+            tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.AreEqual(tank.MaxShotsUntilCooldown - 1, tank.RemainingShots);
 
-            TestHelper.DestroyObjects(tank.gameObject, bullet.gameObject, newBullet.gameObject); ;
+            TestHelper.DestroyObjects(tank.gameObject, bullet.gameObject);
         }
     }
 }
