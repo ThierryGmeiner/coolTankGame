@@ -25,7 +25,7 @@ namespace Game.Data
         public GameObject InteractableContainer => interactableContainer;
         public GameObject RepairBoxContainer => repairBoxContainer;
 
-        public void Awake() {
+        private void Awake() {
             gameObject.name = "SceneData";
             FindAllObjects();
             FindPlayer();

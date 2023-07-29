@@ -33,7 +33,7 @@ namespace Game.AI
 
         protected virtual void Start() {
             startPosNode = sceneData.AStarGrid?.GetNodeFromPosition(startPos);
-            target = GameObject.FindGameObjectWithTag(Magic.Tags.Player);
+            target = sceneData.Player ?? new GameObject();
         }
 
         public float ViewAngle { get => data.viewAngle; }
@@ -54,27 +54,25 @@ namespace Game.AI
         }
 
         public virtual bool CanSeeTarget(Transform head) {
-            if (!TargetIsInViewFieldd(head)) {
+            if (!TargetIsInViewField(head)) {
                 return false;
             } return !Physics.Linecast(transform.position, target.transform.position, obstacleLayer);
         }
 
-        public virtual bool TargetIsInViewFieldd(Transform head) {
-            // target is in inner FOV
-            if (Vector3.Distance(transform.position, target.transform.position) < data.viewRadius) return true;
+        protected virtual bool TargetIsInViewField(Transform head) {
+            var distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+            if (distanceToTarget > data.viewRadiusExtended) { return false; }
+            if (distanceToTarget < data.viewRadius) { return true; }
 
-            // target is in extendet FOV
             Vector3 directionToTarget = (target.transform.position - head.position).normalized;
             bool targetInAngle = Vector3.Angle(head.forward, directionToTarget) < data.viewAngle / 2;
-            bool targetInExtendedSight = Vector3.Distance(transform.position, target.transform.position) < data.viewRadiusExtended;
-            return targetInExtendedSight && targetInAngle;
+            return targetInAngle;
         }
 
         public virtual Vector3 ViewDirection(Transform head, float angleInDegrees, bool angleIsGlobal) {
             if (!angleIsGlobal) {
                 angleInDegrees += head.eulerAngles.y;
-            }
-            return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+            } return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
         }
     }
 }

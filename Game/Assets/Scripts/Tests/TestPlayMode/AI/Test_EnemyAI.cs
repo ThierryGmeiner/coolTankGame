@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Game.AI;
+using Game.Data;
 
 namespace Tests.PlayMode.AI
 {
@@ -23,9 +24,10 @@ namespace Tests.PlayMode.AI
 
         [UnityTest]
         public IEnumerator CanSeeTarget_InRange_True() {
-            TestHelper.CreateSceneData();
+            SceneData data = TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
+            data.FindPlayer();
             yield return null;
 
             ai.transform.position = Vector3.zero;
@@ -33,14 +35,15 @@ namespace Tests.PlayMode.AI
             bool canSeePlayer = ai.CanSeeTarget(ai.Tank.transform);
 
             Assert.IsTrue(canSeePlayer);
-            TestHelper.DestroyObjects(ai.gameObject, player.gameObject);
+            TestHelper.DestroyObjects(ai.gameObject, player.gameObject, data.gameObject);
         }
 
         [UnityTest]
         public IEnumerator CanSeeTarget_InExtendedRange_True() {
-            TestHelper.CreateSceneData();
+            SceneData data = TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
+            data.FindPlayer();
             yield return null;
 
             ai.transform.position = Vector3.zero;
@@ -48,14 +51,15 @@ namespace Tests.PlayMode.AI
             bool canSeePlayer = ai.CanSeeTarget(ai.Tank.transform);
 
             Assert.IsTrue(canSeePlayer);
-            TestHelper.DestroyObjects(ai.gameObject, player.gameObject);
+            TestHelper.DestroyObjects(ai.gameObject, player.gameObject, data.gameObject);
         }
 
         [UnityTest]
         public IEnumerator CanSeeTarget_InExtendedRangeButBehinde_False() {
-            TestHelper.CreateSceneData();
+            SceneData data = TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
+            data.FindPlayer();
             yield return null;
 
             ai.transform.position = Vector3.zero;
@@ -63,14 +67,15 @@ namespace Tests.PlayMode.AI
             bool canSeePlayer = ai.CanSeeTarget(ai.Tank.transform);
 
             Assert.IsFalse(canSeePlayer);
-            TestHelper.DestroyObjects(ai.gameObject, player.gameObject);
+            TestHelper.DestroyObjects(ai.gameObject, player.gameObject, data.gameObject);
         }
 
         [UnityTest]
         public IEnumerator CanSeeTarget_OutOfRange_False() {
-            TestHelper.CreateSceneData();
+            SceneData data = TestHelper.CreateSceneData();
             TankAI ai = TestHelper.CreateEnemyTank<TankAI>();
             GameObject player = TestHelper.CreatePlayerTank();
+            data.FindPlayer();
             yield return null;
 
             ai.transform.position = Vector3.zero;
@@ -78,7 +83,7 @@ namespace Tests.PlayMode.AI
             bool canSeePlayer = ai.CanSeeTarget(ai.Tank.transform);
 
             Assert.IsFalse(canSeePlayer);
-            TestHelper.DestroyObjects(ai.gameObject, player.gameObject);
+            TestHelper.DestroyObjects(ai.gameObject, player.gameObject, data.gameObject);
         }
     }
 }

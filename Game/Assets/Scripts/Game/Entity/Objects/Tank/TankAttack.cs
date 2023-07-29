@@ -7,8 +7,6 @@ namespace Game.Entity.Tank
 {
     public class TankAttack : MonoBehaviour, IRangeAttack, IDropMine
     {
-        [SerializeField] private GameObject bulletContainer;
-
         private Tank tank;
         private BulletStorage bullets;
         private PlannedTimer reloadTimer;
@@ -52,8 +50,9 @@ namespace Game.Entity.Tank
             attackCooldown.StartTimer();
             attackCooldown.ReduceTime(tank.Data.Attack.cooldownAfterShotSeconds);
 
-            bulletContainer ??= new GameObject();
-            BulletPooler = bulletContainer.GetComponent<ObjectPooling>() ?? bulletContainer.AddComponent<ObjectPooling>();
+            BulletPooler = 
+                tank.SceneData.BulletCotainer?.GetComponent<ObjectPooling>() 
+                ?? tank.SceneData.BulletCotainer?.AddComponent<ObjectPooling>();
         }
 
         public void ChangeBullet(GameObject bullet) {
@@ -76,7 +75,7 @@ namespace Game.Entity.Tank
         }
 
         public Bullet Shoot(Vector3 direction) {
-            if (RemainingShots <= 0 || attackCooldown.timeSec > 0) return null;
+            if (RemainingShots <= 0 || attackCooldown.timeSec > 0) { return null; }
 
             Bullet bullet = InstantiateBullet();
             bullet.Shoot(direction);

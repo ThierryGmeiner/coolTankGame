@@ -11,11 +11,11 @@ namespace Tests
 {
     public static class TestHelper
     {
-        public static void CreateSceneData() {
-            var obj = CreateTank();
+        public static SceneData CreateSceneData() {
+            var obj = new GameObject();
             var data = obj.AddComponent<SceneData>();
-            data.Awake();
             obj.tag = Tags.Data;
+            return data;
         }
 
         public static GameObject CreateTank() {
