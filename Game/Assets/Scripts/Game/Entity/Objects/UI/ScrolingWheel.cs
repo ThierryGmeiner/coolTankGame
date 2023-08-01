@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Game.Data;
-using Game.Entity.Tank;
 
 namespace Game.Ui
 {
@@ -10,28 +9,42 @@ namespace Game.Ui
         [SerializeField] private Item[] items;
         [SerializeField] private GameObject selectedSegment;
         [SerializeField] private RectTransform selectedSegmentFillArea;
-
         private float segmentAngle;
 
+        private int segmentCount => items.Length;
+
         private void Awake() {
-            segmentAngle = 360 / items.Length;
+            segmentAngle = 360 / segmentCount;
             SetupItems();
             SetupSelectedSegment();
         }
 
         private void Update() {
+            transform.rotation = Quaternion.Euler(90, 0, 0);
             RotateSelectionWheel();
         }
 
         private void RotateSelectionWheel() {
-            Vector3 mousePos = InputSystem.TankControler.GetMousePosition();
-            Vector3 loockPos = (mousePos - transform.position).normalized / 2;
-            Quaternion rotation = Quaternion.LookRotation(new Vector3(loockPos.x, 90, loockPos.z));
-            selectedSegment.transform.rotation = rotation;
+            Vector3 loockPos = InputSystem.TankControler.GetMousePosition() - transform.position;
+            float rotationAngle = Quaternion.LookRotation(new Vector3(loockPos.x, 90, loockPos.z)).eulerAngles.y;
+            float finalAngle = GetSegmentIndex(rotationAngle) * segmentAngle;
+            selectedSegment.transform.rotation = Quaternion.Euler(new(-90, 0, finalAngle));
+        }
+
+        private int GetSegmentIndex(float angle) {
+            for (int i = 0; i < segmentCount; i++) {
+                if (angle < ( ( i + 1 ) * segmentAngle ) - ( segmentAngle / 2 ) ) {
+                    return i;
+                }
+            } return 0;
+        }
+
+        private void GetTargetedItem() {
+            //Debug.Log()
         }
 
         private void SetupItems() {
-            for (int i = 0; i < items.Length; i++) {
+            for (int i = 0; i < segmentCount; i++) {
                 float angle = i * segmentAngle;
                 InstantiateItemCanvas(items[i].Sprite, angle);
             }
