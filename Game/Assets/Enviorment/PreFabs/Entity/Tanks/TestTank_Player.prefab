@@ -113,7 +113,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2351208615657273727}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.3059445, w: 0.9520494}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -121,7 +121,7 @@ RectTransform:
   - {fileID: 4910591938170378080}
   m_Father: {fileID: 1717750705471919381}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 35.63}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -247,8 +247,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
   - {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
   - {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
-  selectedSegment: {fileID: 1777444151675321916}
-  selectedSegmentFillArea: {fileID: 3664094266498625227}
+  - {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
+  selectorSlider: {fileID: 1777444151675321916}
+  selectorFillArea: {fileID: 3664094266498625227}
 --- !u!1 &4495810816335026785
 GameObject:
   m_ObjectHideFlags: 0

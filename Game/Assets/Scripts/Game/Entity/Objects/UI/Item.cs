@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Data
 {
@@ -8,6 +7,8 @@ namespace Game.Data
     public class Item : ScriptableObject
     {
         public Sprite Sprite;
+        public Sprite SpriteWhenSelected;
+        [Space]
         public Type ItemType;
 
         public enum Type { Bullet = 0, Mine, Defense }

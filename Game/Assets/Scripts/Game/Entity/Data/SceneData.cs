@@ -10,6 +10,7 @@ namespace Game.Data
         [SerializeField] private GameObject entityCotainer;
         [SerializeField] private GameObject enemyContainer;
         [SerializeField] private GameObject bulletContainer;
+        [SerializeField] private GameObject pathParticleContainer;
         [SerializeField] private GameObject interactableContainer;
         [SerializeField] private GameObject repairBoxContainer;
 
@@ -22,6 +23,7 @@ namespace Game.Data
         public GameObject EntityContainer => entityCotainer;
         public GameObject EnemyContainer => enemyContainer;
         public GameObject BulletCotainer => bulletContainer;
+        public GameObject PathParticleContainer => pathParticleContainer;
         public GameObject InteractableContainer => interactableContainer;
         public GameObject RepairBoxContainer => repairBoxContainer;
 

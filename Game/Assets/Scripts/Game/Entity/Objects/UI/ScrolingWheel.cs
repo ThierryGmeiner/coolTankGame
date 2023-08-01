@@ -2,14 +2,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using Game.Data;
 
-namespace Game.Ui
+namespace Game.UI
 {
     public class ScrolingWheel : MonoBehaviour
     {
         [SerializeField] private Item[] items;
-        [SerializeField] private GameObject selectedSegment;
-        [SerializeField] private RectTransform selectedSegmentFillArea;
+        [SerializeField] private GameObject selectorSlider;
+        [SerializeField] private RectTransform selectorFillArea;
+
+        private ScrolingWheelSegment[] segments;
         private float segmentAngle;
+        private int selectedSegmentIndex = 0;
+
+        private readonly Vector3 DEFAULT_SCALE = new Vector3(0.15f, 0.15f, 0.15f);
+        private readonly Vector3 SELECTED_SCALE = new Vector3(0.23f, 0.23f, 0.23f);
 
         private int segmentCount => items.Length;
 
@@ -21,17 +27,31 @@ namespace Game.Ui
 
         private void Update() {
             transform.rotation = Quaternion.Euler(90, 0, 0);
+            
+            selectedSegmentIndex = GetSegmentIndex();
             RotateSelectionWheel();
+            HighlightSelectedItem();
         }
 
         private void RotateSelectionWheel() {
-            Vector3 loockPos = InputSystem.TankControler.GetMousePosition() - transform.position;
-            float rotationAngle = Quaternion.LookRotation(new Vector3(loockPos.x, 90, loockPos.z)).eulerAngles.y;
-            float finalAngle = GetSegmentIndex(rotationAngle) * segmentAngle;
-            selectedSegment.transform.rotation = Quaternion.Euler(new(-90, 0, finalAngle));
+            float finalAngle = selectedSegmentIndex * segmentAngle;
+            selectorSlider.transform.rotation = Quaternion.Euler(new(-90, 0, finalAngle));
         }
 
-        private int GetSegmentIndex(float angle) {
+        private void HighlightSelectedItem() {
+            for (int i = 0; i < segmentCount; i++) {
+                if (i == selectedSegmentIndex) {
+                    segments[i].image.sprite = items[i].SpriteWhenSelected;
+                    segments[i].rect.localScale = SELECTED_SCALE;
+                } else {
+                    segments[i].image.sprite = items[i].Sprite;
+                    segments[i].rect.localScale = DEFAULT_SCALE;
+                }
+            }
+        }
+        
+        private int GetSegmentIndex() {
+            float angle = GetAngle();
             for (int i = 0; i < segmentCount; i++) {
                 if (angle < ( ( i + 1 ) * segmentAngle ) - ( segmentAngle / 2 ) ) {
                     return i;
@@ -39,51 +59,49 @@ namespace Game.Ui
             } return 0;
         }
 
-        private void GetTargetedItem() {
-            //Debug.Log()
-        }
-
-        private void SetupItems() {
-            for (int i = 0; i < segmentCount; i++) {
-                float angle = i * segmentAngle;
-                InstantiateItemCanvas(items[i].Sprite, angle);
-            }
+        private float GetAngle() {
+            Vector3 loockPos = InputSystem.TankControler.GetMousePosition() - transform.position;
+            return Quaternion.LookRotation(new Vector3(loockPos.x, 90, loockPos.z)).eulerAngles.y;
         }
 
         private void SetupSelectedSegment() {
-            selectedSegment.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            Slider slider = selectedSegment.GetComponent<Slider>();
+            selectorSlider.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            Slider slider = selectorSlider.GetComponent<Slider>();
             slider.value = segmentAngle / 360;
-            selectedSegmentFillArea.localRotation = Quaternion.Euler(0, 0, segmentAngle / 2);
+            selectorFillArea.localRotation = Quaternion.Euler(0, 0, segmentAngle / 2);
         }
 
-        private void InstantiateItemCanvas(Sprite image, float angle) {
+        private void SetupItems() {
+            segments = new ScrolingWheelSegment[segmentCount];
+
+            for (int i = 0; i < segmentCount; i++) {
+                float angle = i * segmentAngle;
+                GameObject canvas = InstantiateItemCanvas(items[i].Sprite, angle);
+                canvas.name = "itam_" + i;
+                segments[i] = new(items[i], canvas);                
+            }
+        }
+
+        private GameObject InstantiateItemCanvas(Sprite sprite, float angle) {
             // instantiate image and helper
             GameObject midPoint = new GameObject();
-            GameObject segment = EmptyCanvas();
+            GameObject segment = ScrolingWheelSegment.EmptyCanvas();
             midPoint.transform.SetParent(transform);
             midPoint.transform.position = transform.position;
             segment.transform.SetParent(midPoint.transform);
 
             // mutate item
-            segment.GetComponent<Image>().sprite = image;
             RectTransform rect = segment.GetComponent<RectTransform>();
-            rect.localScale = new Vector3(0.15f, 0.15f, 0.15f);
+            rect.localScale = DEFAULT_SCALE;
             rect.localPosition = new Vector3(0, 3.5f, 0);
             midPoint.transform.localRotation = Quaternion.Euler(0, 0, -angle);
 
             segment.transform.SetParent(transform);
             rect.localRotation = Quaternion.Euler(0, 0, 0);
             Destroy(midPoint);
-        }
+            segment.GetComponent<Image>().sprite = sprite;
 
-        private static GameObject EmptyCanvas() {
-            GameObject canvas = new GameObject();
-            RectTransform rect = canvas.AddComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(10, 10);
-            canvas.AddComponent<CanvasRenderer>();
-            canvas.AddComponent<Image>();
-            return canvas;
+            return segment;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Game.Entity.Tank
     public class TankMovement
     {
         // data
-        private readonly Tank tank;
+        public readonly Tank tank;
         private readonly LayerMask groundLayer;
 
         // pathFinding

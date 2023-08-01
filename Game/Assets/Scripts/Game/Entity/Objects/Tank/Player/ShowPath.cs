@@ -10,12 +10,12 @@ namespace Game.Entity.Tank
     [RequireComponent(typeof(Tank))]
     public class ShowPath : MonoBehaviour
     {
-        [SerializeField] private ObjectPooling objectPooler;
         [SerializeField] private Color color;
         [SerializeField] private float distance;
         [SerializeField] private float appearanceTimeInSec = 0.075f;
 
-        TankMovement movement;
+        private ObjectPooling objectPooler;
+        private TankMovement movement;
         private const float SPAWN_HEIGHT = 0.1f;
 
         private void Awake() {
@@ -24,7 +24,8 @@ namespace Game.Entity.Tank
 
         private void Start() {
             movement = GetComponent<Tank>().Movement;
-            
+            objectPooler = movement.tank.SceneData.PathParticleContainer.GetComponent<ObjectPooling>();
+
             foreach (IPoolable pooler in objectPooler.InactiveObjects) {
                 var particle = pooler.GameObject.transform.GetComponent<ShowPathParticle>();
                 particle.flyingParticle.startColor = color;

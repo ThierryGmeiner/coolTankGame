@@ -27,7 +27,7 @@ namespace Tests.PlayMode.Entity
             TankAttack tank = TestHelper.CreateTank<TankAttack>();
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
             yield return null;
-            Debug.Log(tank.BulletPooler == null);
+
             tank.BulletPooler.PooledObject = bullet.gameObject;
             Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
