@@ -10,7 +10,7 @@ namespace Game.InputSystem
     public class TankControler : MonoBehaviour
     {
         private PlayerControler controler;
-        private Plane plane = new Plane(Vector3.up, 0);
+        private static Plane plane = new Plane(Vector3.up, 0);
         private Tank tank;
         private TankMovement movement;
         private CameraMovement cam;
@@ -52,7 +52,7 @@ namespace Game.InputSystem
             movement.HeadRotationTarget = mousePos;
         }
 
-        private Vector3 GetMousePosition() {
+        public static Vector3 GetMousePosition() {
             float distance;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             plane.Raycast(ray, out distance);
