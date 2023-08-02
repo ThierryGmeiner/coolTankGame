@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2359878231045614941}
-  - component: {fileID: 2359878231045614942}
+  - component: {fileID: 7822609520117269127}
   m_Layer: 0
   m_Name: PathParticle_Pool
   m_TagString: ObjectPool
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2359878231045614942
+--- !u!114 &7822609520117269127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: PathParticle
-  spawnAmount: 100
+  spawnAmount: 150
   pooledObject: {fileID: 8527625191338214309, guid: aed34c931a70cde488c48d1e7ee86660, type: 3}

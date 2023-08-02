@@ -28,7 +28,7 @@ namespace Tests.PlayMode.Entity
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
             yield return null;
 
-            tank.BulletPooler.PooledObject = bullet.gameObject;
+            tank.ActiveBulletPooler.PooledObject = bullet.gameObject;
             Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.IsNotNull(newBullet);
@@ -42,7 +42,7 @@ namespace Tests.PlayMode.Entity
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
             yield return null;
 
-            tank.BulletPooler.PooledObject = bullet.gameObject;
+            tank.ActiveBulletPooler.PooledObject = bullet.gameObject;
             Bullet newBullet = tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.AreEqual(tank.gameObject, newBullet.ShootingEntity);
@@ -56,7 +56,7 @@ namespace Tests.PlayMode.Entity
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
             yield return null;
 
-            tank.BulletPooler.PooledObject = bullet.gameObject;
+            tank.ActiveBulletPooler.PooledObject = bullet.gameObject;
             tank.Shoot(new Vector3(10, 10, 10));
 
             Assert.AreEqual(tank.MaxShotsUntilCooldown - 1, tank.RemainingShots);

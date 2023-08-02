@@ -82,7 +82,7 @@ namespace Game.InputSystem
             controler.Camera.MoveFaster.started += (InputAction.CallbackContext c) => cam.EnableTurbo();
             controler.Camera.MoveFaster.canceled += (InputAction.CallbackContext c) => cam.DisableTurbo();
             controler.Camera.LockCamera.started += (InputAction.CallbackContext c) => {
-                if (ClickOnTank()) cam.ChangeLockingState();
+                if (ClickOnTank()) cam.ChangeLockingState(lockCam: true);
             };
         }
 

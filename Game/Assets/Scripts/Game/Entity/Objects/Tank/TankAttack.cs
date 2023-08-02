@@ -11,12 +11,16 @@ namespace Game.Entity.Tank
         private BulletStorage bullets;
         private PlannedTimer reloadTimer;
         private PlannedTimer attackCooldown;
+        private UI.ScrolingWheel inventory;
 
         public event Action OnShoot;
         public event Action OnDropMine;
         public event Action OnReload;
 
-        public ObjectPooling BulletPooler { get; private set; }
+        // nullReference by enemy because they dont have a scrolingwhele
+        // i have to overwork this system
+        // i think the bulletstorage isnt a god idea
+        public ObjectPooling ActiveBulletPooler { get; private set; }
         private DataTank data => tank.Data;
         public int MaxShotsUntilCooldown { get; private set; } = 5;
         public int RemainingShots { get; private set; }
@@ -45,19 +49,22 @@ namespace Game.Entity.Tank
             MaxShotsUntilCooldown = data.Attack.maxShootsUntilCooldown;
             RemainingShots = MaxShotsUntilCooldown;
 
+            inventory = gameObject.GetComponentInChildren<UI.ScrolingWheel>(includeInactive: true);
+            inventory.OnSelectItem += (Item item) => ChangeBullet(item);
+
             reloadTimer.SetupTimer(tank.Data.Attack.reloadOneBulletSeconds, Timer.Modes.restartWhenTimeIsUp, "ReloadTimer");
             attackCooldown.SetupTimer(tank.Data.Attack.cooldownAfterShotSeconds, Timer.Modes.ConitinuesWhenTimeIsUp, "AttackCooldown");
             attackCooldown.StartTimer();
             attackCooldown.ReduceTime(tank.Data.Attack.cooldownAfterShotSeconds);
 
-            BulletPooler =
+            ActiveBulletPooler =
                 tank.SceneData.BulletCotainer?.GetComponent<ObjectPooling>()
                 ?? tank.SceneData.BulletCotainer?.AddComponent<ObjectPooling>() 
                 ?? new GameObject().AddComponent<ObjectPooling>();
         }
 
-        public void ChangeBullet(GameObject bullet) {
-            bullets.Current = bullet;
+        public void ChangeBullet(Item item) {
+            ActiveBulletPooler = item.objectPool;
         }
 
         private void Reload() {
@@ -84,7 +91,7 @@ namespace Game.Entity.Tank
         }
 
         private Bullet InstantiateBullet() {
-            GameObject obj = BulletPooler.RequestObject();
+            GameObject obj = ActiveBulletPooler.RequestObject();
             obj.transform.position = tank.ShootingSpot.position;
             obj.transform.rotation = tank.ShootingSpot.rotation;
             Bullet bullet = obj.GetComponent<Bullet>();

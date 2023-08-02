@@ -6,7 +6,7 @@ namespace Magic
 {
     public class ObjectPooling : MonoBehaviour
     {        
-        [SerializeField] private string objectName = " ";
+        [SerializeField] private string objectName = string.Empty;
         [SerializeField] private int spawnAmount = 10;
         [SerializeField] private GameObject pooledObject;
 

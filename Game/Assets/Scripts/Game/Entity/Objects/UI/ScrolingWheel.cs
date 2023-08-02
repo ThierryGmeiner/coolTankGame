@@ -9,11 +9,13 @@ namespace Game.UI
         [SerializeField] private Item[] items;
         [SerializeField] private GameObject selectorSlider;
         [SerializeField] private RectTransform selectorFillArea;
-
         private ScrolingWheelSegment[] segments;
         private float segmentAngle;
+        
         private int selectedSegmentIndex = 0;
         private int oldSelectedSegmentIndex = 0;
+
+        public event System.Action<Item> OnSelectItem;
 
         private int segmentCount => items.Length;
 
@@ -33,7 +35,7 @@ namespace Game.UI
         }
 
         public void SelectItem() {
-            Debug.Log($"selected item: {selectedSegmentIndex}");
+            OnSelectItem?.Invoke(items[selectedSegmentIndex]);
         }
 
         private void RotateSelectionWheel() {
@@ -77,7 +79,7 @@ namespace Game.UI
                 float angle = i * segmentAngle;
                 GameObject canvas = ScrolingWheelSegment.InstantiateItemCanvas(transform, angle);
                 segments[i] = new(items[i], canvas);
-                canvas.name = $"item-{i}";
+                canvas.name = $"item-{items[i].ItemType}-{i}";
             }
         }
     }

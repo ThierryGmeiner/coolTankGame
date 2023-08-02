@@ -947,6 +947,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestTank_Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6932864721405223721, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
+      propertyPath: items.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6932864721405223721, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
+      propertyPath: items.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
+    - target: {fileID: 6932864721405223721, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
+      propertyPath: items.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
+    - target: {fileID: 6932864721405223721, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
+      propertyPath: items.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
+    - target: {fileID: 6932864721405223721, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
+      propertyPath: items.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d2437a346e724485c06ab890f6161, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5bec991e3e0c2e42a7e7e10b0cbf4b4, type: 3}
 --- !u!1 &1456219235
@@ -1537,7 +1557,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 391407366770230560, guid: c7d975edf73823142b8052c7c4e1baaa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c7d975edf73823142b8052c7c4e1baaa, type: 3}
 --- !u!1001 &7797173766898200652
 PrefabInstance:

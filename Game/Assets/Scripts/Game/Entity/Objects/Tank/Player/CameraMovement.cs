@@ -46,8 +46,8 @@ namespace Game.Cam
 
         private void Update() {
             ControlZoom();
-
             bool camHasTarget = targetPos != noTarget;
+
             if (camHasTarget) {
                 MoveTowardsPlayer();
             }
