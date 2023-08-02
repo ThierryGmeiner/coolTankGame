@@ -81,6 +81,11 @@ namespace Game.Cam
             if (camIsLocked) SetNewTarget();
         }
 
+        public void ChangeLockingState(bool lockCam) {
+            camIsLocked = lockCam;
+            if (camIsLocked) SetNewTarget();
+        }
+
         public void SetNewTarget() {
             Vector3 newTargetPos = transform.position + (player.transform.position - GetScreenMiddlePosition());
             targetPos = new Vector3(newTargetPos.x, transform.position.y, newTargetPos.z);

@@ -151,15 +151,6 @@ namespace Game.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FindPlayer"",
-                    ""type"": ""Button"",
-                    ""id"": ""4552ac23-8a30-4e3c-b14c-0ca4bfb3fe16"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -231,23 +222,60 @@ namespace Game.InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2d7cb476-ddef-4510-8470-abeecd1977cc"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FindPlayer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""7dc3ed16-6d70-4a5a-bf5e-0cf3c0bf5263"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": ""Hold"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MoveFaster"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Inventory"",
+            ""id"": ""e2ffbd97-ae85-415f-96b9-9593e86659fd"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""28226e69-a113-4a52-a72a-647045841028"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""d0f0026f-da5d-46bc-a305-10e821640290"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c80a94b2-5704-42e6-9098-57ad77d723e0"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef5f0d31-3e09-488a-a120-a3e693da084e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -269,7 +297,10 @@ namespace Game.InputSystem
             m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
             m_Camera_MoveFaster = m_Camera.FindAction("MoveFaster", throwIfNotFound: true);
             m_Camera_LockCamera = m_Camera.FindAction("LockCamera", throwIfNotFound: true);
-            m_Camera_FindPlayer = m_Camera.FindAction("FindPlayer", throwIfNotFound: true);
+            // Inventory
+            m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
+            m_Inventory_OpenInventory = m_Inventory.FindAction("OpenInventory", throwIfNotFound: true);
+            m_Inventory_Select = m_Inventory.FindAction("Select", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -414,7 +445,6 @@ namespace Game.InputSystem
         private readonly InputAction m_Camera_Move;
         private readonly InputAction m_Camera_MoveFaster;
         private readonly InputAction m_Camera_LockCamera;
-        private readonly InputAction m_Camera_FindPlayer;
         public struct CameraActions
         {
             private @PlayerControler m_Wrapper;
@@ -422,7 +452,6 @@ namespace Game.InputSystem
             public InputAction @Move => m_Wrapper.m_Camera_Move;
             public InputAction @MoveFaster => m_Wrapper.m_Camera_MoveFaster;
             public InputAction @LockCamera => m_Wrapper.m_Camera_LockCamera;
-            public InputAction @FindPlayer => m_Wrapper.m_Camera_FindPlayer;
             public InputActionMap Get() { return m_Wrapper.m_Camera; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -441,9 +470,6 @@ namespace Game.InputSystem
                     @LockCamera.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
                     @LockCamera.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
                     @LockCamera.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnLockCamera;
-                    @FindPlayer.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnFindPlayer;
-                    @FindPlayer.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnFindPlayer;
-                    @FindPlayer.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnFindPlayer;
                 }
                 m_Wrapper.m_CameraActionsCallbackInterface = instance;
                 if (instance != null)
@@ -457,13 +483,51 @@ namespace Game.InputSystem
                     @LockCamera.started += instance.OnLockCamera;
                     @LockCamera.performed += instance.OnLockCamera;
                     @LockCamera.canceled += instance.OnLockCamera;
-                    @FindPlayer.started += instance.OnFindPlayer;
-                    @FindPlayer.performed += instance.OnFindPlayer;
-                    @FindPlayer.canceled += instance.OnFindPlayer;
                 }
             }
         }
         public CameraActions @Camera => new CameraActions(this);
+
+        // Inventory
+        private readonly InputActionMap m_Inventory;
+        private IInventoryActions m_InventoryActionsCallbackInterface;
+        private readonly InputAction m_Inventory_OpenInventory;
+        private readonly InputAction m_Inventory_Select;
+        public struct InventoryActions
+        {
+            private @PlayerControler m_Wrapper;
+            public InventoryActions(@PlayerControler wrapper) { m_Wrapper = wrapper; }
+            public InputAction @OpenInventory => m_Wrapper.m_Inventory_OpenInventory;
+            public InputAction @Select => m_Wrapper.m_Inventory_Select;
+            public InputActionMap Get() { return m_Wrapper.m_Inventory; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(InventoryActions set) { return set.Get(); }
+            public void SetCallbacks(IInventoryActions instance)
+            {
+                if (m_Wrapper.m_InventoryActionsCallbackInterface != null)
+                {
+                    @OpenInventory.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnOpenInventory;
+                    @OpenInventory.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnOpenInventory;
+                    @OpenInventory.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnOpenInventory;
+                    @Select.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnSelect;
+                    @Select.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnSelect;
+                    @Select.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnSelect;
+                }
+                m_Wrapper.m_InventoryActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @OpenInventory.started += instance.OnOpenInventory;
+                    @OpenInventory.performed += instance.OnOpenInventory;
+                    @OpenInventory.canceled += instance.OnOpenInventory;
+                    @Select.started += instance.OnSelect;
+                    @Select.performed += instance.OnSelect;
+                    @Select.canceled += instance.OnSelect;
+                }
+            }
+        }
+        public InventoryActions @Inventory => new InventoryActions(this);
         public interface ITankDriveActions
         {
             void OnJump(InputAction.CallbackContext context);
@@ -479,7 +543,11 @@ namespace Game.InputSystem
             void OnMove(InputAction.CallbackContext context);
             void OnMoveFaster(InputAction.CallbackContext context);
             void OnLockCamera(InputAction.CallbackContext context);
-            void OnFindPlayer(InputAction.CallbackContext context);
+        }
+        public interface IInventoryActions
+        {
+            void OnOpenInventory(InputAction.CallbackContext context);
+            void OnSelect(InputAction.CallbackContext context);
         }
     }
 }

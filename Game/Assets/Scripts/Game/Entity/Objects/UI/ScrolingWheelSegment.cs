@@ -15,8 +15,9 @@ namespace Game.UI
 
         public ScrolingWheelSegment(Item item, GameObject obj) {
             this.item = item;
-            image = obj.GetComponent<Image>() ?? obj.AddComponent<Image>();
-            rect = obj.GetComponent<RectTransform>() ?? obj.AddComponent<RectTransform>();
+            this.image = obj.GetComponent<Image>() ?? obj.AddComponent<Image>();
+            this.rect = obj.GetComponent<RectTransform>() ?? obj.AddComponent<RectTransform>();
+            DeselectItem();
         }
 
         public void SelectItem() {
@@ -32,7 +33,7 @@ namespace Game.UI
         public static GameObject InstantiateItemCanvas(Transform parent, float angle) {
             // instantiate image and helper
             GameObject midPoint = new GameObject();
-            GameObject segment = ScrolingWheelSegment.EmptyCanvas();
+            GameObject segment = EmptyCanvas();
             midPoint.transform.SetParent(parent);
             midPoint.transform.position = parent.position;
             segment.transform.SetParent(midPoint.transform);

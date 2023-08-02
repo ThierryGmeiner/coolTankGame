@@ -21,6 +21,7 @@ namespace Game.UI
             segmentAngle = 360 / segmentCount;
             SetupItems();
             SetupSelectedSegment();
+            gameObject.SetActive(false);
         }
 
         private void Update() {
@@ -29,6 +30,10 @@ namespace Game.UI
             selectedSegmentIndex = GetSegmentIndex();
             RotateSelectionWheel();
             HighlightSelectedItem();
+        }
+
+        public void SelectItem() {
+            Debug.Log($"selected item: {selectedSegmentIndex}");
         }
 
         private void RotateSelectionWheel() {
@@ -45,16 +50,16 @@ namespace Game.UI
         
         private int GetSegmentIndex() {
             oldSelectedSegmentIndex = selectedSegmentIndex;
-            float angle = GetAngle();
+            float angle = GetSelecorAngle();
 
             for (int i = 0; i < segmentCount; i++) {
-                if (angle < ( ( i + 1 ) * segmentAngle ) - ( segmentAngle / 2 ) ) {
+                if (angle < ((i + 1) * segmentAngle) - (segmentAngle / 2)) {
                     return i;
                 }
             } return 0;
         }
 
-        private float GetAngle() {
+        private float GetSelecorAngle() {
             Vector3 loockPos = InputSystem.TankControler.GetMousePosition() - transform.position;
             return Quaternion.LookRotation(new Vector3(loockPos.x, 90, loockPos.z)).eulerAngles.y;
         }
@@ -68,12 +73,10 @@ namespace Game.UI
 
         private void SetupItems() {
             segments = new ScrolingWheelSegment[segmentCount];
-
             for (int i = 0; i < segmentCount; i++) {
                 float angle = i * segmentAngle;
                 GameObject canvas = ScrolingWheelSegment.InstantiateItemCanvas(transform, angle);
                 segments[i] = new(items[i], canvas);
-                segments[i].DeselectItem();
                 canvas.name = $"item-{i}";
             }
         }
