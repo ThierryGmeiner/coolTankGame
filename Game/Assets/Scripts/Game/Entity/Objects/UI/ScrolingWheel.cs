@@ -52,7 +52,7 @@ namespace Game.UI
         
         private int GetSegmentIndex() {
             oldSelectedSegmentIndex = selectedSegmentIndex;
-            float angle = GetSelecorAngle();
+            float angle = GetSelectorAngle();
 
             for (int i = 0; i < segmentCount; i++) {
                 if (angle < ((i + 1) * segmentAngle) - (segmentAngle / 2)) {
@@ -61,7 +61,7 @@ namespace Game.UI
             } return 0;
         }
 
-        private float GetSelecorAngle() {
+        private float GetSelectorAngle() {
             Vector3 loockPos = InputSystem.TankControler.GetMousePosition() - transform.position;
             return Quaternion.LookRotation(new Vector3(loockPos.x, 90, loockPos.z)).eulerAngles.y;
         }
@@ -79,7 +79,7 @@ namespace Game.UI
                 float angle = i * segmentAngle;
                 GameObject canvas = ScrolingWheelSegment.InstantiateItemCanvas(transform, angle);
                 segments[i] = new(items[i], canvas);
-                canvas.name = $"item-{items[i].ItemType}-{i}";
+                canvas.name = $"item:{items[i].type.ToString()}-ID:{(int)items[i].type}";
             }
         }
     }

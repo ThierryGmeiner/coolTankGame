@@ -130,8 +130,8 @@ namespace Tests.PlayMode.Entity
         public IEnumerator OnCollisionEnter_IsShootingEntity_DontDamageEntity() {
             Tank tank = TestHelper.CreateTank<Tank>();
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
-            bullet.ShootingEntity = tank.gameObject;
 
+            bullet.Shoot(tank.gameObject, tank.transform, Vector3.zero);
             bullet.transform.position = tank.transform.position;
             yield return new WaitForFixedUpdate();
 
@@ -143,16 +143,18 @@ namespace Tests.PlayMode.Entity
 
         [UnityTest]
         public IEnumerator Shoot_AddVelocity() {
+            GameObject attacker = new GameObject();
             Bullet bullet = TestHelper.CreateBullet<Bullet>();
             bullet.transform.position = TestHelper.GetEmtySpace(bullet.transform.localScale);
             bullet.GetComponent<Collider>().enabled = false;
             yield return null;
 
-            bullet.Shoot(Vector3.forward);
+            bullet.Shoot(attacker, attacker.transform,Vector3.forward);
             yield return new WaitForFixedUpdate();
 
             Assert.AreNotEqual(0, bullet.RigidBody.velocity.z);
 
+            TestHelper.DestroyObjects(attacker);
             if (bullet != null) TestHelper.DestroyObjects(bullet.gameObject);
         }
 

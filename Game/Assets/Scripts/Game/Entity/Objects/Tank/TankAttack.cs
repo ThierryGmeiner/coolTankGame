@@ -8,7 +8,6 @@ namespace Game.Entity.Tank
     public class TankAttack : MonoBehaviour, IRangeAttack, IDropMine
     {
         private Tank tank;
-        private BulletStorage bullets;
         private PlannedTimer reloadTimer;
         private PlannedTimer attackCooldown;
         private UI.ScrolingWheel inventory;
@@ -20,6 +19,7 @@ namespace Game.Entity.Tank
         // nullReference by enemy because they dont have a scrolingwhele
         // i have to overwork this system
         // i think the bulletstorage isnt a god idea
+
         public ObjectPooling ActiveBulletPooler { get; private set; }
         private DataTank data => tank.Data;
         public int MaxShotsUntilCooldown { get; private set; } = 5;
@@ -64,7 +64,7 @@ namespace Game.Entity.Tank
         }
 
         public void ChangeBullet(Item item) {
-            ActiveBulletPooler = item.objectPool;
+            //ActiveBulletPooler = item.objectPool;
         }
 
         private void Reload() {
@@ -84,18 +84,9 @@ namespace Game.Entity.Tank
         public Bullet Shoot(Vector3 direction) {
             if (RemainingShots <= 0 || attackCooldown.timeSec > 0) { return null; }
 
-            Bullet bullet = InstantiateBullet();
-            bullet.Shoot(direction);
+            Bullet bullet = ActiveBulletPooler.RequestObject().GetComponent<Bullet>();
+            bullet.Shoot(tank.gameObject, tank.ShootingSpot.transform, direction);
             OnShoot?.Invoke();
-            return bullet;
-        }
-
-        private Bullet InstantiateBullet() {
-            GameObject obj = ActiveBulletPooler.RequestObject();
-            obj.transform.position = tank.ShootingSpot.position;
-            obj.transform.rotation = tank.ShootingSpot.rotation;
-            Bullet bullet = obj.GetComponent<Bullet>();
-            bullet.ShootingEntity = tank.gameObject;
             return bullet;
         }
     }

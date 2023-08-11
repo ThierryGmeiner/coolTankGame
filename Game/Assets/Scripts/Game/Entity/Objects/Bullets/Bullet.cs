@@ -20,33 +20,13 @@ namespace Game.Entity
         public event Action<int, int, int, Vector3> OnDamaged;
         public event Action OnDestruction;
 
-        public string Name { get => name; }
-        public GameObject GameObject { get => gameObject; }
-        public ObjectPooling ObjectPooler { get; set; }
-        public GameObject ShootingEntity { get; set; } // the object that shoots the bullet
-        public Rigidbody RigidBody { get; set; }
-        public Collider Collider { get; set; }
-        public Health.DamageType DamageType { get => Health.DamageType.Shot; }
-        public int MaxHitPoints { get; } = 0;
-        public int HitPoints { get; } = 0;
-        public bool HasFullHP => HitPoints >= MaxHitPoints;
-        public float LifeTime {
-            get => lifeTime;
-            set {
-                lifeTime = value;
-                InitializeTimer();
-            }
-        }
 
         protected virtual void Awake() {
             RigidBody = GetComponent<Rigidbody>();
             Collider = GetComponent<BoxCollider>();
             timer = gameObject.AddComponent<PlannedTimer>();
+            InitializeLifeTime();
         }
-
-        private void Start() {
-            InitializeTimer();
-        }   
 
         protected virtual void OnCollisionEnter(Collision collision) {
             if (collision.gameObject == ShootingEntity) { return; }
@@ -57,7 +37,10 @@ namespace Game.Entity
             GetDestroyed();
         }
 
-        public virtual void Shoot(Vector3 direction) {
+        public virtual void Shoot(GameObject shootingEntity, Transform shootingSpot, Vector3 direction) {
+            transform.position = shootingSpot.position;
+            transform.rotation = shootingSpot.rotation;
+            ShootingEntity = shootingEntity;
             RigidBody.AddForce(direction.normalized * shootingSpeed, ForceMode.Impulse);
         }
 
@@ -73,8 +56,8 @@ namespace Game.Entity
             SetInactive();
         }
 
-        private void InitializeTimer() {
-            timer.OnTimerEnds += () => GetDestroyed();
+        private void InitializeLifeTime() {
+            timer.OnTimerEnds += GetDestroyed;
             timer.SetupTimer(lifeTime, Timer.Modes.destroyWhenTimeIsUp, "LifeTime");
             timer.StartTimer();
         }
@@ -82,6 +65,7 @@ namespace Game.Entity
         public void SetActive() {
             Collider.enabled = true;
             RigidBody.isKinematic = false;
+            InitializeLifeTime();
         }
 
         public void SetInactive() {
@@ -91,8 +75,22 @@ namespace Game.Entity
             transform.position = new Vector3(-210, -210, -210);
         }
 
-        private void OnDestroy() {
-            // play sound and particles
+        public string Name { get => name; }
+        public GameObject GameObject { get => gameObject; }
+        public ObjectPooling ObjectPooler { get; set; }
+        public GameObject ShootingEntity { get; protected set; } // the object that shoots the bullet
+        public Rigidbody RigidBody { get; set; }
+        public Collider Collider { get; set; }
+        public Health.DamageType DamageType { get => Health.DamageType.Shot; }
+        public int MaxHitPoints { get; } = 0;
+        public int HitPoints { get; } = 0;
+        public bool HasFullHP => HitPoints >= MaxHitPoints;
+        public float LifeTime {
+            get => lifeTime;
+            set {
+                lifeTime = value;
+                InitializeLifeTime();
+            }
         }
     }
 }
